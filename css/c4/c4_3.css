@@ -1,0 +1,248 @@
+
+        .grammar-box {
+            background: var(--code-bg, #1A1830);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin: 16px 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13.5px;
+            color: #CDD6F4;
+            line-height: 2;
+            overflow-x: auto;
+        }
+
+        .grammar-box .rule-num {
+            color: rgba(205, 214, 244, .45);
+            user-select: none;
+            margin-right: 10px;
+        }
+
+        .grammar-box .nt {
+            color: #CBA6F7;
+        }
+
+        .grammar-box .t {
+            color: #A6E3A1;
+        }
+
+        .grammar-box .arr {
+            color: #94E2D5;
+        }
+
+        .grammar-box .eps {
+            color: #F9E2AF;
+        }
+
+        .table-scroll {
+            overflow-x: auto;
+            margin: 16px 0;
+        }
+
+        .machine-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 18px 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12.5px;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 0 0 1px rgba(99, 102, 241, .15);
+        }
+
+        .machine-table th {
+            background: #EEF2FF;
+            color: #4338CA;
+            padding: 10px 12px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .machine-table td {
+            padding: 10px 12px;
+            text-align: center;
+            border-top: 1px solid #EEF2FF;
+            color: var(--text, #1E1B4B);
+            white-space: nowrap;
+        }
+
+        .machine-table td.row-head {
+            background: #F8FAFC;
+            color: #4338CA;
+            font-weight: 700;
+        }
+
+        .machine-table td.reject {
+            color: #991B1B;
+            background: #FEF2F2;
+        }
+
+        .machine-table td.accept {
+            color: #065F46;
+            background: #F0FDF4;
+            font-weight: 700;
+        }
+
+        .machine-table td.action {
+            color: #4338CA;
+            background: #F8FAFF;
+        }
+
+        .machine-table td.eps-action {
+            color: #92400E;
+            background: #FFFBEB;
+        }
+
+        .mini-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 14px;
+            margin: 18px 0;
+        }
+
+        .mini-card {
+            background: var(--card, #fff);
+            border: 1px solid rgba(99, 102, 241, .15);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 4px 18px rgba(99, 102, 241, .08);
+        }
+
+        .mini-card h4 {
+            font-family: 'Syne', sans-serif;
+            font-size: 15px;
+            color: var(--purple, #6366F1);
+            font-weight: 700;
+            margin: 0 0 10px;
+        }
+
+        .set-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 14px 0;
+        }
+
+        .set-chip {
+            background: #EEF2FF;
+            color: #4338CA;
+            border: 1px solid rgba(99, 102, 241, .18);
+            border-radius: 999px;
+            padding: 6px 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .set-chip.follow {
+            background: #F0FDF4;
+            color: #065F46;
+            border-color: rgba(16, 185, 129, .28);
+        }
+
+        .set-chip.epsilon {
+            background: #FFFBEB;
+            color: #92400E;
+            border-color: rgba(245, 158, 11, .3);
+        }
+
+        .algo-list {
+            counter-reset: algo;
+            display: grid;
+            gap: 10px;
+            margin: 18px 0;
+        }
+
+        .algo-step {
+            display: grid;
+            grid-template-columns: 42px 1fr;
+            gap: 12px;
+            align-items: start;
+            background: #fff;
+            border: 1px solid rgba(99, 102, 241, .14);
+            border-radius: 12px;
+            padding: 12px 14px;
+        }
+
+        .algo-step::before {
+            counter-increment: algo;
+            content: counter(algo);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #EEF2FF;
+            color: #4338CA;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+        }
+
+        .algo-step strong {
+            color: var(--text, #1E1B4B);
+        }
+
+        .algo-step p {
+            margin: 4px 0 0;
+            color: var(--muted, #6B7280);
+            font-size: 13.5px;
+            line-height: 1.55;
+        }
+
+        .code-panel {
+            background: #1A1830;
+            color: #CDD6F4;
+            border-radius: 12px;
+            padding: 18px 20px;
+            margin: 16px 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 1.7;
+            overflow-x: auto;
+        }
+
+        .code-panel .kw {
+            color: #89B4FA;
+        }
+
+        .code-panel .cm {
+            color: #7F849C;
+        }
+
+        .code-panel .fn {
+            color: #CBA6F7;
+        }
+
+        .code-panel .ch {
+            color: #A6E3A1;
+        }
+
+        .stack-strip {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
+            gap: 10px;
+            margin: 18px 0;
+        }
+
+        .stack-card {
+            background: #fff;
+            border: 1px solid rgba(99, 102, 241, .18);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .stack-card .input {
+            color: var(--muted, #6B7280);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .6px;
+            margin-bottom: 6px;
+        }
+
+        .stack-card .stack {
+            font-family: 'JetBrains Mono', monospace;
+            color: #4338CA;
+            font-size: 13px;
+            font-weight: 700;
+        }

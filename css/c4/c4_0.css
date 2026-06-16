@@ -1,0 +1,267 @@
+
+        /* ── Relation / pair display ─────────────────────────── */
+        .pair-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 8px;
+            margin: 16px 0;
+        }
+
+        .pair-chip {
+            background: var(--purple-s, #EEF2FF);
+            color: var(--purple, #6366F1);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 6px 10px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1.5px solid transparent;
+            transition: border-color .2s, background .2s;
+        }
+
+        .pair-chip.from-r {
+            background: #EEF2FF;
+            border-color: rgba(99, 102, 241, .25);
+        }
+
+        .pair-chip.transitive {
+            background: #FFFBEB;
+            color: #92400E;
+            border-color: rgba(245, 158, 11, .35);
+        }
+
+        .pair-chip.reflexive {
+            background: #F0FDF4;
+            color: #065F46;
+            border-color: rgba(16, 185, 129, .35);
+        }
+
+        /* ── Closure stepper ─────────────────────────────────── */
+        .closure-stepper {
+            background: var(--card, #fff);
+            border: 1px solid rgba(99, 102, 241, .15);
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(99, 102, 241, .09);
+            margin: 24px 0;
+        }
+
+        .cs-header {
+            background: var(--purple-s, #EEF2FF);
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cs-header h4 {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--purple, #6366F1);
+            margin: 0;
+        }
+
+        .cs-body {
+            padding: 22px;
+        }
+
+        .cs-step-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--purple, #6366F1);
+            margin-bottom: 6px;
+        }
+
+        .cs-step-title {
+            font-family: 'Syne', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            color: var(--text, #1E1B4B);
+            margin-bottom: 8px;
+        }
+
+        .cs-step-desc {
+            font-size: 13.5px;
+            color: var(--muted, #6B7280);
+            line-height: 1.65;
+            margin-bottom: 14px;
+        }
+
+        .cs-pairs-wrap {
+            margin-top: 10px;
+        }
+
+        .cs-nav {
+            display: flex;
+            gap: 10px;
+            padding: 14px 22px;
+            background: var(--purple-s, #EEF2FF);
+            border-top: 1px solid rgba(99, 102, 241, .12);
+        }
+
+        /* ── Grammar rule display ────────────────────────────── */
+        .grammar-box {
+            background: var(--code-bg, #1A1830);
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin: 16px 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13.5px;
+            color: #CDD6F4;
+            line-height: 2;
+        }
+
+        .grammar-box .rule-num {
+            color: rgba(205, 214, 244, .45);
+            user-select: none;
+            margin-right: 10px;
+        }
+
+        .grammar-box .nt {
+            color: #CBA6F7;
+        }
+
+        /* nonterminals – purple */
+        .grammar-box .t {
+            color: #A6E3A1;
+        }
+
+        /* terminals – green */
+        .grammar-box .arr {
+            color: #94E2D5;
+        }
+
+        /* arrow – teal */
+
+        /* ── Derivation sequence ─────────────────────────────── */
+        .deriv-seq {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px;
+            margin: 16px 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+        }
+
+        .deriv-seq .ds-step {
+            background: var(--purple-s, #EEF2FF);
+            color: var(--purple, #6366F1);
+            padding: 5px 10px;
+            border-radius: 8px;
+        }
+
+        .deriv-seq .ds-step .underline {
+            text-decoration: underline;
+            text-decoration-color: #6366F1;
+        }
+
+        .deriv-seq .ds-arrow {
+            color: var(--muted, #6B7280);
+            font-size: 16px;
+            padding: 0 2px;
+        }
+
+        .deriv-seq .ds-rule {
+            font-size: 10px;
+            background: rgba(99, 102, 241, .12);
+            color: var(--purple, #6366F1);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        /* ── Tree SVG wrapper ────────────────────────────────── */
+        .tree-wrap {
+            background: var(--card, #fff);
+            border: 1px solid rgba(99, 102, 241, .15);
+            border-radius: 14px;
+            padding: 20px;
+            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .tree-wrap figcaption {
+            font-size: 12px;
+            color: var(--muted, #6B7280);
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        /* ── Relation table ──────────────────────────────────── */
+        .rel-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            margin: 16px 0;
+        }
+
+        .rel-table th {
+            background: var(--purple-s, #EEF2FF);
+            color: var(--purple, #6366F1);
+            padding: 8px 14px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 12px;
+        }
+
+        .rel-table td {
+            padding: 7px 14px;
+            border-bottom: 1px solid #EEF2FF;
+            color: var(--text, #1E1B4B);
+        }
+
+        .rel-table td.reason {
+            color: var(--muted, #6B7280);
+            font-style: italic;
+            font-size: 12px;
+        }
+
+        .rel-table tr.transitive td {
+            background: #FFFBEB;
+        }
+
+        .rel-table tr.reflexive td {
+            background: #F0FDF4;
+        }
+
+        /* legend pills */
+        .legend-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 12px 0 20px;
+        }
+
+        .legend-pill {
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .legend-pill.original {
+            background: #EEF2FF;
+            color: #4338CA;
+        }
+
+        .legend-pill.transitive {
+            background: #FFFBEB;
+            color: #92400E;
+        }
+
+        .legend-pill.reflexive {
+            background: #F0FDF4;
+            color: #065F46;
+        }

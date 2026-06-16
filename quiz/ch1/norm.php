@@ -1,0 +1,1012 @@
+<?php
+session_start();
+include '../../dbconn.php';
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../login.php");
+    exit();
+}
+
+$user_id = $_SESSION['user_id'];
+
+$questions = [
+    [
+        'q' => 'What is the primary function of a compiler?',
+        'choices' => [
+            'A' => 'To execute the source program directly and display output',
+            'B' => 'To translate a high-level source program into an equivalent machine language object program',
+            'C' => 'To check only the syntax of a program and report errors',
+            'D' => 'To interpret each line of code one at a time at run time',
+        ],
+        'answer' => 'B',
+        'explain' => 'A compiler accepts a program written in a high-level language and produces as output an equivalent program in machine language for a particular target machine.',
+        'color'   => 'indigo',
+    ],
+    [
+        'q' => 'When a compiler processes the statement x = x * 9, which of the following is TRUE?',
+        'choices' => [
+            'A' => 'The compiler performs the multiplication and stores the result',
+            'B' => 'The compiler ignores the statement as it is trivial',
+            'C' => 'The compiler generates a sequence of instructions including a multiply instruction — it does NOT perform the multiplication',
+            'D' => 'The compiler converts 9 to binary and stores it in memory',
+        ],
+        'answer' => 'C',
+        'explain' => 'The compiler does NOT perform the multiplication. It generates, as output, a sequence of instructions including a "multiply" instruction to be executed later at run time.',
+        'color'   => 'teal',
+    ],
+    [
+        'q' => 'What is the key difference between a compiler and an interpreter?',
+        'choices' => [
+            'A' => 'A compiler works only with Java; an interpreter works with all languages',
+            'B' => 'The output of a compiler is a machine language program; the output of an interpreter is the source program\'s computed result',
+            'C' => 'An interpreter is faster than a compiler at generating code',
+            'D' => 'A compiler runs one line at a time; an interpreter translates the whole program first',
+        ],
+        'answer' => 'B',
+        'explain' => 'The output of a compiler is a program (in machine language), whereas the output of an interpreter is the source program\'s output — the actual computed result.',
+        'color'   => 'purple',
+    ],
+    [
+        'q' => 'Which of the following is a compile-time error (detected by the compiler)?',
+        'choices' => [
+            'A' => 'Division by zero at run time',
+            'B' => 'An array subscript out of bounds',
+            'C' => 'A missing closing parenthesis: a = ((b+c)*d;',
+            'D' => 'Dereferencing a null pointer',
+        ],
+        'answer' => 'C',
+        'explain' => 'Syntax errors like a missing parenthesis are detected by the compiler at compile time. Division by zero, invalid subscripts, and null pointer errors are run-time errors.',
+        'color'   => 'rose',
+    ],
+    [
+        'q' => 'What is the FIRST phase of a compiler?',
+        'choices' => [
+            'A' => 'Syntax Analysis',
+            'B' => 'Code Generation',
+            'C' => 'Global Optimization',
+            'D' => 'Lexical Analysis',
+        ],
+        'answer' => 'D',
+        'explain' => 'Lexical analysis (the scanner) is the first phase of a compiler. It isolates "words" (tokens/lexemes) from the input string and passes them to the next phase.',
+        'color'   => 'amber',
+    ],
+    [
+        'q' => 'Given the Java input: sum = sum + unit * /* accumulate sum */ 1.2e-12 ;   — how many tokens does the lexical phase output?',
+        'choices' => [
+            'A' => '8 tokens including the comment',
+            'B' => '7 tokens (comment is discarded)',
+            'C' => '5 tokens',
+            'D' => '9 tokens',
+        ],
+        'answer' => 'B',
+        'explain' => 'The 7 tokens are: identifier(sum), assignment(=), identifier(sum), operator(+), identifier(unit), operator(*), numeric constant(1.2e-12). The comment /* accumulate sum */ is identified but discarded.',
+        'color'   => 'green',
+    ],
+    [
+        'q' => 'Which of the following token types is identified by the scanner but NOT included in its output?',
+        'choices' => [
+            'A' => 'Identifiers',
+            'B' => 'Numeric constants',
+            'C' => 'Comments',
+            'D' => 'Keywords',
+        ],
+        'answer' => 'C',
+        'explain' => 'Comments must be identified by the scanner (lexical analyser) but are NOT included in the token output — they are ignored by all subsequent phases.',
+        'color'   => 'cyan',
+    ],
+    [
+        'q' => 'What does the symbol table built during lexical analysis store?',
+        'choices' => [
+            'A' => 'All machine language instructions generated so far',
+            'B' => 'All atoms produced by the parser',
+            'C' => 'All identifiers used in the source program, along with their relevant information and attributes',
+            'D' => 'All syntax errors found during compilation',
+        ],
+        'answer' => 'C',
+        'explain' => 'The symbol table stores all identifiers used in the source program, including relevant information and attributes of those identifiers.',
+        'color'   => 'indigo',
+    ],
+    [
+        'q' => 'For the Java statement A = B + C * D, what is the CORRECT sequence of atoms output by the parser?',
+        'choices' => [
+            'A' => '(ADD,B,C,T1), (MULT,T1,D,T2), (MOVE,T2,A)',
+            'B' => '(MULT,C,D,T1), (ADD,B,T1,T2), (MOVE,T2,A)',
+            'C' => '(MOVE,A,B), (ADD,B,C,T1), (MULT,T1,D,A)',
+            'D' => '(ADD,B,C,T1), (MOVE,T1,A), (MULT,C,D,A)',
+        ],
+        'answer' => 'B',
+        'explain' => 'Multiplication has higher precedence, so the MULT atom comes first: (MULT,C,D,T1), then (ADD,B,T1,T2), then (MOVE,T2,A). The compiler must respect operator precedence.',
+        'color'   => 'purple',
+    ],
+    [
+        'q' => 'In a syntax tree, what do INTERIOR nodes and LEAF nodes represent respectively?',
+        'choices' => [
+            'A' => 'Interior = operands; Leaf = operations',
+            'B' => 'Interior = operations or control structures; Leaf = operands',
+            'C' => 'Interior = tokens; Leaf = atoms',
+            'D' => 'Interior = machine instructions; Leaf = registers',
+        ],
+        'answer' => 'B',
+        'explain' => 'In syntax trees, each interior node represents an operation or control structure, and each leaf node represents an operand.',
+        'color'   => 'teal',
+    ],
+    [
+        'q' => 'Global optimization is described as "machine-independent" because:',
+        'choices' => [
+            'A' => 'It runs on any operating system without modification',
+            'B' => 'It is invoked BEFORE the code generator, examining atoms rather than machine instructions',
+            'C' => 'It does not affect the source program in any way',
+            'D' => 'It can only be used with interpreted languages',
+        ],
+        'answer' => 'B',
+        'explain' => 'Global optimization is called machine-independent because it operates on atoms (before code generation), not on machine-specific instructions. Local optimization, performed after code generation, is machine-dependent.',
+        'color'   => 'rose',
+    ],
+    [
+        'q' => 'Which of the following is an example of a loop invariant that global optimization would move OUT of a loop?',
+        'choices' => [
+            'A' => 'A variable that changes on every loop iteration',
+            'B' => 'A computation that depends on the loop counter i',
+            'C' => 'x = Math.sqrt(y) inside a loop where y never changes',
+            'D' => 'An array access a[i] that uses the loop index',
+        ],
+        'answer' => 'C',
+        'explain' => 'Since y does not change inside the loop, x = Math.sqrt(y) is a loop invariant. Global optimization moves it outside the loop, eliminating 99,999 unnecessary calls.',
+        'color'   => 'amber',
+    ],
+    [
+        'q' => 'In a single-pass compiler, how does control flow between the phases?',
+        'choices' => [
+            'A' => 'Each phase writes its entire output to a disk file before the next phase starts',
+            'B' => 'Lexical analysis runs completely first, then syntax analysis, then code generation',
+            'C' => 'The syntax analyser calls lexical analysis as a subroutine for each token, and calls the code generator as a subroutine for each atom',
+            'D' => 'All three phases run in parallel on separate processor cores',
+        ],
+        'answer' => 'C',
+        'explain' => 'In a single-pass compiler, the parser (syntax analysis) calls the lexical analyser as a subroutine each time it needs a token, and calls the code generator whenever it has produced an atom.',
+        'color'   => 'green',
+    ],
+    [
+        'q' => 'What is bootstrapping in the context of compiler implementation?',
+        'choices' => [
+            'A' => 'Downloading a compiler from the internet to a new machine',
+            'B' => 'Using a small compiler written for a language subset as input to itself (or a related compiler) to produce a full-language compiler',
+            'C' => 'Writing a compiler entirely in machine language from scratch',
+            'D' => 'Converting assembly language directly to machine code',
+        ],
+        'answer' => 'B',
+        'explain' => 'Bootstrapping involves writing a compiler for a language subset in machine language, then writing a full-language compiler in that subset language and using the first compiler to translate it — "pulling yourself up by your bootstraps".',
+        'color'   => 'cyan',
+    ],
+    [
+        'q' => 'What is the main advantage of compiling to an intermediate form (such as atoms or byte code)?',
+        'choices' => [
+            'A' => 'The object program runs faster than native machine code',
+            'B' => 'You need only one front-end per high-level language and one back-end per target machine, reducing the total number of compilers needed',
+            'C' => 'It eliminates the need for a lexical analysis phase',
+            'D' => 'It allows the compiler to skip syntax checking entirely',
+        ],
+        'answer' => 'B',
+        'explain' => 'With intermediate form, for n languages and m machines you need n front-ends + m back-ends instead of n×m full compilers. This dramatically reduces development effort.',
+        'color'   => 'indigo',
+    ],
+];
+
+$total     = count($questions);
+$submitted = false;
+$score     = 0;
+$results   = [];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $submitted = true;
+    foreach ($questions as $i => $q) {
+        $key      = 'q' . $i;
+        $userAns  = $_POST[$key] ?? null;
+        $answered = $userAns !== null;
+        $correct  = $answered && $userAns === $q['answer'];
+        if ($correct) $score++;
+        $results[] = ['answered' => $answered, 'userAns' => $userAns, 'correct' => $correct];
+    }
+
+    $scorepoint = $score * 100;
+
+    // Generate board ID like BD1, BD2, BD3
+    $result = $conn->query("SELECT board_id FROM leaderboard ORDER BY CAST(SUBSTRING(board_id, 3) AS UNSIGNED) DESC LIMIT 1");
+
+    if ($result && $result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $last_number = (int) substr($row['board_id'], 2);
+        $next_number = $last_number + 1;
+    } else {
+        $next_number = 1;
+    }
+
+    $board_id = 'BD' . $next_number;
+
+    $board_chap = 1;
+    $quiz_type = "Normal";
+
+    $stmt = $conn->prepare("
+    INSERT INTO leaderboard (board_id, board_chap, quiz_type, scorepoint, user_id)
+    VALUES (?, ?, ?, ?, ?)
+");
+    $stmt->bind_param("sisii", $board_id, $board_chap, $quiz_type, $scorepoint, $user_id);
+    $stmt->execute();
+    $stmt->close();
+}
+
+$pct = $submitted ? round($score / $total * 100) : 0;
+
+// color palette map
+$palette = [
+    'indigo' => ['bg' => '#EEF2FF', 'border' => '#6366F1', 'text' => '#4338CA', 'light' => '#C7D2FE'],
+    'teal'   => ['bg' => '#F0FDFA', 'border' => '#14B8A6', 'text' => '#0F766E', 'light' => '#99F6E4'],
+    'purple' => ['bg' => '#FAF5FF', 'border' => '#A855F7', 'text' => '#7E22CE', 'light' => '#E9D5FF'],
+    'rose'   => ['bg' => '#FFF1F2', 'border' => '#F43F5E', 'text' => '#BE123C', 'light' => '#FECDD3'],
+    'amber'  => ['bg' => '#FFFBEB', 'border' => '#F59E0B', 'text' => '#92400E', 'light' => '#FDE68A'],
+    'green'  => ['bg' => '#F0FDF4', 'border' => '#22C55E', 'text' => '#15803D', 'light' => '#BBF7D0'],
+    'cyan'   => ['bg' => '#ECFEFF', 'border' => '#06B6D4', 'text' => '#155E75', 'light' => '#A5F3FC'],
+];
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 1 – Medium Quiz</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="../../css/body.css">
+
+    <style>
+        body {
+            background: #F4F3FF;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* ── Header ── */
+        .page-header {
+            max-width: 1160px;
+            margin: 0 auto;
+            padding: 44px 24px 0;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: #1E1B4B;
+            letter-spacing: -.5px;
+        }
+
+        .page-header h1 .accent {
+            color: #6366F1;
+        }
+
+        .difficulty-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #FEF3C7;
+            color: #92400E;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid #FCD34D;
+            margin-bottom: 8px;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+        }
+
+        .page-header p {
+            color: #6B7280;
+            font-size: 14px;
+            margin-top: 6px;
+        }
+
+        /* ── Progress tracker ── */
+        .tracker {
+            max-width: 1160px;
+            margin: 18px auto 0;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tracker-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #E5E7EB;
+            transition: background .3s;
+            cursor: default;
+        }
+
+        .tracker-dot.answered {
+            background: #6366F1;
+        }
+
+        .tracker-label {
+            font-size: 12px;
+            color: #9CA3AF;
+            margin-left: 4px;
+        }
+
+        /* ── Question card ── */
+        .q-card {
+            background: #fff;
+            border-radius: 16px;
+            border-left: 5px solid #E5E7EB;
+            box-shadow: 0 2px 14px rgba(0, 0, 0, .06);
+            padding: 26px 28px;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: rise .45s ease forwards;
+            transition: box-shadow .2s;
+        }
+
+        .q-card:hover {
+            box-shadow: 0 8px 28px rgba(0, 0, 0, .10);
+        }
+
+        <?php foreach ($palette as $name => $c): ?>.q-card.color-<?= $name ?> {
+            border-left-color: <?= $c['border'] ?>;
+            background: <?= $c['bg'] ?>;
+        }
+
+        .q-card.color-<?= $name ?>.q-num {
+            background: <?= $c['light'] ?>;
+            color: <?= $c['text'] ?>;
+        }
+
+        .q-card.color-<?= $name ?>.choice-btn:hover:not(.disabled) {
+            border-color: <?= $c['border'] ?>;
+            background: <?= $c['light'] ?>;
+            color: <?= $c['text'] ?>;
+        }
+
+        .q-card.color-<?= $name ?>.choice-btn.selected {
+            border-color: <?= $c['border'] ?>;
+            background: <?= $c['light'] ?>;
+            color: <?= $c['text'] ?>;
+            font-weight: 600;
+        }
+
+        <?php endforeach; ?><?php for ($i = 1; $i <= 15; $i++) echo ".q-card:nth-child($i){animation-delay:" . ($i * .04) . "s;}"; ?>@keyframes rise {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ── Q number badge ── */
+        .q-num {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+        }
+
+        /* ── Question text ── */
+        .q-text {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1E1B4B;
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+
+        /* ── Choice buttons ── */
+        .choices {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .choice-btn {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 15px;
+            border: 1.5px solid #E5E7EB;
+            border-radius: 10px;
+            background: #fff;
+            cursor: pointer;
+            font-size: 14px;
+            color: #374151;
+            text-align: left;
+            transition: all .18s;
+            width: 100%;
+        }
+
+        .choice-btn .letter {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #F3F4F6;
+            font-size: 12px;
+            font-weight: 700;
+            color: #6B7280;
+            flex-shrink: 0;
+            transition: all .18s;
+        }
+
+        .choice-btn.selected .letter {
+            background: inherit;
+            filter: brightness(.85);
+        }
+
+        /* Result states */
+        .choice-btn.correct-ans {
+            border-color: #22C55E !important;
+            background: #F0FDF4 !important;
+            color: #15803D !important;
+            font-weight: 600;
+        }
+
+        .choice-btn.correct-ans .letter {
+            background: #22C55E;
+            color: #fff;
+        }
+
+        .choice-btn.wrong-ans {
+            border-color: #EF4444 !important;
+            background: #FFF5F5 !important;
+            color: #991B1B !important;
+        }
+
+        .choice-btn.wrong-ans .letter {
+            background: #EF4444;
+            color: #fff;
+        }
+
+        .choice-btn.disabled {
+            cursor: default;
+            pointer-events: none;
+            opacity: .65;
+        }
+
+        /* Card result states */
+        .q-card.result-correct {
+            border-left-color: #22C55E !important;
+        }
+
+        .q-card.result-wrong {
+            border-left-color: #EF4444 !important;
+        }
+
+        .q-card.result-skipped {
+            border-left-color: #9CA3AF !important;
+        }
+
+        /* Result badge */
+        .result-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-bottom: 8px;
+        }
+
+        .badge-correct {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .badge-wrong {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .badge-skipped {
+            background: #F3F4F6;
+            color: #6B7280;
+        }
+
+        /* Explanation */
+        .explain-box {
+            margin-top: 14px;
+            padding: 12px 14px;
+            background: rgba(99, 102, 241, .07);
+            border-left: 3px solid #6366F1;
+            border-radius: 0 8px 8px 0;
+            font-size: 13px;
+            color: #374151;
+            line-height: 1.65;
+        }
+
+        /* ── Score card ── */
+        .score-card {
+            background: #fff;
+            border-radius: 18px;
+            padding: 32px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 24px rgba(99, 102, 241, .12);
+            border: 1px solid #E0E7FF;
+        }
+
+        .score-row {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 20px;
+        }
+
+        .score-stat {
+            text-align: center;
+        }
+
+        .score-big {
+            font-size: 46px;
+            font-weight: 800;
+            color: #6366F1;
+            line-height: 1;
+        }
+
+        .score-lbl {
+            font-size: 12px;
+            color: #9CA3AF;
+            margin-top: 4px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+
+        .stat-correct {
+            color: #22C55E;
+        }
+
+        .stat-wrong {
+            color: #EF4444;
+        }
+
+        .score-bar {
+            height: 12px;
+            background: #E8E8F0;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 0 0 10px;
+        }
+
+        .score-bar-fill {
+            height: 100%;
+            border-radius: 20px;
+            background: linear-gradient(90deg, #6366F1, #818CF8);
+            transition: width 1.1s ease;
+        }
+
+        .score-msg {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1E1B4B;
+        }
+
+        .btn-retry {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 11px 32px;
+            background: #EEF2FF;
+            color: #4338CA;
+            font-weight: 700;
+            font-size: 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            border: 1.5px solid #C7D2FE;
+            transition: background .18s;
+        }
+
+        .btn-retry:hover {
+            background: #c7d2fe;
+            color: #3730a3;
+        }
+
+        /* ── Layout with sidebar ── */
+        .page-layout {
+            display: flex;
+            align-items: flex-start;
+            gap: 0;
+            max-width: 1160px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        /* ── Left nav sidebar ── */
+        .q-nav {
+            position: sticky;
+            top: 80px;
+            width: 310px;
+            flex-shrink: 0;
+            background: #fff;
+            border-radius: 16px;
+            border: 1px solid #E0E7FF;
+            box-shadow: 0 4px 18px rgba(99, 102, 241, .09);
+            padding: 14px 12px;
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            align-items: start;
+            margin-top: 28px;
+            margin-right: 20px;
+            margin-left: 0px;
+        }
+
+        .q-nav-label {
+            grid-column: 1 / -1;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #9CA3AF;
+            margin-bottom: 4px;
+            text-align: center;
+        }
+
+        .q-nav-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            border: 1.5px solid #E5E7EB;
+            background: #F9FAFB;
+            font-size: 12px;
+            font-weight: 700;
+            color: #6B7280;
+            cursor: pointer;
+            transition: all .18s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+
+        .q-nav-btn:hover {
+            background: #EEF2FF;
+            border-color: #6366F1;
+            color: #4338CA;
+            transform: scale(1.08);
+        }
+
+        .q-nav-btn.nav-answered {
+            background: #6366F1;
+            border-color: #6366F1;
+            color: #fff;
+        }
+
+        .q-nav-btn.nav-answered:hover {
+            background: #4F46E5;
+            border-color: #4F46E5;
+            color: #fff;
+        }
+
+        .q-nav-btn.nav-active {
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, .3);
+        }
+
+        /* result colors on nav after submit */
+        .q-nav-btn.nav-correct {
+            background: #22C55E;
+            border-color: #22C55E;
+            color: #fff;
+        }
+
+        .q-nav-btn.nav-wrong {
+            background: #EF4444;
+            border-color: #EF4444;
+            color: #fff;
+        }
+
+        .q-nav-btn.nav-skipped {
+            background: #9CA3AF;
+            border-color: #9CA3AF;
+            color: #fff;
+        }
+
+        .q-nav-btn.nav-correct:hover {
+            background: #16A34A;
+            border-color: #16A34A;
+        }
+
+        .q-nav-btn.nav-wrong:hover {
+            background: #DC2626;
+            border-color: #DC2626;
+        }
+
+        /* ── Quiz wrap (right column) ── */
+        .quiz-wrap {
+            flex: 1;
+            min-width: 0;
+            margin: 28px 0 80px;
+            padding: 0;
+        }
+
+        /* ── Submit ── */
+        .submit-wrap {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #6366F1, #8B5CF6);
+            color: #fff;
+            border: none;
+            padding: 15px 52px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 12px;
+            cursor: pointer;
+            letter-spacing: .3px;
+            box-shadow: 0 4px 16px rgba(99, 102, 241, .3);
+            transition: transform .15s, box-shadow .15s;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(99, 102, 241, .4);
+        }
+    </style>
+</head>
+
+<body>
+    <nav id="navbar" class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a id="title" class="navbar-brand" href="#">CompileX</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="home.php">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Chapter
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Chap 1</a></li>
+                            <li><a class="dropdown-item" href="#">Chap 2</a></li>
+                            <li><a class="dropdown-item" href="#">Chap 3</a></li>
+                            <li><a class="dropdown-item" href="#">Chap 4</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="quiz.php">Quiz</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="leaderboard.php">Leaderboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="profile.php">Profile</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="collapse navbar-collapse">
+                <div class="ms-auto">
+                    <a href="logout.php" class="button-28">LOGOUT</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <div class="difficulty-chip">⚡ Medium Level</div>
+        <h1>Chapter 1 — <span class="accent">Multiple Choice</span> Quiz</h1>
+        <p>15 questions covering Sections 1.1, 1.2, and 1.3. Choose the best answer for each question.</p>
+    </div>
+
+    <!-- Dot tracker -->
+    <div class="tracker" id="tracker">
+        <?php for ($i = 0; $i < $total; $i++): ?>
+            <div class="tracker-dot" id="dot-<?= $i ?>" title="Q<?= $i + 1 ?>"></div>
+        <?php endfor; ?>
+        <span class="tracker-label" id="tracker-label">0 / <?= $total ?> answered</span>
+    </div>
+
+    <div class="page-layout">
+
+        <!-- ── Left question navigator ── -->
+        <nav class="q-nav" id="qNav">
+            <div class="q-nav-label">Question</div>
+            <?php for ($i = 0; $i < $total; $i++):
+                $navClass = 'q-nav-btn';
+                if ($submitted && isset($results[$i])) {
+                    $r = $results[$i];
+                    if (!$r['answered'])   $navClass .= ' nav-skipped';
+                    elseif ($r['correct']) $navClass .= ' nav-correct';
+                    else                   $navClass .= ' nav-wrong';
+                }
+            ?>
+                <a href="#q-<?= $i ?>" class="<?= $navClass ?>" id="nav-btn-<?= $i ?>"><?= $i + 1 ?></a>
+            <?php endfor; ?>
+        </nav>
+
+        <div class="quiz-wrap">
+
+            <?php if ($submitted):
+                $wrong   = $score < $total ? array_reduce(array_keys($results), fn($c, $i) => $c + (!$results[$i]['correct'] && $results[$i]['answered'] ? 1 : 0), 0) : 0;
+                $skipped = array_reduce($results, fn($c, $r) => $c + (!$r['answered'] ? 1 : 0), 0);
+            ?>
+                <div class="score-card">
+                    <div class="score-row">
+                        <div class="score-stat">
+                            <div class="score-big"><?= $score ?>/<?= $total ?></div>
+                            <div class="score-lbl">Total Score</div>
+                        </div>
+                        <div class="score-stat">
+                            <div class="score-big stat-correct"><?= $score ?></div>
+                            <div class="score-lbl">Correct</div>
+                        </div>
+                        <div class="score-stat">
+                            <div class="score-big stat-wrong"><?= $wrong + $skipped ?></div>
+                            <div class="score-lbl">Missed</div>
+                        </div>
+                        <div class="score-stat">
+                            <div class="score-big" style="color:#F59E0B;"><?= $pct ?>%</div>
+                            <div class="score-lbl">Percentage</div>
+                        </div>
+                    </div>
+                    <div class="score-bar">
+                        <div class="score-bar-fill" style="width:<?= $pct ?>%"></div>
+                    </div>
+                    <div class="score-msg">
+                        <?php
+                        if ($pct === 100)    echo '🏆 Perfect! You mastered Chapter 1!';
+                        elseif ($pct >= 80)  echo '🎉 Excellent work! Strong understanding of compiler concepts.';
+                        elseif ($pct >= 60)  echo '👍 Good effort — check the explanations below to fill the gaps.';
+                        elseif ($pct >= 40)  echo '📖 Keep going! Review Chapter 1 and try again.';
+                        else                 echo '💪 Don\'t give up — re-read the notes and try once more!';
+                        ?>
+                    </div>
+                    <a class="btn-retry" href="<?= $_SERVER['PHP_SELF'] ?>">↺ Retry Quiz</a>
+                </div>
+            <?php endif; ?>
+
+            <form method="POST" id="quizForm">
+                <?php foreach ($questions as $i => $q):
+                    $pal = $palette[$q['color']];
+                    $r   = $results[$i] ?? null;
+                    $cardExtra = '';
+                    if ($submitted && $r) {
+                        if (!$r['answered'])   $cardExtra = ' result-skipped';
+                        elseif ($r['correct']) $cardExtra = ' result-correct';
+                        else                   $cardExtra = ' result-wrong';
+                    }
+                ?>
+                    <div id="q-<?= $i ?>" class="q-card color-<?= $q['color'] ?><?= $cardExtra ?>">
+
+                        <?php if ($submitted && $r): ?>
+                            <?php if (!$r['answered']): ?>
+                                <span class="result-badge badge-skipped">⚪ Skipped</span>
+                            <?php elseif ($r['correct']): ?>
+                                <span class="result-badge badge-correct">✔ Correct</span>
+                            <?php else: ?>
+                                <span class="result-badge badge-wrong">✘ Wrong — Correct answer: <?= $q['answer'] ?></span>
+                            <?php endif; ?>
+                        <?php endif; ?>
+
+                        <div class="q-num">Question <?= $i + 1 ?> of <?= $total ?></div>
+                        <div class="q-text"><?= htmlspecialchars($q['q']) ?></div>
+
+                        <div class="choices">
+                            <?php foreach ($q['choices'] as $letter => $text):
+                                $btnClass = 'choice-btn';
+                                if ($submitted && $r) {
+                                    $btnClass .= ' disabled';
+                                    if ($letter === $q['answer'])                              $btnClass .= ' correct-ans';
+                                    elseif ($r['answered'] && $letter === $r['userAns'])       $btnClass .= ' wrong-ans';
+                                } elseif (!$submitted) {
+                                    // selected highlight handled by JS
+                                }
+                                $checked = ($submitted && $r && $r['answered'] && $r['userAns'] === $letter);
+                            ?>
+                                <button type="button"
+                                    class="<?= $btnClass ?><?= (!$submitted && '') ?>"
+                                    data-qi="<?= $i ?>"
+                                    data-val="<?= $letter ?>"
+                                    onclick="selectChoice(this)"
+                                    <?= ($submitted) ? 'disabled' : '' ?>>
+                                    <span class="letter"><?= $letter ?></span>
+                                    <span><?= htmlspecialchars($text) ?></span>
+                                    <input type="radio" name="q<?= $i ?>" value="<?= $letter ?>"
+                                        style="display:none" <?= $checked ? 'checked' : '' ?>>
+                                </button>
+                            <?php endforeach; ?>
+                        </div>
+
+                        <?php if ($submitted): ?>
+                            <div class="explain-box">💡 <?= htmlspecialchars($q['explain']) ?></div>
+                        <?php endif; ?>
+
+                    </div>
+                <?php endforeach; ?>
+
+                <?php if (!$submitted): ?>
+                    <div class="submit-wrap">
+                        <button type="submit" class="btn-submit">Submit Answers →</button>
+                    </div>
+                <?php endif; ?>
+            </form>
+        </div><!-- end quiz-wrap -->
+    </div><!-- end page-layout -->
+
+    <script>
+        const total = <?= $total ?>;
+        let answered = new Set();
+
+        function selectChoice(btn) {
+            const qi = btn.dataset.qi;
+            const val = btn.dataset.val;
+
+            // Deselect siblings
+            document.querySelectorAll(`.choice-btn[data-qi="${qi}"]`).forEach(b => {
+                b.classList.remove('selected');
+                b.querySelector('input[type=radio]').checked = false;
+            });
+
+            // Select this one
+            btn.classList.add('selected');
+            btn.querySelector('input[type=radio]').checked = true;
+
+            // Update dot tracker
+            answered.add(qi);
+            document.getElementById('dot-' + qi).classList.add('answered');
+            document.getElementById('tracker-label').textContent = answered.size + ' / ' + total + ' answered';
+
+            // Update nav button
+            const navBtn = document.getElementById('nav-btn-' + qi);
+            if (navBtn) navBtn.classList.add('nav-answered');
+        }
+
+        // Highlight active nav button on scroll
+        const cards = document.querySelectorAll('.q-card');
+        const navBtns = document.querySelectorAll('.q-nav-btn');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.id; // "q-N"
+                    const idx = id.split('-')[1];
+                    navBtns.forEach(b => b.classList.remove('nav-active'));
+                    const activeBtn = document.getElementById('nav-btn-' + idx);
+                    if (activeBtn) activeBtn.classList.add('nav-active');
+                }
+            });
+        }, {
+            threshold: 0.35
+        });
+        cards.forEach(c => observer.observe(c));
+
+        // Restore selection state on page load (in case of browser back)
+        document.querySelectorAll('input[type=radio]:checked').forEach(inp => {
+            const btn = inp.closest('.choice-btn');
+            if (btn) {
+                btn.classList.add('selected');
+                const qi = btn.dataset.qi;
+                answered.add(qi);
+                const navBtn = document.getElementById('nav-btn-' + qi);
+                if (navBtn) navBtn.classList.add('nav-answered');
+            }
+        });
+    </script>
+
+</body>
+
+</html>

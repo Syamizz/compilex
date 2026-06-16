@@ -1,0 +1,167 @@
+<mxfile host="app.diagrams.net" agent="Codex">
+  <diagram id="compilex-overall-flow" name="CompileX Overall System Flowchart">
+    <mxGraphModel dx="1373" dy="1759" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="2" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=24;fontStyle=1;fontColor=#1E1B4B;" value="CompileX System Flowchart" vertex="1">
+          <mxGeometry height="30" width="480" x="550" y="-40" as="geometry" />
+        </mxCell>
+        <mxCell id="3" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=14;fontColor=#1E1B4B;" value="User" vertex="1">
+          <mxGeometry height="120" width="60" x="40" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EEF2FF;strokeColor=#6366F1;fontColor=#1E1B4B;fontSize=14;" value="Landing Page&#xa;index.php" vertex="1">
+          <mxGeometry height="70" width="160" x="150" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="5" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#F59E0B;fontColor=#92400E;fontSize=14;" value="Already have&#xa;account?" vertex="1">
+          <mxGeometry height="80" width="120" x="360" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E8FF;strokeColor=#A855F7;fontColor=#4C1D95;fontSize=14;" value="Login&#xa;login.php" vertex="1">
+          <mxGeometry height="70" width="160" x="540" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#10B981;fontColor=#065F46;fontSize=14;" value="Register&#xa;register.php /&#xa;register_process.php" vertex="1">
+          <mxGeometry height="90" width="160" x="540" y="215" as="geometry" />
+        </mxCell>
+        <mxCell id="9" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FCE7F3;strokeColor=#EC4899;fontColor=#9D174D;fontSize=14;" value="Authentication /&#xa;User Data Validation" vertex="1">
+          <mxGeometry height="90" width="180" x="780" y="215" as="geometry" />
+        </mxCell>
+        <mxCell id="10" parent="1" style="shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#E0F2FE;strokeColor=#0284C7;fontColor=#0C4A6E;fontSize=14;" value="MySQL Database&#xa;compilex&#xa;&#xa;Tables / data used for:&#xa;- users&#xa;- profile image path&#xa;- progress / quiz data&#xa;(current app partly demo-based)" vertex="1">
+          <mxGeometry height="270" width="220" x="1040" as="geometry" />
+        </mxCell>
+        <mxCell id="11" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EEF2FF;strokeColor=#6366F1;fontColor=#1E1B4B;fontSize=14;fontStyle=1;" value="Home Dashboard&#xa;home.php&#xa;&#xa;Main navigation hub" vertex="1">
+          <mxGeometry height="95" width="180" x="840" y="427.5" as="geometry" />
+        </mxCell>
+        <mxCell id="12" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FDF2F8;strokeColor=#EC4899;fontColor=#9D174D;fontSize=13;" value="Navbar&lt;br&gt;dashboard.php&lt;br&gt;&lt;br&gt;Home / Chapter / Quiz /&lt;br&gt;Leaderboard / Profile / Logout" vertex="1">
+          <mxGeometry height="100" width="220" x="1180" y="305" as="geometry" />
+        </mxCell>
+        <mxCell id="13" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E8FF;strokeColor=#8B5CF6;fontColor=#4C1D95;fontSize=14;" value="Chapter Notes&#xa;chapter1 / chapter2 /&#xa;chapter3 / chapter4" vertex="1">
+          <mxGeometry height="90" width="180" x="220" y="630" as="geometry" />
+        </mxCell>
+        <mxCell id="14" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAF5FF;strokeColor=#A855F7;fontColor=#581C87;fontSize=13;" value="Read Notes /&#xa;Interactive Learning&#xa;(examples, diagrams, exercises)" vertex="1">
+          <mxGeometry height="90" width="180" x="220" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="15" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ECFCCB;strokeColor=#65A30D;fontColor=#365314;fontSize=14;" value="Quiz Module&#xa;quiz.php" vertex="1">
+          <mxGeometry height="90" width="180" x="530" y="630" as="geometry" />
+        </mxCell>
+        <mxCell id="16" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF9C3;strokeColor=#CA8A04;fontColor=#713F12;fontSize=13;" value="Chapter unlock logic&#xa;based on previous&#xa;chapter progress" vertex="1">
+          <mxGeometry height="90" width="180" x="530" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="17" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE4E6;strokeColor=#F43F5E;fontColor=#881337;fontSize=14;" value="Leaderboard&#xa;leaderboard.php" vertex="1">
+          <mxGeometry height="90" width="180" x="770" y="670" as="geometry" />
+        </mxCell>
+        <mxCell id="19" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E0F2FE;strokeColor=#0EA5E9;fontColor=#0C4A6E;fontSize=13;" value="Update Profile&#xa;update_profile.php&#xa;upload_profile.php" vertex="1">
+          <mxGeometry height="90" width="180" x="1010" y="805" as="geometry" />
+        </mxCell>
+        <mxCell id="20" parent="1" style="shape=folder;tabWidth=40;tabHeight=14;tabPosition=left;html=1;fillColor=#F8FAFC;strokeColor=#64748B;fontColor=#334155;fontSize=13;" value="Image Storage&#xa;images/" vertex="1">
+          <mxGeometry height="80" width="140" x="1310" y="805" as="geometry" />
+        </mxCell>
+        <mxCell id="21" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEE2E2;strokeColor=#EF4444;fontColor=#991B1B;fontSize=14;" value="Logout&#xa;logout.php" vertex="1">
+          <mxGeometry height="90" width="140" x="1330" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="22" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#94A3B8;fontColor=#334155;fontSize=13;" value="Session End /&#xa;Return to Entry" vertex="1">
+          <mxGeometry height="80" width="140" x="1540" y="435" as="geometry" />
+        </mxCell>
+        <mxCell id="23" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F0FDF4;strokeColor=#22C55E;fontColor=#166534;fontSize=13;" value="dbconn.php&#xa;opens DB connection" vertex="1">
+          <mxGeometry height="60" width="160" x="1370" y="165" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;endArrow=block;endFill=1;" target="4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#64748B;endArrow=block;endFill=1;" target="5" value="open system">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#64748B;endArrow=block;endFill=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;" target="6" value="Yes">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#64748B;endArrow=block;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="7" value="No">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="410" y="270" as="sourcePoint" />
+            <mxPoint x="470" y="345.0666666666666" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#2563EB;endArrow=block;endFill=1;" target="8" value="or use Google">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#64748B;endArrow=block;endFill=1;" target="9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#64748B;endArrow=block;endFill=1;" target="9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#2563EB;endArrow=block;endFill=1;" target="9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#0284C7;endArrow=block;endFill=1;" target="10" value="read / write user data">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#10B981;endArrow=block;endFill=1;" value="success">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="889.93" y="340" />
+              <mxPoint x="949.93" y="340" />
+            </Array>
+            <mxPoint x="889.9966666666666" y="305" as="sourcePoint" />
+            <mxPoint x="949.9966666666666" y="427.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#EC4899;endArrow=block;endFill=1;" target="12" value="shared navigation">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" edge="1" parent="1" source="11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#8B5CF6;endArrow=block;endFill=1;" target="13" value="open chapter">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" edge="1" parent="1" source="13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#8B5CF6;endArrow=block;endFill=1;" target="14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" edge="1" parent="1" source="8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#65A30D;endArrow=block;endFill=1;" target="15" value="take quiz">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" edge="1" parent="1" source="15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#CA8A04;endArrow=block;endFill=1;" target="16" value="unlock / availability">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e16" edge="1" parent="1" source="11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#F43F5E;endArrow=block;endFill=1;" target="17" value="view ranking">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e17" edge="1" parent="1" source="11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#3B82F6;endArrow=block;endFill=1;" target="18" value="manage profile">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e18" edge="1" parent="1" source="18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#0EA5E9;endArrow=block;endFill=1;" target="19" value="edit info / upload image">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e19" edge="1" parent="1" source="18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#0284C7;endArrow=block;endFill=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;" target="10" value="store profile data">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e20" edge="1" parent="1" source="19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#64748B;endArrow=block;endFill=1;" target="20" value="save image file">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e21" edge="1" parent="1" source="11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#EF4444;endArrow=block;endFill=1;" target="21" value="logout">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e22" edge="1" parent="1" source="21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#94A3B8;endArrow=block;endFill=1;" target="22">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e24" edge="1" parent="1" source="23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#22C55E;endArrow=block;endFill=1;" target="10" value="DB connection">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="BWTKqtdvUsMzrd6O89Wb-23" edge="1" parent="1" source="11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#65A30D;endArrow=block;endFill=1;" target="8" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="770" y="392" as="sourcePoint" />
+            <mxPoint x="560" y="520" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2563EB;fontColor=#1E3A8A;fontSize=14;" value="Google Login&#xa;google-login.php&#xa;google-callback.php" vertex="1">
+          <mxGeometry height="90" width="160" x="540" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="BWTKqtdvUsMzrd6O89Wb-24" edge="1" parent="1" source="19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#0284C7;endArrow=block;endFill=1;" target="18" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1060" y="800" as="sourcePoint" />
+            <mxPoint x="1150" y="270" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="18" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#3B82F6;fontColor=#1E3A8A;fontSize=14;" value="Profile&#xa;profile.php" vertex="1">
+          <mxGeometry height="90" width="180" x="1010" y="630" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
