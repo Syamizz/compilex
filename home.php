@@ -169,6 +169,12 @@ $chapters = [
             ['label' => '4.6.1 Implementing Attributed Grammars with Recursive Descent ', 'href' => 'chapter4/c4_6_1.php'],
             ['label' => '4.7 An Attributed Translation Grammar for Expressions', 'href' => 'chapter4/c4_7_0.php'],
             ['label' => '4.7.1 Translating Expressions with Recursive Descent', 'href' => 'chapter4/c4_7_1.php'],
+            ['label' => '4.8 Decaf Expressions (Part 1)', 'href' => 'chapter4/c4_8_0.php'],
+            ['label' => '4.8 Decaf Expressions (Part 2)', 'href' => 'chapter4/c4_8_1.php'],
+            ['label' => '4.9 Translating Control Structures (Part 1)', 'href' => 'chapter4/c4_9_0.php'],
+            ['label' => '4.9 Translating Control Structures (Part 2)', 'href' => 'chapter4/c4_9_1.php'],
+            ['label' => '4.10 Case Study: A Top Down Parser for Decaf (Part 1)', 'href' => 'chapter4/c4_10_0.php'],
+            ['label' => '4.10 Case Study: A Top Down Parser for Decaf (Part 2)', 'href' => 'chapter4/c4_10_1.php'],
         ],
     ],
 ];

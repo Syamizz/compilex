@@ -12,7 +12,7 @@ $user_id = $_SESSION['user_id'];
 
 $chapter  = 4;
 $page     = 25;
-$nextPage = "c4_10.php"; // adjust as needed
+$nextPage = "c4_10_0.php"; // adjust as needed
 
 if (isset($_GET['complete']) && $_GET['complete'] == '25') {
     saveProgress($conn, $user_id, $chapter, $page);
@@ -533,7 +533,7 @@ if (isset($_GET['complete']) && $_GET['complete'] == '25') {
                 <a href="?complete=25" class="nav-btn next">
                     <div style="text-align:right">
                         <span class="btn-sub">Next page</span>
-                        4.10 Next Topic
+                        4.10 Case Study: A Top Down Parser for Decaf
                     </div>
                     <span>→</span>
                 </a>
