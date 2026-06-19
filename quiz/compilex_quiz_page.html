@@ -1,0 +1,122 @@
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.qp{padding:2rem 1.5rem 3rem}
+.qp-head{margin-bottom:2rem}
+.qp-head h1{font-size:22px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.qp-head h1 span{color:#6366F1}
+.qp-head p{font-size:14px;color:var(--color-text-secondary)}
+.qgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.qcard{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;display:flex;flex-direction:column;transition:border-color .2s}
+.qcard:not(.locked):hover{border-color:var(--color-border-secondary)}
+.qcard.locked{opacity:.6}
+.qcard-accent{height:3px}
+.ac1{background:#6366F1}.ac2{background:#06B6D4}.ac3{background:#F59E0B}.ac4{background:#EF4444}
+.locked .qcard-accent{background:var(--color-border-tertiary)}
+.qcard-body{padding:1rem 1.25rem;flex:1;display:flex;flex-direction:column;gap:10px}
+.ch-label{font-size:11px;font-weight:500;letter-spacing:.6px;color:var(--color-text-secondary);text-transform:uppercase}
+.ch-title{font-size:15px;font-weight:500;color:var(--color-text-primary);line-height:1.4}
+.ch-desc{font-size:13px;color:var(--color-text-secondary);line-height:1.6;flex:1}
+.prog-wrap{display:flex;flex-direction:column;gap:4px}
+.prog-row{display:flex;justify-content:space-between;font-size:11px;color:var(--color-text-secondary)}
+.prog-track{height:4px;background:var(--color-background-secondary);border-radius:99px;overflow:hidden}
+.prog-fill{height:100%;border-radius:99px}
+.diff-row{display:flex;gap:6px}
+.dbtn{flex:1;padding:7px 4px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:12px;font-weight:500;background:var(--color-background-primary);color:var(--color-text-primary);cursor:pointer;text-align:center;text-decoration:none;transition:background .15s,border-color .15s}
+.dbtn:hover{background:var(--color-background-secondary);border-color:var(--color-border-primary)}
+.dbtn.easy{color:#065F46;border-color:#6EE7B7;background:#F0FDF4}
+.dbtn.easy:hover{background:#D1FAE5}
+.dbtn.normal{color:#92400E;border-color:#FCD34D;background:#FFFBEB}
+.dbtn.normal:hover{background:#FEF3C7}
+.dbtn.hard{color:#991B1B;border-color:#FCA5A5;background:#FFF5F5}
+.dbtn.hard:hover{background:#FEE2E2}
+.locked .dbtn{color:var(--color-text-secondary);background:var(--color-background-secondary);border-color:var(--color-border-tertiary);cursor:not-allowed;pointer-events:none}
+.qcard-foot{padding:8px 1.25rem;border-top:0.5px solid var(--color-border-tertiary);font-size:12px;display:flex;align-items:center;gap:6px}
+.foot-ok{color:#059669}.foot-lock{color:var(--color-text-secondary)}
+</style>
+<div class="qp">
+  <h2 class="sr-only">CompileX quiz selection page with four chapter cards</h2>
+  <div class="qp-head">
+    <h1>Choose your <span>quiz</span></h1>
+    <p>Complete each chapter's learning material to unlock the next quiz.</p>
+  </div>
+  <div class="qgrid">
+
+    <div class="qcard">
+      <div class="qcard-accent ac1"></div>
+      <div class="qcard-body">
+        <div class="ch-label"><i class="ti ti-check" aria-hidden="true"></i> Chapter 1</div>
+        <div class="ch-title">Introduction to Compilers</div>
+        <div class="ch-desc">Tokenisation, regular expressions, and the role of a scanner in compilation.</div>
+        <div class="prog-wrap">
+          <div class="prog-row"><span>Learning progress</span><span>100%</span></div>
+          <div class="prog-track"><div class="prog-fill" style="width:100%;background:#6366F1"></div></div>
+        </div>
+        <div class="diff-row">
+          <a href="ch1/easy.php" class="dbtn easy">Easy</a>
+          <a href="ch1/norm.php" class="dbtn normal">Normal</a>
+          <a href="ch1/hard.php" class="dbtn hard">Hard</a>
+        </div>
+      </div>
+      <div class="qcard-foot foot-ok"><i class="ti ti-circle-check" aria-hidden="true"></i> Unlocked — pick a difficulty</div>
+    </div>
+
+    <div class="qcard">
+      <div class="qcard-accent ac2"></div>
+      <div class="qcard-body">
+        <div class="ch-label"><i class="ti ti-check" aria-hidden="true"></i> Chapter 2</div>
+        <div class="ch-title">Syntax Analysis</div>
+        <div class="ch-desc">Context-free grammars, parse trees, and top-down vs bottom-up parsing.</div>
+        <div class="prog-wrap">
+          <div class="prog-row"><span>Learning progress</span><span>100%</span></div>
+          <div class="prog-track"><div class="prog-fill" style="width:100%;background:#06B6D4"></div></div>
+        </div>
+        <div class="diff-row">
+          <a href="ch2/easy.php" class="dbtn easy">Easy</a>
+          <a href="ch2/norm.php" class="dbtn normal">Normal</a>
+          <a href="ch2/hard.php" class="dbtn hard">Hard</a>
+        </div>
+      </div>
+      <div class="qcard-foot foot-ok"><i class="ti ti-circle-check" aria-hidden="true"></i> Unlocked — pick a difficulty</div>
+    </div>
+
+    <div class="qcard">
+      <div class="qcard-accent ac3"></div>
+      <div class="qcard-body">
+        <div class="ch-label"><i class="ti ti-check" aria-hidden="true"></i> Chapter 3</div>
+        <div class="ch-title">Semantic Analysis</div>
+        <div class="ch-desc">Type checking, symbol tables, and enforcing language semantics.</div>
+        <div class="prog-wrap">
+          <div class="prog-row"><span>Learning progress</span><span>100%</span></div>
+          <div class="prog-track"><div class="prog-fill" style="width:100%;background:#F59E0B"></div></div>
+        </div>
+        <div class="diff-row">
+          <a href="ch3/easy.php" class="dbtn easy">Easy</a>
+          <a href="ch3/norm.php" class="dbtn normal">Normal</a>
+          <a href="ch3/hard.php" class="dbtn hard">Hard</a>
+        </div>
+      </div>
+      <div class="qcard-foot foot-ok"><i class="ti ti-circle-check" aria-hidden="true"></i> Unlocked — pick a difficulty</div>
+    </div>
+
+    <div class="qcard">
+      <div class="qcard-accent ac4"></div>
+      <div class="qcard-body">
+        <div class="ch-label"><i class="ti ti-check" aria-hidden="true"></i> Chapter 4</div>
+        <div class="ch-title">Top Down Parsing</div>
+        <div class="ch-desc">Intermediate code, optimisation strategies, and target machine code.</div>
+        <div class="prog-wrap">
+          <div class="prog-row"><span>Learning progress</span><span>100%</span></div>
+          <div class="prog-track"><div class="prog-fill" style="width:100%;background:#EF4444"></div></div>
+        </div>
+        <div class="diff-row">
+          <a href="ch4/easy.php" class="dbtn easy">Easy</a>
+          <a href="ch4/norm.php" class="dbtn normal">Normal</a>
+          <a href="ch4/hard.php" class="dbtn hard">Hard</a>
+        </div>
+      </div>
+      <div class="qcard-foot foot-ok"><i class="ti ti-circle-check" aria-hidden="true"></i> Unlocked — pick a difficulty</div>
+    </div>
+
+  </div>
+</div>

@@ -5,13 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CompileX</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-
+ 
     <!-- font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playwrite+NZ+Basic:wght@100..400&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="stylesheet" href="body.css">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         * {
@@ -21,7 +21,9 @@
         }
  
         body {
-            font-family: var(--font-sans);
+            font-family: 'Syne', sans-serif;
+            background: var(--color-background-tertiary);
+            margin: 0;
         }
 
         .page {
@@ -29,11 +31,29 @@
             min-height: 500px;
         }
 
-        nav {
-            background: #FFD6FF;
-            padding: 12px 20px;
-            border-bottom: 0.5px solid rgba(0, 0, 0, 0.08);
+         #navbar {
+            background-color:  #18181B;
         }
+
+        /* Navbar text — white on dark background */
+        #navbar a,
+        #navbar .nav-link {
+            color: #FFFFFF;
+        }
+
+        /* Hover state — slightly muted so there's a visual reaction */
+        #navbar a:hover,
+        #navbar .nav-link:hover {
+            color: #A1A1AA;
+        }
+
+        /* Active/current page — white + indigo underline */
+        #navbar a.active,
+        #navbar .nav-link.active {
+            color: #FFFFFF;
+            border-bottom: 4px solid #6366F1;
+        }
+
 
         nav span {
             font-family: var(--font-serif);

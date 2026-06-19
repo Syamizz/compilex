@@ -45,19 +45,36 @@ footer {
 }
 
 #navbar {
-    background-color: #FFD6FF;
+    background-color:  #18181B;
 }
 
+/* Navbar text — white on dark background */
+#navbar a,
+#navbar .nav-link {
+    color: #FFFFFF;
+}
 
+/* Hover state — slightly muted so there's a visual reaction */
+#navbar a:hover,
+#navbar .nav-link:hover {
+    color: #A1A1AA;
+}
+
+/* Active/current page — white + indigo underline */
+#navbar a.active,
+#navbar .nav-link.active {
+    color: #FFFFFF;
+    border-bottom: 4px solid #6366F1;
+}
 
 /* CSS */
 .button-28 {
     appearance: none;
     background-color: transparent;
-    border: 2px solid #1A1A1A;
+    border: 2px solid #f7f3f3;
     border-radius: 15px;
     box-sizing: border-box;
-    color: #3B3B3B;
+    color: #504141;
     cursor: pointer;
     display: inline-block;
     font-size: 10px;

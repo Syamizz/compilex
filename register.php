@@ -9,25 +9,43 @@ $error = $_GET['error'] ?? '';
     <title>ezComp - Register</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- font -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playwrite+NZ+Basic:wght@100..400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="body.css">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         
 
         body {
+            font-family: 'Syne', sans-serif;
+            background: var(--color-background-tertiary);
             margin: 0;
-            color: #374151;
-            font-family: var(--font-sans);
-            background: #FAFAF9;
         }
 
-        #navbar {
-            background-color: #FFD6FF;
+          #navbar {
+            background-color:  #18181B;
+        }
+
+        /* Navbar text — white on dark background */
+        #navbar a,
+        #navbar .nav-link {
+            color: #FFFFFF;
+        }
+
+        /* Hover state — slightly muted so there's a visual reaction */
+        #navbar a:hover,
+        #navbar .nav-link:hover {
+            color: #A1A1AA;
+        }
+
+        /* Active/current page — white + indigo underline */
+        #navbar a.active,
+        #navbar .nav-link.active {
+            color: #FFFFFF;
+            border-bottom: 4px solid #6366F1;
         }
 
         #title {
@@ -37,19 +55,28 @@ $error = $_GET['error'] ?? '';
         .button-28 {
             appearance: none;
             background-color: transparent;
-            border: 2px solid #1A1A1A;
+            border: 2px solid #f7f3f3;
             border-radius: 15px;
-            color: #3B3B3B;
+            box-sizing: border-box;
+            color: #504141;
             cursor: pointer;
             display: inline-block;
             font-size: 10px;
             font-weight: 600;
+            line-height: normal;
+            margin: 0;
             min-height: 30px;
+            min-width: 0;
+            outline: none;
             padding: 12px 20px;
             text-align: center;
             text-decoration: none;
             transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
             width: auto;
+            will-change: transform;
         }
 
         .button-28:hover {

@@ -37,31 +37,22 @@ if (!empty($user['profile_image']) && file_exists("images/" . $user['profile_ima
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="stylesheet" href="body.css">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 
     <!-- font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playwrite+NZ+Basic:wght@100..400&display=swap" rel="stylesheet">
 
     <style>
         body {
+            font-family: 'Syne', sans-serif;
+            background: var(--color-background-tertiary);
             margin: 0;
-            color: #374151;
-
-            font-family: Arial;
-            background: #FAFAF9;
-            font-family: "Playwrite NZ Basic", cursive;
-            font-optical-sizing: auto;
-            font-weight: 2px;
-            font-style: normal;
         }
 
-
-        .logo {
-            font-size: 22px;
-            font-weight: bold;
-            color: #6366F1;
-        }
 
         .login-btn {
             background: #A5B4FC;
@@ -158,7 +149,26 @@ if (!empty($user['profile_image']) && file_exists("images/" . $user['profile_ima
         }
 
         #navbar {
-            background-color: #FFD6FF;
+            background-color: #18181B;
+        }
+
+        /* Navbar text — white on dark background */
+        #navbar a,
+        #navbar .nav-link {
+            color: #FFFFFF;
+        }
+
+        /* Hover state — slightly muted so there's a visual reaction */
+        #navbar a:hover,
+        #navbar .nav-link:hover {
+            color: #A1A1AA;
+        }
+
+        /* Active/current page — white + indigo underline */
+        #navbar a.active,
+        #navbar .nav-link.active {
+            color: #FFFFFF;
+            border-bottom: 4px solid #6366F1;
         }
 
 
@@ -167,10 +177,10 @@ if (!empty($user['profile_image']) && file_exists("images/" . $user['profile_ima
         .button-28 {
             appearance: none;
             background-color: transparent;
-            border: 2px solid #1A1A1A;
+            border: 2px solid #f7f3f3;
             border-radius: 15px;
             box-sizing: border-box;
-            color: #3B3B3B;
+            color: #504141;
             cursor: pointer;
             display: inline-block;
             font-size: 10px;
@@ -383,27 +393,17 @@ if (!empty($user['profile_image']) && file_exists("images/" . $user['profile_ima
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="home.php">Home</a>
+                        <a class="nav-link" aria-current="page" href="home.php">Home</a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Chapter
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Chap 1</a></li>
-                            <li><a class="dropdown-item" href="#">Chap 2</a></li>
-                            <li><a class="dropdown-item" href="#">Chap 3</a></li>
-                            <li><a class="dropdown-item" href="#">Chap 4</a></li>
-                        </ul>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="quiz.php">Quiz</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Quiz</a>
+                        <a class="nav-link" href="leaderboard.php">Leaderboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Leaderboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " href="#">Profile</a>
+                        <a class="nav-link active" href="profile.php">Profile</a>
                     </li>
                 </ul>
             </div>
@@ -457,6 +457,10 @@ if (!empty($user['profile_image']) && file_exists("images/" . $user['profile_ima
                 <button type="button" class="button-4" data-bs-toggle="modal" data-bs-target="#editProfileModal">
                     Edit Profile
                 </button>
+
+                <a href="change_password.php" class="button-4" style="text-decoration: none; margin-left: 8px;">
+                    Change Password
+                </a>
             </div>
         </div>
     </div>

@@ -10,10 +10,10 @@
         .button-28 {
             appearance: none;
             background-color: transparent;
-            border: 2px solid #1A1A1A;
+            border: 2px solid #f7f3f3;
             border-radius: 15px;
             box-sizing: border-box;
-            color: #3B3B3B;
+            color: #504141;
             cursor: pointer;
             display: inline-block;
             font-size: 10px;
@@ -61,7 +61,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="../home.php">Home</a>
+                    <a class="nav-link" aria-current="page" href="../home.php">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="../quiz.php">Quiz</a>

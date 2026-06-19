@@ -347,7 +347,7 @@ $showTutorial = !$hasAnySavedProgress || $allChapterProgressZero;
 
 <head>
     <meta charset="UTF-8">
-    <title>ezComp – Learn Compiler Principles</title>
+    <title>Compilex– Learn Compiler Principles</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -581,6 +581,7 @@ $showTutorial = !$hasAnySavedProgress || $allChapterProgressZero;
             transform: rotate(180deg);
         }
 
+        /* chapter sub list */
         .completed-list {
             display: none;
             margin: 4px 24px 0;
@@ -591,6 +592,27 @@ $showTutorial = !$hasAnySavedProgress || $allChapterProgressZero;
 
         .completed-list.open {
             display: block;
+        }
+
+        /* Scrollable inner wrapper — shows max 10 items (~40px each = 400px) */
+        .completed-list-inner {
+            max-height: 200px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--indigo) transparent;
+        }
+
+        .completed-list-inner::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .completed-list-inner::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .completed-list-inner::-webkit-scrollbar-thumb {
+            background: var(--indigo);
+            border-radius: 4px;
         }
 
         .done-item {
@@ -1157,6 +1179,74 @@ $showTutorial = !$hasAnySavedProgress || $allChapterProgressZero;
             background: #6366F1;
             color: white;
         }
+
+        /* Badge carousel */
+        .badges-carousel-wrap {
+            padding: 0 36px;
+            background: linear-gradient(135deg, #e6e9f5 0%, #cfd9f2 50%, #b8c6ec 100%);
+        }
+
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            padding: 18px 0;
+            background: transparent;
+        }
+
+        .badges-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.85);
+            border: 0.5px solid rgba(99,102,241,0.3);
+            color: var(--indigo);
+            font-size: 20px;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            transition: background 0.18s, box-shadow 0.18s;
+            padding: 0;
+            font-family: inherit;
+        }
+
+        .badges-nav-btn:hover {
+            background: white;
+            box-shadow: 0 2px 8px rgba(99,102,241,0.25);
+        }
+
+        .badges-nav-btn:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+
+        .badges-nav-left  { left: 4px; }
+        .badges-nav-right { right: 4px; }
+
+        .badges-dots {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            padding-bottom: 14px;
+        }
+
+        .badges-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(99,102,241,0.3);
+            transition: background 0.18s;
+        }
+
+        .badges-dot.active {
+            background: var(--indigo);
+        }
     </style>
 </head>
 
@@ -1213,12 +1303,14 @@ $showTutorial = !$hasAnySavedProgress || $allChapterProgressZero;
                             </button>
 
                             <div class="completed-list" id="done-<?= $ch['id'] ?>">
-                                <?php foreach ($ch['doneTopics'] as $done): ?>
+                                <div class="completed-list-inner">
+                                    <?php foreach ($ch['doneTopics'] as $done): ?>
                                     <a class="done-item" href="<?= $done['href'] ?>">
                                         <span class="done-check" style="color:<?= $ch['color'] ?>;">✓</span>
                                         <span><?= htmlspecialchars($done['label']) ?></span>
                                     </a>
-                                <?php endforeach; ?>
+                                    <?php endforeach; ?>
+                                </div>
                             </div>
                         <?php endif; ?>
 
@@ -1385,57 +1477,64 @@ $showTutorial = !$hasAnySavedProgress || $allChapterProgressZero;
 
                 <div class="section-heading" style="margin-top: 28px;">Badges earned</div>
 
-                <div class="badges-card" id="tutorial-badges">
-                    <div class="badges-card-header">
-                        <span class="badges-card-title">Your badges</span>
-                        <span class="badges-count-pill">
-                            <?= $earnedCount ?> / <?= count($badges) ?> earned
-                        </span>
-                    </div>
+                <?php
+// Sort badges: earned first, then locked
+usort($badges, function($a, $b) {
+    return $b['earned'] <=> $a['earned'];
+});
+?>
 
-                    <div class="badges-grid">
-                        <?php foreach ($badges as $badge): ?>
-                            <div class="badge-slot <?= $badge['earned'] ? 'badge-earned' : 'badge-locked' ?>">
+<div class="badges-card" id="tutorial-badges">
+    <div class="badges-card-header">
+        <span class="badges-card-title">Your badges</span>
+        <span class="badges-count-pill">
+            <?= $earnedCount ?> / <?= count($badges) ?> earned
+        </span>
+    </div>
 
-                                <?php if ($badge['earned']): ?>
+    <div class="badges-carousel-wrap" style="position:relative;">
 
+        <!-- Left arrow -->
+        <button class="badges-nav-btn badges-nav-left" id="badgesNavLeft" onclick="shiftBadges(-1)" aria-label="Previous badges">
+            &#8249;
+        </button>
 
-                                    <div class="badge-icon-img-wrap">
-                                        <img
-                                            src="badges/<?= htmlspecialchars($badge['icon']) ?>"
-                                            alt="<?= htmlspecialchars($badge['name']) ?>"
-                                            class="badge-icon-img">
-                                    </div>
+        <!-- Right arrow -->
+        <button class="badges-nav-btn badges-nav-right" id="badgesNavRight" onclick="shiftBadges(1)" aria-label="Next badges">
+            &#8250;
+        </button>
 
-                                    <span class="badge-name">
-                                        <?= htmlspecialchars($badge['name']) ?>
-                                    </span>
+        <!-- Viewport: only 3 visible -->
+        <div class="badges-grid" id="badgesGrid">
+            <?php foreach ($badges as $i => $badge): ?>
+                <div class="badge-slot <?= $badge['earned'] ? 'badge-earned' : 'badge-locked' ?>"
+                     data-badge-index="<?= $i ?>"
+                     style="display:none;">
 
-                                    <span class="badge-desc">
-                                        <?= htmlspecialchars($badge['desc']) ?>
-                                    </span>
+                    <?php if ($badge['earned']): ?>
+                        <div class="badge-icon-img-wrap">
+                            <img src="badges/<?= htmlspecialchars($badge['icon']) ?>"
+                                 alt="<?= htmlspecialchars($badge['name']) ?>"
+                                 class="badge-icon-img">
+                        </div>
+                        <span class="badge-name"><?= htmlspecialchars($badge['name']) ?></span>
+                        <span class="badge-desc"><?= htmlspecialchars($badge['desc']) ?></span>
+                    <?php else: ?>
+                        <div class="badge-icon-img-wrap locked-slot">
+                            <span class="locked-question">?</span>
+                        </div>
+                        <span class="badge-name">Locked</span>
+                        <span class="badge-desc"><?= htmlspecialchars($badge['desc']) ?></span>
+                    <?php endif; ?>
 
-                                <?php else: ?>
-
-                                    <div class="badge-icon-img-wrap locked-slot">
-                                        <span class="locked-question">?</span>
-                                    </div>
-
-                                    <span class="badge-name">
-                                        Locked
-                                    </span>
-
-                                    <span class="badge-desc">
-                                        <?= htmlspecialchars($badge['desc']) ?>
-                                    </span>
-
-                                <?php endif; ?>
-
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
                 </div>
+            <?php endforeach; ?>
+        </div>
 
+        <!-- Dot indicators -->
+        <div class="badges-dots" id="badgesDots"></div>
+    </div>
+</div>
 
 
 
@@ -1630,6 +1729,52 @@ $showTutorial = !$hasAnySavedProgress || $allChapterProgressZero;
             window.addEventListener('load', showTutorialStep);
         </script>
     <?php endif; ?>
+
+    <script>
+(function() {
+    const VISIBLE = 3;
+    let badgeOffset = 0;
+
+    const grid    = document.getElementById('badgesGrid');
+    const dotsEl  = document.getElementById('badgesDots');
+    const leftBtn = document.getElementById('badgesNavLeft');
+    const rightBtn= document.getElementById('badgesNavRight');
+
+    if (!grid) return;
+
+    const slots = Array.from(grid.querySelectorAll('[data-badge-index]'));
+    const total = slots.length;
+    const pages = Math.ceil(total / VISIBLE);
+
+    // Build dots
+    for (let i = 0; i < pages; i++) {
+        const dot = document.createElement('span');
+        dot.className = 'badges-dot' + (i === 0 ? ' active' : '');
+        dotsEl.appendChild(dot);
+    }
+
+    function render() {
+        slots.forEach((slot, i) => {
+            slot.style.display = (i >= badgeOffset && i < badgeOffset + VISIBLE) ? '' : 'none';
+        });
+
+        // Update dots
+        const dots = dotsEl.querySelectorAll('.badges-dot');
+        const currentPage = Math.floor(badgeOffset / VISIBLE);
+        dots.forEach((d, i) => d.classList.toggle('active', i === currentPage));
+
+        leftBtn.disabled  = badgeOffset === 0;
+        rightBtn.disabled = badgeOffset + VISIBLE >= total;
+    }
+
+    window.shiftBadges = function(dir) {
+        badgeOffset = Math.max(0, Math.min(badgeOffset + dir * VISIBLE, total - VISIBLE));
+        render();
+    };
+
+    render();
+})();
+</script>
 </body>
 
 </html>

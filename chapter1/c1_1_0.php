@@ -33,57 +33,11 @@ if (isset($_GET['complete']) && $_GET['complete'] == '1') {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="../css/c1_1.css">
+    
 
-    <style>
-        /* CSS */
-        .button-28 {
-            appearance: none;
-            background-color: transparent;
-            border: 2px solid #1A1A1A;
-            border-radius: 15px;
-            box-sizing: border-box;
-            color: #3B3B3B;
-            cursor: pointer;
-            display: inline-block;
-            font-size: 10px;
-            font-weight: 600;
-            line-height: normal;
-            margin: 0;
-            min-height: 30px;
-            min-width: 0;
-            outline: none;
-            padding: 12px 20px;
-            text-align: center;
-            text-decoration: none;
-            transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
-            user-select: none;
-            -webkit-user-select: none;
-            touch-action: manipulation;
-            width: auto;
-            will-change: transform;
-        }
-
-        .button-28:disabled {
-            pointer-events: none;
-        }
-
-        .button-28:hover {
-            color: #fff;
-            background-color: #1A1A1A;
-            box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
-            transform: translateY(-2px);
-        }
-
-        .button-28:active {
-            box-shadow: none;
-            transform: translateY(0);
-        }
-    </style>
+    
 
 </head>
 

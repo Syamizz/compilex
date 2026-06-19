@@ -25,35 +25,48 @@
     }
 
     body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      font-size: 15px;
-      line-height: 1.75;
-    }
+            font-family: 'Syne', sans-serif;
+            background: var(--color-background-tertiary);
+            margin: 0;
+        }
 
+
+    /* ── Navbar ─────────────────────── */
     #navbar {
-      background: var(--pink) !important;
-    }
+            background-color: #18181B;
+        }
 
-    .navbar-brand {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
-      font-size: 21px;
-      color: var(--text) !important;
-    }
+        /* Navbar text — white on dark background */
+        #navbar a,
+        #navbar .nav-link {
+            color: #FFFFFF;
+            
+        }
 
-    #navbar .nav-link {
-      font-weight: 500;
-      color: var(--text) !important;
-      border-radius: 8px;
-      padding: 6px 13px !important;
-      transition: background .2s;
-    }
+        
+        #navbar .nav-link {
+            font-size: 17px;
+            font-weight: 600;
+        }
 
-    #navbar .nav-link:hover {
-      background: rgba(99, 102, 241, .1);
-    }
+        /* Hover state — slightly muted so there's a visual reaction */
+        #navbar a:hover,
+        #navbar .nav-link:hover {
+            color: #A1A1AA;
+        }
+
+        /* Active/current page — white + indigo underline */
+        #navbar a.active,
+        #navbar .nav-link.active {
+            color: #FFFFFF;
+            border-bottom: 4px solid #6366F1;
+        }
+
+        #title {
+            font-size: 18px !important;
+            font-weight: 200;
+            letter-spacing: 0.5px;
+        }
 
     .note-container {
       display: grid;
