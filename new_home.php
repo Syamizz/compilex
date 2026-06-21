@@ -1201,8 +1201,8 @@ $showTutorial = !$hasAnySavedProgress || $allChapterProgressZero;
             width: 28px;
             height: 28px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.85);
-            border: 0.5px solid rgba(99,102,241,0.3);
+            background: rgba(255, 255, 255, 0.85);
+            border: 0.5px solid rgba(99, 102, 241, 0.3);
             color: var(--indigo);
             font-size: 20px;
             line-height: 1;
@@ -1218,7 +1218,7 @@ $showTutorial = !$hasAnySavedProgress || $allChapterProgressZero;
 
         .badges-nav-btn:hover {
             background: white;
-            box-shadow: 0 2px 8px rgba(99,102,241,0.25);
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
         }
 
         .badges-nav-btn:disabled {
@@ -1226,8 +1226,13 @@ $showTutorial = !$hasAnySavedProgress || $allChapterProgressZero;
             cursor: default;
         }
 
-        .badges-nav-left  { left: 4px; }
-        .badges-nav-right { right: 4px; }
+        .badges-nav-left {
+            left: 4px;
+        }
+
+        .badges-nav-right {
+            right: 4px;
+        }
 
         .badges-dots {
             display: flex;
@@ -1240,7 +1245,7 @@ $showTutorial = !$hasAnySavedProgress || $allChapterProgressZero;
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background: rgba(99,102,241,0.3);
+            background: rgba(99, 102, 241, 0.3);
             transition: background 0.18s;
         }
 
@@ -1248,6 +1253,7 @@ $showTutorial = !$hasAnySavedProgress || $allChapterProgressZero;
             background: var(--indigo);
         }
     </style>
+    <link rel="stylesheet" href="css/new.css">
 </head>
 
 <body>
@@ -1264,14 +1270,14 @@ $showTutorial = !$hasAnySavedProgress || $allChapterProgressZero;
 
     <div class="page-wrap">
         <h1>Welcome back, <?php echo $username; ?></h1>
-        <br>
+        <br><br>
         <div class="main-grid" style="display:grid; grid-template-columns:1.25fr 0.9fr 1.35fr; gap:32px; align-items:start;">
 
             <div id="tutorial-learning-progress">
                 <div class="section-heading">Your learning progress</div>
 
                 <?php foreach ($chapters as $ch): ?>
-                    <div id="prog-card" class="progress-card <?= $ch['locked'] ? 'locked' : '' ?>" id="card-<?= $ch['id'] ?>">
+                    <div class="progress-card <?= $ch['locked'] ? 'locked' : '' ?>" id="card-<?= $ch['id'] ?>">
 
                         <div class="card-accent" style="background:<?= $ch['locked'] ? '#9CA3AF' : $ch['color'] ?>;"></div>
 
@@ -1305,10 +1311,10 @@ $showTutorial = !$hasAnySavedProgress || $allChapterProgressZero;
                             <div class="completed-list" id="done-<?= $ch['id'] ?>">
                                 <div class="completed-list-inner">
                                     <?php foreach ($ch['doneTopics'] as $done): ?>
-                                    <a class="done-item" href="<?= $done['href'] ?>">
-                                        <span class="done-check" style="color:<?= $ch['color'] ?>;">✓</span>
-                                        <span><?= htmlspecialchars($done['label']) ?></span>
-                                    </a>
+                                        <a class="done-item" href="<?= $done['href'] ?>">
+                                            <span class="done-check" style="color:<?= $ch['color'] ?>;">✓</span>
+                                            <span><?= htmlspecialchars($done['label']) ?></span>
+                                        </a>
                                     <?php endforeach; ?>
                                 </div>
                             </div>
@@ -1348,8 +1354,8 @@ $showTutorial = !$hasAnySavedProgress || $allChapterProgressZero;
                 <?php endforeach; ?>
             </div>
 
-            <div id="quiz-section">
-                <div  class="section-heading">Your quiz progress</div>
+            <div>
+                <div class="section-heading">Your quiz progress</div>
 
                 <div class="quiz-progress-card" id="tutorial-quiz-progress">
                     <div class="quiz-progress-header">
@@ -1396,7 +1402,7 @@ $showTutorial = !$hasAnySavedProgress || $allChapterProgressZero;
                 </div>
             </div>
 
-            <div id="lead-section">
+            <div>
                 <div class="section-heading">Top overall leaderboard</div>
 
                 <div class="leaderboard-card" id="tutorial-leaderboard">
@@ -1430,10 +1436,10 @@ $showTutorial = !$hasAnySavedProgress || $allChapterProgressZero;
                 $userBadges = [];
 
                 $stmt = $conn->prepare("
-                    SELECT badges_id
-                    FROM users_badges
-                    WHERE user_id = ?
-                ");
+    SELECT badges_id
+    FROM users_badges
+    WHERE user_id = ?
+");
                 $stmt->bind_param("i", $userId);
                 $stmt->execute();
 
@@ -1449,10 +1455,10 @@ $showTutorial = !$hasAnySavedProgress || $allChapterProgressZero;
                 $badges = [];
 
                 $badgeStmt = $conn->prepare("
-                    SELECT badges_id, badges_name, description, icon
-                    FROM badges
-                    ORDER BY badges_id ASC
-                ");
+    SELECT badges_id, badges_name, description, icon
+    FROM badges
+    ORDER BY badges_id ASC
+");
                 $badgeStmt->execute();
 
                 $badgeResult = $badgeStmt->get_result();
@@ -1479,62 +1485,62 @@ $showTutorial = !$hasAnySavedProgress || $allChapterProgressZero;
 
                 <?php
                 // Sort badges: earned first, then locked
-                usort($badges, function($a, $b) {
+                usort($badges, function ($a, $b) {
                     return $b['earned'] <=> $a['earned'];
                 });
                 ?>
 
-                    <div class="badges-card" id="tutorial-badges">
-                        <div class="badges-card-header">
-                            <span class="badges-card-title">Your badges</span>
-                            <span class="badges-count-pill">
-                                <?= $earnedCount ?> / <?= count($badges) ?> earned
-                            </span>
-                        </div>
-
-                        <div class="badges-carousel-wrap" style="position:relative;">
-
-                            <!-- Left arrow -->
-                            <button class="badges-nav-btn badges-nav-left" id="badgesNavLeft" onclick="shiftBadges(-1)" aria-label="Previous badges">
-                                &#8249;
-                            </button>
-
-                            <!-- Right arrow -->
-                            <button class="badges-nav-btn badges-nav-right" id="badgesNavRight" onclick="shiftBadges(1)" aria-label="Next badges">
-                                &#8250;
-                            </button>
-
-                            <!-- Viewport: only 3 visible -->
-                            <div class="badges-grid" id="badgesGrid">
-                                <?php foreach ($badges as $i => $badge): ?>
-                                    <div class="badge-slot <?= $badge['earned'] ? 'badge-earned' : 'badge-locked' ?>"
-                                        data-badge-index="<?= $i ?>"
-                                        style="display:none;">
-
-                                        <?php if ($badge['earned']): ?>
-                                            <div class="badge-icon-img-wrap">
-                                                <img src="badges/<?= htmlspecialchars($badge['icon']) ?>"
-                                                    alt="<?= htmlspecialchars($badge['name']) ?>"
-                                                    class="badge-icon-img">
-                                            </div>
-                                            <span class="badge-name"><?= htmlspecialchars($badge['name']) ?></span>
-                                            <span class="badge-desc"><?= htmlspecialchars($badge['desc']) ?></span>
-                                        <?php else: ?>
-                                            <div class="badge-icon-img-wrap locked-slot">
-                                                <span class="locked-question">?</span>
-                                            </div>
-                                            <span class="badge-name">Locked</span>
-                                            <span class="badge-desc"><?= htmlspecialchars($badge['desc']) ?></span>
-                                        <?php endif; ?>
-
-                                    </div>
-                                <?php endforeach; ?>
-                            </div>
-
-                            <!-- Dot indicators -->
-                            <div class="badges-dots" id="badgesDots"></div>
-                        </div>
+                <div class="badges-card" id="tutorial-badges">
+                    <div class="badges-card-header">
+                        <span class="badges-card-title">Your badges</span>
+                        <span class="badges-count-pill">
+                            <?= $earnedCount ?> / <?= count($badges) ?> earned
+                        </span>
                     </div>
+
+                    <div class="badges-carousel-wrap" style="position:relative;">
+
+                        <!-- Left arrow -->
+                        <button class="badges-nav-btn badges-nav-left" id="badgesNavLeft" onclick="shiftBadges(-1)" aria-label="Previous badges">
+                            &#8249;
+                        </button>
+
+                        <!-- Right arrow -->
+                        <button class="badges-nav-btn badges-nav-right" id="badgesNavRight" onclick="shiftBadges(1)" aria-label="Next badges">
+                            &#8250;
+                        </button>
+
+                        <!-- Viewport: only 3 visible -->
+                        <div class="badges-grid" id="badgesGrid">
+                            <?php foreach ($badges as $i => $badge): ?>
+                                <div class="badge-slot <?= $badge['earned'] ? 'badge-earned' : 'badge-locked' ?>"
+                                    data-badge-index="<?= $i ?>"
+                                    style="display:none;">
+
+                                    <?php if ($badge['earned']): ?>
+                                        <div class="badge-icon-img-wrap">
+                                            <img src="badges/<?= htmlspecialchars($badge['icon']) ?>"
+                                                alt="<?= htmlspecialchars($badge['name']) ?>"
+                                                class="badge-icon-img">
+                                        </div>
+                                        <span class="badge-name"><?= htmlspecialchars($badge['name']) ?></span>
+                                        <span class="badge-desc"><?= htmlspecialchars($badge['desc']) ?></span>
+                                    <?php else: ?>
+                                        <div class="badge-icon-img-wrap locked-slot">
+                                            <span class="locked-question">?</span>
+                                        </div>
+                                        <span class="badge-name">Locked</span>
+                                        <span class="badge-desc"><?= htmlspecialchars($badge['desc']) ?></span>
+                                    <?php endif; ?>
+
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+
+                        <!-- Dot indicators -->
+                        <div class="badges-dots" id="badgesDots"></div>
+                    </div>
+                </div>
 
 
 
@@ -1731,50 +1737,50 @@ $showTutorial = !$hasAnySavedProgress || $allChapterProgressZero;
     <?php endif; ?>
 
     <script>
-(function() {
-    const VISIBLE = 3;
-    let badgeOffset = 0;
+        (function() {
+            const VISIBLE = 3;
+            let badgeOffset = 0;
 
-    const grid    = document.getElementById('badgesGrid');
-    const dotsEl  = document.getElementById('badgesDots');
-    const leftBtn = document.getElementById('badgesNavLeft');
-    const rightBtn= document.getElementById('badgesNavRight');
+            const grid = document.getElementById('badgesGrid');
+            const dotsEl = document.getElementById('badgesDots');
+            const leftBtn = document.getElementById('badgesNavLeft');
+            const rightBtn = document.getElementById('badgesNavRight');
 
-    if (!grid) return;
+            if (!grid) return;
 
-    const slots = Array.from(grid.querySelectorAll('[data-badge-index]'));
-    const total = slots.length;
-    const pages = Math.ceil(total / VISIBLE);
+            const slots = Array.from(grid.querySelectorAll('[data-badge-index]'));
+            const total = slots.length;
+            const pages = Math.ceil(total / VISIBLE);
 
-    // Build dots
-    for (let i = 0; i < pages; i++) {
-        const dot = document.createElement('span');
-        dot.className = 'badges-dot' + (i === 0 ? ' active' : '');
-        dotsEl.appendChild(dot);
-    }
+            // Build dots
+            for (let i = 0; i < pages; i++) {
+                const dot = document.createElement('span');
+                dot.className = 'badges-dot' + (i === 0 ? ' active' : '');
+                dotsEl.appendChild(dot);
+            }
 
-    function render() {
-        slots.forEach((slot, i) => {
-            slot.style.display = (i >= badgeOffset && i < badgeOffset + VISIBLE) ? '' : 'none';
-        });
+            function render() {
+                slots.forEach((slot, i) => {
+                    slot.style.display = (i >= badgeOffset && i < badgeOffset + VISIBLE) ? '' : 'none';
+                });
 
-        // Update dots
-        const dots = dotsEl.querySelectorAll('.badges-dot');
-        const currentPage = Math.floor(badgeOffset / VISIBLE);
-        dots.forEach((d, i) => d.classList.toggle('active', i === currentPage));
+                // Update dots
+                const dots = dotsEl.querySelectorAll('.badges-dot');
+                const currentPage = Math.floor(badgeOffset / VISIBLE);
+                dots.forEach((d, i) => d.classList.toggle('active', i === currentPage));
 
-        leftBtn.disabled  = badgeOffset === 0;
-        rightBtn.disabled = badgeOffset + VISIBLE >= total;
-    }
+                leftBtn.disabled = badgeOffset === 0;
+                rightBtn.disabled = badgeOffset + VISIBLE >= total;
+            }
 
-    window.shiftBadges = function(dir) {
-        badgeOffset = Math.max(0, Math.min(badgeOffset + dir * VISIBLE, total - VISIBLE));
-        render();
-    };
+            window.shiftBadges = function(dir) {
+                badgeOffset = Math.max(0, Math.min(badgeOffset + dir * VISIBLE, total - VISIBLE));
+                render();
+            };
 
-    render();
-})();
-</script>
+            render();
+        })();
+    </script>
 </body>
 
 </html>

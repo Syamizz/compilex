@@ -1,0 +1,357 @@
+/* CompileX — black & white editorial theme */
+:root {
+    --ink: #292929;
+    --ink-soft: #3d3d3d;
+    --paper: #f5f5f2;
+    --white: #ffffff;
+    --line: #d4d4d4;
+    --muted: #6b6b6b;
+    --shadow: 6px 6px 0 #292929;
+
+    /* Remap the variables used by the dashboard. */
+    --indigo: #292929;
+    --indigo-dark: #202020;
+    --indigo-light: #ededeb;
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #eeeeeb;
+    --color-background-tertiary: #f5f5f2;
+    --color-border-tertiary: #d4d4d4;
+    --color-text-primary: #292929;
+    --color-text-secondary: #666666;
+}
+
+html {
+    background: var(--paper);
+}
+
+body {
+    color: var(--ink) !important;
+    background-color: var(--paper) !important;
+    background-image: radial-gradient(#c9c9c5 0.7px, transparent 0.7px) !important;
+    background-size: 18px 18px !important;
+}
+
+/* Dark masthead with a high-contrast active state. */
+#navbar,
+#tutorial-navbar,
+.navbar {
+    background: var(--ink) !important;
+    border-bottom: 1px solid #3b3b3b !important;
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.12) !important;
+}
+
+#navbar a,
+#navbar .nav-link,
+#tutorial-navbar a,
+#tutorial-navbar .nav-link,
+.navbar a,
+.navbar .nav-link,
+.navbar-brand {
+    color: var(--white) !important;
+}
+
+#navbar a:hover,
+#tutorial-navbar a:hover,
+.navbar a:hover {
+    color: #bdbdbd !important;
+}
+
+#navbar a.active,
+#navbar .nav-link.active,
+#tutorial-navbar a.active,
+.navbar .active {
+    color: var(--white) !important;
+    border-bottom-color: var(--white) !important;
+}
+
+.login-btn,
+.button-28,
+.logout-btn {
+    color: var(--white) !important;
+    background: var(--ink) !important;
+    border: 1px solid var(--white) !important;
+    border-radius: 999px !important;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.login-btn:hover,
+.button-28:hover,
+.logout-btn:hover {
+    color: var(--ink) !important;
+    background: var(--white) !important;
+    box-shadow: 3px 3px 0 #777 !important;
+}
+
+.page-wrap {
+    max-width: 1480px !important;
+}
+
+.welcome-title,
+h1 {
+    color: var(--ink) !important;
+    font-weight: 700 !important;
+    letter-spacing: -.045em;
+}
+
+.section-heading {
+    color: var(--ink) !important;
+    font-weight: 800 !important;
+    letter-spacing: .14em !important;
+}
+
+/* Cards use a clean editorial border and a playful offset shadow on hover. */
+.progress-card,
+.quiz-progress-card,
+.leaderboard-card,
+.badges-card {
+    background: var(--white) !important;
+    color: var(--ink) !important;
+    border: 1px solid var(--ink) !important;
+    border-radius: 12px !important;
+    box-shadow: 3px 3px 0 #c7c7c3 !important;
+}
+
+.progress-card:hover,
+.quiz-progress-card:hover,
+.leaderboard-card:hover,
+.badges-card:hover {
+    transform: translate(-2px, -2px) !important;
+    border-color: var(--ink) !important;
+    box-shadow: var(--shadow) !important;
+}
+
+.card-accent {
+    background: var(--ink) !important;
+}
+
+.chapter-link,
+.current-topic-name,
+.quiz-progress-title,
+.quiz-chapter-title,
+.badges-card-title,
+.badge-name {
+    color: var(--ink) !important;
+}
+
+.chapter-link:hover,
+.continue-arrow,
+.review-arrow {
+    color: var(--muted) !important;
+}
+
+.pct-badge,
+.score-pill,
+.badges-count-pill {
+    color: var(--white) !important;
+    background: var(--ink) !important;
+    border: 1px solid var(--ink) !important;
+}
+
+.bar-track {
+    background: #dededb !important;
+    border: 1px solid #c4c4c1;
+}
+
+.bar-fill {
+    background: var(--ink) !important;
+}
+
+.current-dot {
+    background: var(--ink) !important;
+}
+
+.current-label,
+.completed-label,
+.completed-check,
+.done-check {
+    color: var(--ink) !important;
+}
+
+.card-current,
+.completed-current,
+.done-item,
+.card-next {
+    color: var(--ink) !important;
+}
+
+.card-current:hover,
+.done-item:hover {
+    background: #ececea !important;
+}
+
+.completed-current,
+.locked-current {
+    background: #f0f0ed !important;
+    border: 1px solid #c7c7c4 !important;
+}
+
+.completed-toggle {
+    color: var(--ink) !important;
+}
+
+/* Quiz status stays understandable without relying on color. */
+.quiz-progress-header,
+.badges-card-header {
+    background: var(--ink) !important;
+    color: var(--white) !important;
+    border-bottom-color: var(--ink) !important;
+}
+
+.quiz-progress-header *,
+.badges-card-header * {
+    color: inherit !important;
+}
+
+.quiz-summary-box,
+.quiz-level-pill {
+    color: var(--ink) !important;
+    background: var(--white) !important;
+    border: 1px solid var(--ink) !important;
+    border-radius: 8px !important;
+}
+
+.quiz-level-pill.answered {
+    color: var(--white) !important;
+    background: var(--ink) !important;
+}
+
+.quiz-level-pill.answered .quiz-score {
+    color: #d4d4d4 !important;
+}
+
+.quiz-level-pill.unanswered {
+    border-style: dashed !important;
+}
+
+/* Leaderboard: the top three are distinguished by weight and pattern. */
+.lb-table thead th {
+    color: var(--white) !important;
+    background: var(--ink) !important;
+    border-color: var(--ink) !important;
+}
+
+.lb-table tbody tr,
+.lb-table tbody td {
+    color: var(--ink) !important;
+    background: var(--white) !important;
+    border-color: #ddddda !important;
+}
+
+.lb-table tbody tr:hover td {
+    background: #eeeeeb !important;
+}
+
+.rank-medal {
+    color: var(--ink) !important;
+    background: var(--white) !important;
+    border: 1px solid var(--ink) !important;
+}
+
+.rank-1 .rank-medal {
+    color: var(--white) !important;
+    background: var(--ink) !important;
+}
+
+.rank-2 .rank-medal {
+    border-width: 2px !important;
+}
+
+.rank-3 .rank-medal {
+    border-style: dashed !important;
+}
+
+/* Badge artwork can remain detailed, while its container stays monochrome. */
+.badges-grid,
+.badge-slot {
+    background: var(--white) !important;
+    color: var(--ink) !important;
+}
+
+.badge-locked {
+    filter: grayscale(1);
+    opacity: .56 !important;
+}
+
+.locked-slot,
+.badges-nav-btn {
+    color: var(--white) !important;
+    background: var(--ink) !important;
+    border-color: var(--ink) !important;
+}
+
+.badges-nav-btn:hover:not(:disabled) {
+    color: var(--ink) !important;
+    background: var(--white) !important;
+}
+
+.badges-dot {
+    background: #bdbdb9 !important;
+}
+
+.badges-dot.active {
+    background: var(--ink) !important;
+}
+
+/* Tutorial adopts the same visual language. */
+.tutorial-backdrop {
+    background: rgba(25, 25, 25, .66) !important;
+}
+
+.tutorial-box {
+    color: var(--ink) !important;
+    background: var(--white) !important;
+    border: 2px solid var(--ink) !important;
+    box-shadow: 8px 8px 0 var(--ink) !important;
+}
+
+.tutorial-highlight {
+    outline-color: var(--white) !important;
+    box-shadow: 0 0 0 5px var(--ink), 0 0 0 8px var(--white) !important;
+}
+
+.tutorial-btn.primary {
+    color: var(--white) !important;
+    background: var(--ink) !important;
+    border-color: var(--ink) !important;
+}
+
+.tutorial-btn.secondary {
+    color: var(--ink) !important;
+    background: var(--white) !important;
+    border-color: var(--ink) !important;
+}
+
+footer {
+    color: #bdbdbd !important;
+    background: var(--ink) !important;
+    border-top: 1px solid #333 !important;
+}
+
+::selection {
+    color: var(--white);
+    background: var(--ink);
+}
+
+@media (max-width: 768px) {
+    .page-wrap {
+        padding: 34px 18px 56px !important;
+    }
+
+    .progress-card:hover,
+    .quiz-progress-card:hover,
+    .leaderboard-card:hover,
+    .badges-card:hover {
+        transform: none !important;
+        box-shadow: 3px 3px 0 #c7c7c3 !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}

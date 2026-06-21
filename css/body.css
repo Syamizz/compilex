@@ -3,8 +3,7 @@ body {
     color: #374151;
 
     font-family: Arial;
-    background: #FAFAF9;
-    /*font-family: "Playwrite NZ Basic", cursive; */
+  
     font-optical-sizing: auto;
     font-weight: 2px;
     font-style: normal;
@@ -12,6 +11,7 @@ body {
 
 body {
     font-family: var(--font-sans);
+    padding-top: 60px;
 }
 
 .logo {
@@ -45,7 +45,9 @@ footer {
 }
 
 #navbar {
-    background-color:  #18181B;
+    background-color: #18181B;
+    width: 100%;
+    z-index: 1050;
 }
 
 /* Navbar text — white on dark background */
@@ -109,4 +111,30 @@ footer {
 .button-28:active {
     box-shadow: none;
     transform: translateY(0);
+}
+
+/* Visible line around each dashboard section */
+
+
+
+#prog-card,
+#tutorial-quiz-progress,
+#tutorial-leaderboard,
+#tutorial-badges {
+    border: 1px solid #D1D5DB;
+    border-radius: 12px;
+    background: #FFFFFF;
+}
+
+/* Learning section needs internal spacing */
+#tutorial-learning-progress,#quiz-section,#lead-section {
+    padding: 16px;
+}
+
+/* Slightly stronger line on hover */
+#tutorial-learning-progress:hover,
+#tutorial-quiz-progress:hover,
+#tutorial-leaderboard:hover,
+#tutorial-badges:hover {
+    border-color: #A5B4FC;
 }

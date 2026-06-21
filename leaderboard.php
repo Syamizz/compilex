@@ -193,7 +193,7 @@ function rankLabel(int $rank): string
 
 <body>
     <!-- Navbar -->
-    <nav id="navbar" class="navbar navbar-expand-lg">
+    <nav id="navbar" class="navbar navbar-expand-lg fixed-top">
         <div class="container-fluid">
             <a id="title" class="navbar-brand" href="#">CompileX</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CompileX</title>
- 
+
     <!-- font -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
@@ -19,7 +19,7 @@
             margin: 0;
             padding: 0;
         }
- 
+
         body {
             font-family: 'Syne', sans-serif;
             background: var(--color-background-tertiary);
@@ -31,8 +31,8 @@
             min-height: 500px;
         }
 
-         #navbar {
-            background-color:  #18181B;
+        #navbar {
+            background-color: #18181B;
         }
 
         /* Navbar text — white on dark background */
@@ -310,6 +310,10 @@
         </div>
     </nav>
 
+
+
+    <audio id="buttonSound" src="sound/btn_login.mp3" preload="auto"></audio>
+
     
 
     <!-- content -->
@@ -332,8 +336,8 @@
                     <span class="toggle-pw" id="toggle-pw" title="Show/hide password">Show</span>
                     <div class="field-hint" id="pw-hint"></div>
                 </div>
-<p class="register-link">Forgot password? <a href="reset_pass.php">Click here</a></p>
-                <button type="submit" class="btn-login" id="btn-login">Login</button>
+                <p class="register-link">Forgot password? <a href="reset_pass.php">Click here</a></p>
+                <button type="submit" class="btn-login" id="btn-login" onclick="playButtonSound()">Login</button>
 
             </form>
 
@@ -358,8 +362,16 @@
     <div class="toast" id="toast"></div>
 
     <footer>
-        © <?php echo date("Y"); ?> ezComp • Compiler Learning Platform
+        © <?php echo date("Y"); ?> CompileX • Compiler Learning Platform
     </footer>
+
+    <script>
+        function playButtonSound() {
+            const sound = document.getElementById("buttonSound");
+            sound.currentTime = 0;
+            sound.play();
+        }
+    </script>
 
     <script>
         const usernameEl = document.getElementById('username');

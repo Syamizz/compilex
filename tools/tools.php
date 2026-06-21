@@ -1,31 +1,3 @@
-<?php
-session_start();
-include 'dbconn.php';
-
-// Get username from session
-$username = $_SESSION['username'];
-// Query user data
-$sql = "SELECT * FROM users WHERE username = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $username);
-$stmt->execute();
-$result = $stmt->get_result();
-
-// Fetch data
-$user = $result->fetch_assoc();
-
-
-// Define the default image path
-$default_img = "images/default-avatar-profile.jpg";
-
-// Logic: If database has a value AND the file actually exists in the folder
-if (!empty($user['profile_image']) && file_exists("images/" . $user['profile_image'])) {
-    $user_img = "images/" . $user['profile_image'];
-} else {
-    $user_img = $default_img;
-}
-
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -37,9 +9,7 @@ if (!empty($user['profile_image']) && file_exists("images/" . $user['profile_ima
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-
+  
     <link rel="stylesheet" href="body.css">
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
@@ -173,75 +143,11 @@ if (!empty($user['profile_image']) && file_exists("images/" . $user['profile_ima
             color: #6B7280;
         }
 
-        #navbar {
-            background-color: #18181B;
-        }
-
-        /* Navbar text — white on dark background */
-        #navbar a,
-        #navbar .nav-link {
-            color: #FFFFFF;
-        }
-
-        /* Hover state — slightly muted so there's a visual reaction */
-        #navbar a:hover,
-        #navbar .nav-link:hover {
-            color: #A1A1AA;
-        }
-
-        /* Active/current page — white + indigo underline */
-        #navbar a.active,
-        #navbar .nav-link.active {
-            color: #FFFFFF;
-            border-bottom: 4px solid #6366F1;
-        }
+        
 
 
 
-        /* CSS */
-        .button-28 {
-            appearance: none;
-            background-color: transparent;
-            border: 2px solid #f7f3f3;
-            border-radius: 15px;
-            box-sizing: border-box;
-            color: #504141;
-            cursor: pointer;
-            display: inline-block;
-            font-size: 10px;
-            font-weight: 600;
-            line-height: normal;
-            margin: 0;
-            min-height: 30px;
-            min-width: 0;
-            outline: none;
-            padding: 12px 20px;
-            text-align: center;
-            text-decoration: none;
-            transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
-            user-select: none;
-            -webkit-user-select: none;
-            touch-action: manipulation;
-            width: auto;
-            will-change: transform;
-        }
-
-        .button-28:disabled {
-            pointer-events: none;
-        }
-
-        .button-28:hover {
-            color: #fff;
-            background-color: #1A1A1A;
-            box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
-            transform: translateY(-2px);
-        }
-
-        .button-28:active {
-            box-shadow: none;
-            transform: translateY(0);
-        }
-
+        
 
 
         .fade {
@@ -351,59 +257,7 @@ if (!empty($user['profile_image']) && file_exists("images/" . $user['profile_ima
             display: none;
         }
 
-        .profile-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 70vh;
-            /* center vertically */
-        }
-
-        .profile-card {
-            background: #ffffff;
-            padding: 30px 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            width: 45%;
-            text-align: left;
-        }
-
-        .profile-card h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #6366F1;
-        }
-
-        .profile-card table {
-            width: 100%;
-        }
-
-        .profile-card th {
-            text-align: left;
-            padding: 8px 0;
-            color: #374151;
-        }
-
-        .profile-card td {
-            text-align: left;
-            color: #6B7280;
-        }
-
-        .profile-card .btn-container {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .profile-circle {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            /* Ensures the image doesn't look stretched */
-            border: 2px solid #ccc;
-            /* Optional: adds a nice border ring */
-        }
-
+       
 
         /* ── Interactive tokeniser ─────── */
         .tok-wrap {
@@ -1109,79 +963,91 @@ if (!empty($user['profile_image']) && file_exists("images/" . $user['profile_ima
 
 <body>
 
-    <!-- Navbar -->
-    <nav id="navbar" class="navbar navbar-expand-lg">
-        <div class="container-fluid">
-            <a id="title" class="navbar-brand" href="#">CompileX</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="home.php">Home</a>
-                    </li>
+    
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="quiz.php">Quiz</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="leaderboard.php">Leaderboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="profile.php">Profile</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="collapse navbar-collapse">
-                <div class="ms-auto">
-                    <a href="logout.php" class="button-28">LOGOUT</a>
-                </div>
-            </div>
-        </div>
-    </nav>
 
-    <br><br>
 
     <!-- ══════════════════════════════════════════════ -->
-    <!-- Compiler Tools Teaser                          -->
+    <!-- Chapter 2 Tools Card                           -->
     <!-- ══════════════════════════════════════════════ -->
-    <div style="max-width: 700px; margin: 40px auto; text-align: center; padding: 0 20px;">
-        <p style="font-size: 13px; font-weight: 600; letter-spacing: .08em; color: #6366F1; margin-bottom: 8px;">COMPILER PRINCIPLES TOOLS</p>
-        <h2 style="font-size: 28px; font-weight: 700; color: #1E1B4B; margin-bottom: 12px;">Learn Compilers by Doing</h2>
-        <p style="font-size: 16px; color: #6B7280; max-width: 520px; margin: 0 auto 24px; line-height: 1.7;">
-            Explore the stages of compiler design through our interactive simulators.
-            See how source code is broken into tokens, classified, and processed — all in your browser.
-        </p>
-        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 28px;">
-            <span style="background: #EEF2FF; color: #4338CA; font-size: 13px; font-weight: 600; padding: 5px 14px; border-radius: 999px;">Lexical Analysis</span>
-            <span style="background: #E1F5EE; color: #0F6E56; font-size: 13px; font-weight: 600; padding: 5px 14px; border-radius: 999px;">Token Classification</span>
-            <span style="background: #FAEEDA; color: #854F0B; font-size: 13px; font-weight: 600; padding: 5px 14px; border-radius: 999px;">Java Scanner Simulator</span>
+    <div style="max-width: 700px; margin: 40px auto; padding: 0 20px;">
+
+        <!-- Card -->
+        <div style="background: #FFFFFF; border-radius: 16px; box-shadow: 0 4px 24px rgba(99,102,241,.10); border: 1px solid rgba(99,102,241,.15); overflow: hidden;">
+
+            <!-- Card header -->
+            <div style="background: #18181B; padding: 20px 28px;">
+                <p style="font-size: 12px; font-weight: 600; letter-spacing: .1em; color: #A5B4FC; margin: 0 0 6px;">CHAPTER 2 — SYMBOL TABLES &amp; LEXICAL ANALYSIS</p>
+                <h2 style="font-size: 22px; font-weight: 700; color: #FFFFFF; margin: 0 0 6px;">Interactive Compiler Tools</h2>
+                <p style="font-size: 14px; color: #A1A1AA; margin: 0; line-height: 1.6;">
+                    Explore lexical scanning, token classification, and symbol table structures hands-on — all linked to your textbook examples.
+                </p>
+            </div>
+
+            <!-- Tool buttons -->
+            <div style="padding: 24px 28px; display: flex; flex-direction: column; gap: 14px;">
+
+                <!-- Java Tokeniser -->
+                <button onclick="document.getElementById('tokModal').style.display='flex'"
+                    style="display: flex; align-items: center; gap: 16px; background: #F8F7FF; border: 1px solid rgba(99,102,241,.2); border-radius: 12px; padding: 16px 20px; cursor: pointer; text-align: left; width: 100%; transition: all .2s;"
+                    onmouseover="this.style.borderColor='#6366F1'; this.style.background='#EEF2FF';"
+                    onmouseout="this.style.borderColor='rgba(99,102,241,.2)'; this.style.background='#F8F7FF';">
+                    <div style="width: 44px; height: 44px; border-radius: 10px; background: #EEF2FF; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;">🔤</div>
+                    <div style="flex: 1;">
+                        <div style="font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; color: #1E1B4B;">Java Tokeniser</div>
+                        <div style="font-size: 13px; color: #6B7280; margin-top: 2px;">Classify tokens using the 9-class scheme from Section 2.1</div>
+                    </div>
+                    <div style="font-size: 18px; color: #6366F1; flex-shrink: 0;">▶</div>
+                </button>
+
+                <!-- BST Builder -->
+                <button onclick="document.getElementById('bstModal').style.display='flex'"
+                    style="display: flex; align-items: center; gap: 16px; background: #F8F7FF; border: 1px solid rgba(99,102,241,.2); border-radius: 12px; padding: 16px 20px; cursor: pointer; text-align: left; width: 100%; transition: all .2s;"
+                    onmouseover="this.style.borderColor='#6366F1'; this.style.background='#EEF2FF';"
+                    onmouseout="this.style.borderColor='rgba(99,102,241,.2)'; this.style.background='#F8F7FF';">
+                    <div style="width: 44px; height: 44px; border-radius: 10px; background: #ECFDF5; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;">🌳</div>
+                    <div style="flex: 1;">
+                        <div style="font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; color: #1E1B4B;">Binary Search Tree Builder</div>
+                        <div style="font-size: 13px; color: #6B7280; margin-top: 2px;">Visualise BST insertion order — balanced vs degenerate (Fig 2.8)</div>
+                    </div>
+                    <div style="font-size: 18px; color: #6366F1; flex-shrink: 0;">▶</div>
+                </button>
+
+                <!-- Hash Table -->
+                <button onclick="document.getElementById('hashModal').style.display='flex'"
+                    style="display: flex; align-items: center; gap: 16px; background: #F8F7FF; border: 1px solid rgba(99,102,241,.2); border-radius: 12px; padding: 16px 20px; cursor: pointer; text-align: left; width: 100%; transition: all .2s;"
+                    onmouseover="this.style.borderColor='#6366F1'; this.style.background='#EEF2FF';"
+                    onmouseout="this.style.borderColor='rgba(99,102,241,.2)'; this.style.background='#F8F7FF';">
+                    <div style="width: 44px; height: 44px; border-radius: 10px; background: #F0FDF4; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;">🔑</div>
+                    <div style="flex: 1;">
+                        <div style="font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; color: #1E1B4B;">Hash Table Visualiser</div>
+                        <div style="font-size: 13px; color: #6B7280; margin-top: 2px;">See <code style="background:#F0FDF4; color:#065F46; padding:1px 6px; border-radius:4px; font-size:12px;">(len + ascii(first)) % HASHMAX</code> live — Fig 2.9</div>
+                    </div>
+                    <div style="font-size: 18px; color: #6366F1; flex-shrink: 0;">▶</div>
+                </button>
+
+                <!-- Decaf Scanner -->
+                <button onclick="document.getElementById('decafModal').style.display='flex'"
+                    style="display: flex; align-items: center; gap: 16px; background: #F8F7FF; border: 1px solid rgba(99,102,241,.2); border-radius: 12px; padding: 16px 20px; cursor: pointer; text-align: left; width: 100%; transition: all .2s;"
+                    onmouseover="this.style.borderColor='#6366F1'; this.style.background='#EEF2FF';"
+                    onmouseout="this.style.borderColor='rgba(99,102,241,.2)'; this.style.background='#F8F7FF';">
+                    <div style="width: 44px; height: 44px; border-radius: 10px; background: #FEF3C7; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;">☕</div>
+                    <div style="flex: 1;">
+                        <div style="font-family: 'Syne', sans-serif; font-weight: 700; font-size: 15px; color: #1E1B4B;">Decaf Scanner</div>
+                        <div style="font-size: 13px; color: #6B7280; margin-top: 2px;">Scan Decaf source using <code style="background:#FEF3C7; color:#92400E; padding:1px 6px; border-radius:4px; font-size:12px;">decaf.grammar</code> from Section 2.5</div>
+                    </div>
+                    <div style="font-size: 18px; color: #6366F1; flex-shrink: 0;">▶</div>
+                </button>
+
+            </div>
+
+            <!-- Card footer -->
+            <div style="border-top: 1px solid rgba(99,102,241,.1); padding: 14px 28px; background: #F8F7FF; display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 12px; color: #9CA3AF;">🔗 All tools are based on examples from your compiler principles textbook.</span>
+            </div>
+
         </div>
-
-        <button onclick="document.getElementById('bstModal').style.display='flex'"
-            style="background: #6366F1; color: #fff; border: none; padding: 12px 28px; font-size: 15px; font-weight: 700; border-radius: 8px; cursor: pointer; font-family: 'Syne', sans-serif; display: inline-flex; align-items: center; gap: 8px;">
-            ▶ Binary Search Tree Builder
-        </button>
-
-        <button onclick="document.getElementById('hashModal').style.display='flex'"
-            style="background: #6366F1; color: #fff; border: none; padding: 12px 28px; font-size: 15px; font-weight: 700; border-radius: 8px; cursor: pointer; font-family: 'Syne', sans-serif; display: inline-flex; align-items: center; gap: 8px;">
-            ▶ Hash Table
-        </button>
-
-        <br><br>
-        <button onclick="document.getElementById('tokModal').style.display='flex'"
-            style="background: #6366F1; color: #fff; border: none; padding: 12px 28px; font-size: 15px; font-weight: 700; border-radius: 8px; cursor: pointer; font-family: 'Syne', sans-serif; display: inline-flex; align-items: center; gap: 8px;">
-            ▶ Java Tokeniser
-        </button>
-
-        <button onclick="document.getElementById('decafModal').style.display='flex'"
-            style="background: #6366F1; color: #fff; border: none; padding: 12px 28px; font-size: 15px; font-weight: 700; border-radius: 8px; cursor: pointer; font-family: 'Syne', sans-serif; display: inline-flex; align-items: center; gap: 8px;">
-            ▶ Decaf Scanner
-        </button>
-
     </div>
-
 
     <!-- ══════════════════════════════════════════════ -->
     <!-- Tokeniser Modal                                -->
@@ -1457,10 +1323,7 @@ if (!empty($user['profile_image']) && file_exists("images/" . $user['profile_ima
         </div>
     </div>
 
-    <footer>
-        © <?php echo date("Y"); ?> CompileX • Compiler Learning Platform
-    </footer>
-
+    
 
     <script>
         // ── Interactive tokeniser ────────────────────────────────
