@@ -13,257 +13,257 @@ $questions = [
     // 10 MULTIPLE CHOICE QUESTIONS
     [
         'type' => 'mcq',
-        'q' => 'In Chapter 2, lexical analysis identifies words in the source program and passes them to later compiler phases. What does each token consist of?',
+        'q' => 'What is the input to the syntax analysis phase of a compiler?',
         'choices' => [
-            'A' => 'Only the original source character',
-            'B' => 'A class and a value',
-            'C' => 'A parse tree and a grammar rule',
-            'D' => 'A machine instruction and address',
-        ],
-        'answer' => 'B',
-        'explain' => 'The note states that words are passed as tokens, with each token consisting of a class and value.',
-    ],
-    [
-        'type' => 'mcq',
-        'q' => 'Which statement correctly describes comments during lexical analysis?',
-        'choices' => [
-            'A' => 'Comments must be detected but are not put out as tokens',
-            'B' => 'Comments are always passed to syntax analysis as keyword tokens',
-            'C' => 'Comments are stored in the numeric constant table',
-            'D' => 'Comments are treated as identifiers',
+            'A' => 'A stream of tokens produced by lexical analysis',
+            'B' => 'A completed object program',
+            'C' => 'A table of machine addresses',
+            'D' => 'A stream of assembly instructions',
         ],
         'answer' => 'A',
-        'explain' => 'Chapter 2 says comments must be detected in lexical analysis, but they are not put out as tokens.',
+        'explain' => 'Chapter 3 states that syntax analysis receives a stream of tokens produced by the lexical analysis phase.',
     ],
     [
         'type' => 'mcq',
-        'q' => 'A deterministic finite state machine must have which property?',
+        'q' => 'Which statement correctly describes a syntax tree?',
         'choices' => [
-            'A' => 'At least two starting states',
-            'B' => 'Exactly one arc leaving each state for each possible input symbol',
-            'C' => 'No accepting states',
-            'D' => 'Only one state in total',
-        ],
-        'answer' => 'B',
-        'explain' => 'The note defines deterministic machines as completely specified with no contradictions: exactly one arc for each state and input symbol.',
-    ],
-    [
-        'type' => 'mcq',
-        'q' => 'In regular expressions from Chapter 2, what is the correct precedence from highest to lowest?',
-        'choices' => [
-            'A' => 'Union, concatenation, Kleene star',
-            'B' => 'Concatenation, union, Kleene star',
-            'C' => 'Kleene star, concatenation, union',
-            'D' => 'Kleene star, union, concatenation',
+            'A' => 'Its interior nodes represent operands and its leaves represent operations',
+            'B' => 'Every node represents a terminal symbol',
+            'C' => 'Its interior nodes represent operations and its leaves represent operands',
+            'D' => 'It stores only syntax error messages',
         ],
         'answer' => 'C',
-        'explain' => 'The note says Kleene star takes precedence over concatenation, and concatenation takes precedence over union.',
+        'explain' => 'A syntax tree is a data structure whose interior nodes represent operations and whose leaves represent operands.',
     ],
     [
         'type' => 'mcq',
-        'q' => 'What language is described by the regular expression 1(0+1)*0?',
+        'q' => 'Which of the following is NOT one of the components of a grammar?',
         'choices' => [
-            'A' => 'All strings of zeros and ones',
-            'B' => 'All strings beginning with 1 and ending with 0',
-            'C' => 'All strings with an even number of ones',
-            'D' => 'Only the string 10',
-        ],
-        'answer' => 'B',
-        'explain' => 'Chapter 2 gives this expression as the set of all strings of zeros and ones which begin with 1 and end with 0.',
-    ],
-    [
-        'type' => 'mcq',
-        'q' => 'For the Java input while ( x33 <= 2.5e+33 - total ) calc ( x33 ) ; //! which item is not put out as a token?',
-        'choices' => [
-            'A' => 'while',
-            'B' => '<=',
-            'C' => ';',
-            'D' => '//!',
+            'A' => 'A finite set of terminal symbols',
+            'B' => 'A finite set of nonterminal symbols',
+            'C' => 'A starting nonterminal',
+            'D' => 'An infinite set of machine instructions',
         ],
         'answer' => 'D',
-        'explain' => 'The note shows that the comment is not put out. The semicolon is still a special-character token.',
+        'explain' => 'A grammar contains terminals, nonterminals, a starting nonterminal, and a finite list of rewriting rules.',
     ],
     [
         'type' => 'mcq',
-        'q' => 'What does the lexical analysis phase do with the syntactically incorrect input } while if ( { ?',
+        'q' => 'Grammar G1 contains the rules S -> 0S0, S -> 1S1, S -> 0, and S -> 1. Which language does it specify?',
         'choices' => [
-            'A' => 'It checks syntax and rejects the whole input',
-            'B' => 'It outputs five tokens corresponding to the five words',
-            'C' => 'It outputs only while and if',
-            'D' => 'It converts the symbols into numeric constants',
+            'A' => 'Binary strings of even length',
+            'B' => 'Odd-length palindromes over {0,1}',
+            'C' => 'Strings containing equal numbers of 0s and 1s',
+            'D' => 'Binary strings ending in 1',
         ],
         'answer' => 'B',
-        'explain' => 'The note says lexical analysis does not check proper syntax; that error is left for syntax analysis.',
+        'explain' => 'Chapter 3 identifies L(G1) as the language of odd-length palindromes over the alphabet {0,1}.',
     ],
     [
         'type' => 'mcq',
-        'q' => 'In SableCC, which source-file section defines macros such as digit, letter, and newline?',
+        'q' => 'What language is generated by grammar G2?',
         'choices' => [
-            'A' => 'Helpers',
-            'B' => 'States',
-            'C' => 'Tokens',
-            'D' => 'Ignored Tokens',
+            'A' => 'Strings of the form a^n b^n where n is at least 0',
+            'B' => 'Strings of the form a^n b^m where n and m are different',
+            'C' => 'Strings containing only the terminal a',
+            'D' => 'Palindromes over {a,b}',
         ],
         'answer' => 'A',
-        'explain' => 'Chapter 2 describes Helpers as macros used by the Tokens section.',
+        'explain' => 'G2 generates zero or more a symbols followed by exactly the same number of b symbols.',
     ],
     [
         'type' => 'mcq',
-        'q' => 'In the Decaf case study, why is the keyword class named clas in the SableCC Tokens section?',
+        'q' => 'Which form must every rule in a context-free grammar have?',
         'choices' => [
-            'A' => 'Because Decaf does not support classes',
-            'B' => 'Because SableCC will not permit class as a token name',
-            'C' => 'Because class is treated as a comment',
-            'D' => 'Because class is stored only in the symbol table',
+            'A' => 'A single nonterminal on the left and any string of terminals and nonterminals on the right',
+            'B' => 'A single terminal on the left and a nonterminal on the right',
+            'C' => 'Two nonterminals on both sides',
+            'D' => 'A terminal followed by exactly one nonterminal on both sides',
+        ],
+        'answer' => 'A',
+        'explain' => 'A context-free rule has the form A -> alpha, where A is one nonterminal and alpha is any string of terminals and nonterminals.',
+    ],
+    [
+        'type' => 'mcq',
+        'q' => 'When is a context-free grammar considered ambiguous?',
+        'choices' => [
+            'A' => 'When it has more than one terminal symbol',
+            'B' => 'When one string has more than one derivation tree',
+            'C' => 'When it contains a null production',
+            'D' => 'When it has more than one nonterminal',
         ],
         'answer' => 'B',
-        'explain' => 'The note says class is an exception; for some reason SableCC will not permit class as a name, so it is shortened to clas.',
+        'explain' => 'Chapter 3 defines an ambiguous context-free grammar as one that permits more than one derivation tree for a particular string.',
     ],
     [
         'type' => 'mcq',
-        'q' => 'In the Decaf Tokens section, what does misc = [0..0xffff] represent?',
+        'q' => 'Why can a pushdown machine accept some languages that a finite state machine cannot?',
         'choices' => [
-            'A' => 'Only valid identifiers',
-            'B' => 'Only white space',
-            'C' => 'Any character not matched as part of the previous tokens',
-            'D' => 'Only arithmetic operators',
+            'A' => 'It has an infinite stack',
+            'B' => 'It has no states',
+            'C' => 'It reads several input symbols simultaneously',
+            'D' => 'It changes the input alphabet',
         ],
-        'answer' => 'C',
-        'explain' => 'The note says any character not matched as part of the above tokens is called a misc token and will likely cause a syntax error.',
+        'answer' => 'A',
+        'explain' => 'A pushdown machine extends a finite state machine with an infinite last-in, first-out stack.',
+    ],
+    [
+        'type' => 'mcq',
+        'q' => 'What does the extended pushdown operation Rep(Term, +, Expr) do?',
+        'choices' => [
+            'A' => 'Removes the entire stack',
+            'B' => 'Replaces the top stack symbol with Term, +, and Expr in the listed order',
+            'C' => 'Reads three input symbols without changing the stack',
+            'D' => 'Outputs a postfix expression immediately',
+        ],
+        'answer' => 'B',
+        'explain' => 'Rep replaces the top stack symbol with every symbol in its argument list, pushed from left to right.',
+    ],
+    [
+        'type' => 'mcq',
+        'q' => 'According to Chapter 3, how is the dangling-else ambiguity normally resolved?',
+        'choices' => [
+            'A' => 'The else is associated with the first if in the program',
+            'B' => 'The else is associated with the closest previous unmatched if',
+            'C' => 'Every if must be removed',
+            'D' => 'The else is ignored by syntax analysis',
+        ],
+        'answer' => 'B',
+        'explain' => 'Chapter 3 resolves the ambiguity by associating each else with the closest previous unmatched if.',
     ],
 
     // 5 DRAG AND DROP QUESTIONS
     [
         'type' => 'drag',
-        'q' => 'Drag each lexical item to the correct token class from Chapter 2.',
+        'q' => 'Drag each grammar term to its correct definition.',
         'items' => [
-            'item1' => 'while',
-            'item2' => 'x33',
-            'item3' => '<=',
-            'item4' => '2.5e+33',
+            'item1' => 'Terminal symbol',
+            'item2' => 'Nonterminal symbol',
+            'item3' => 'Sentential form',
+            'item4' => 'Derivation',
         ],
         'targets' => [
-            'keyword' => 'Keyword',
-            'identifier' => 'Identifier',
-            'operator' => 'Operator',
-            'numeric' => 'Numeric constant',
+            'input' => 'A character from the input alphabet',
+            'grammar_variable' => 'A grammar symbol distinct from terminals',
+            'mixed_string' => 'A string containing terminals and possibly nonterminals',
+            'rule_sequence' => 'A sequence of rules ending in a string of terminals',
         ],
         'answer' => [
-            'item1' => 'keyword',
-            'item2' => 'identifier',
-            'item3' => 'operator',
-            'item4' => 'numeric',
+            'item1' => 'input',
+            'item2' => 'grammar_variable',
+            'item3' => 'mixed_string',
+            'item4' => 'rule_sequence',
         ],
-        'explain' => 'Chapter 2 lists keywords, identifiers, operators, and numeric constants as lexical token classes.',
+        'explain' => 'These definitions are introduced in Section 3.0.1 when Chapter 3 defines grammars and generated languages.',
     ],
     [
         'type' => 'drag',
-        'q' => 'Drag each regular-expression operation to its meaning.',
+        'q' => 'Drag each Chomsky grammar class to the correct rule description.',
         'items' => [
-            'item1' => 'Union',
-            'item2' => 'Concatenation',
-            'item3' => 'Kleene star',
-            'item4' => 'Parentheses',
+            'item1' => 'Unrestricted',
+            'item2' => 'Context-sensitive',
+            'item3' => 'Context-free',
+            'item4' => 'Right linear',
         ],
         'targets' => [
-            'combine' => 'Set union of languages',
-            'join' => 'Juxtaposition of strings',
-            'repeat' => 'Zero or more repetitions',
-            'group' => 'Controls precedence',
+            'no_restriction' => 'Arbitrary strings can occur on both sides',
+            'uses_context' => 'A nonterminal is rewritten only within a specified context',
+            'single_left' => 'One nonterminal occurs on the left side',
+            'terminal_optional_nonterminal' => 'Right side is a terminal, optionally followed by a nonterminal',
         ],
         'answer' => [
-            'item1' => 'combine',
-            'item2' => 'join',
-            'item3' => 'repeat',
-            'item4' => 'group',
+            'item1' => 'no_restriction',
+            'item2' => 'uses_context',
+            'item3' => 'single_left',
+            'item4' => 'terminal_optional_nonterminal',
         ],
-        'explain' => 'The note defines union, concatenation, and Kleene star as the three regular-expression operations; parentheses specify precedence.',
+        'explain' => 'Chapter 3 presents these four classes as Types 0, 1, 2, and 3 of Chomsky\'s grammar hierarchy.',
     ],
     [
         'type' => 'drag',
-        'q' => 'Drag each SableCC section or feature to its role.',
+        'q' => 'Using grammar G5, drag each nonterminal to what it represents in an arithmetic expression.',
         'items' => [
-            'item1' => 'Helpers',
-            'item2' => 'States',
-            'item3' => 'Tokens',
-            'item4' => 'Ignored Tokens',
+            'item1' => 'Expr',
+            'item2' => 'Term',
+            'item3' => 'Factor',
+            'item4' => 'const',
         ],
         'targets' => [
-            'macros' => 'Defines useful macros',
-            'modes' => 'Defines scanner modes',
-            'patterns' => 'Defines named token patterns',
-            'skip' => 'Tokens the parser never sees',
+            'addition' => 'Expression level containing addition',
+            'multiplication' => 'Expression level containing multiplication',
+            'basic' => 'Parenthesized expression, variable, or constant',
+            'constant_value' => 'A constant operand',
         ],
         'answer' => [
-            'item1' => 'macros',
-            'item2' => 'modes',
-            'item3' => 'patterns',
-            'item4' => 'skip',
+            'item1' => 'addition',
+            'item2' => 'multiplication',
+            'item3' => 'basic',
+            'item4' => 'constant_value',
         ],
-        'explain' => 'Chapter 2 says SableCC lexical analysis uses Helpers, States, and Tokens; Decaf comments and white space are ignored tokens.',
+        'explain' => 'Grammar G5 separates Expr, Term, and Factor so multiplication has precedence over addition.',
     ],
     [
         'type' => 'drag',
-        'q' => 'Drag each Decaf helper to the correct meaning.',
+        'q' => 'Drag each pushdown-machine feature to its correct role.',
         'items' => [
-            'item1' => 'letter',
-            'item2' => 'digit',
-            'item3' => 'digits',
-            'item4' => 'exp',
+            'item1' => 'Push(X)',
+            'item2' => 'Pop',
+            'item3' => 'Advance',
+            'item4' => 'Retain',
         ],
         'targets' => [
-            'single_letter' => 'One upper or lower case letter',
-            'single_digit' => 'One numeric digit',
-            'many_digits' => 'One or more digits',
-            'exponent' => 'Exponent part of a numeric constant',
+            'add' => 'Places X on top of the stack',
+            'remove' => 'Removes the top stack symbol',
+            'next_input' => 'Moves to the next input symbol',
+            'same_input' => 'Keeps the input pointer at its current symbol',
         ],
         'answer' => [
-            'item1' => 'single_letter',
-            'item2' => 'single_digit',
-            'item3' => 'many_digits',
-            'item4' => 'exponent',
+            'item1' => 'add',
+            'item2' => 'remove',
+            'item3' => 'next_input',
+            'item4' => 'same_input',
         ],
-        'explain' => 'These helper definitions are listed in the Decaf case study Helpers section.',
+        'explain' => 'Push, pop, advance, and retain are operations used in the pushdown machines described in Chapter 3.',
     ],
     [
         'type' => 'drag',
-        'q' => 'Drag each SableCC command or Java command to the correct step.',
+        'q' => 'Drag each Chapter 3 expression to its correct postfix form.',
         'items' => [
-            'item1' => 'sablecc lexing.grammar',
-            'item2' => 'javac lexing/*.java',
-            'item3' => 'java lexing.Lexing',
-            'item4' => 'ctrl-z on Windows/DOS',
+            'item1' => '2 + 3',
+            'item2' => '2 + 3 * 5',
+            'item3' => '2 * 3 + 5',
+            'item4' => '(2 + 3) * 5',
         ],
         'targets' => [
-            'generate' => 'Generate Java class definitions',
-            'compile' => 'Compile generated Java files',
-            'run' => 'Execute the scanner',
-            'eof' => 'Terminate standard input',
+            'post1' => '2 3 +',
+            'post2' => '2 3 5 * +',
+            'post3' => '2 3 * 5 +',
+            'post4' => '2 3 + 5 *',
         ],
         'answer' => [
-            'item1' => 'generate',
-            'item2' => 'compile',
-            'item3' => 'run',
-            'item4' => 'eof',
+            'item1' => 'post1',
+            'item2' => 'post2',
+            'item3' => 'post3',
+            'item4' => 'post4',
         ],
-        'explain' => 'Chapter 2 explains the two-step SableCC process, then running the scanner and ending input with the EOF character.',
+        'explain' => 'Chapter 3 gives these exact examples when explaining the extended pushdown translator for infix-to-postfix conversion.',
     ],
 
     // 5 MIX AND MATCH QUESTIONS
     [
         'type' => 'match',
-        'q' => 'Match each token class with the description from Chapter 2.',
+        'q' => 'Match each grammar with the language or property described in Chapter 3.',
         'left' => [
-            'a' => 'Keyword',
-            'b' => 'Identifier',
-            'c' => 'Special character',
-            'd' => 'White space',
+            'a' => 'Grammar G1',
+            'b' => 'Grammar G2',
+            'c' => 'Grammar G3',
+            'd' => 'Grammar G4',
         ],
         'right' => [
-            'r1' => 'A word with predefined meaning to the compiler',
-            'r2' => 'A programmer-created name for a construct',
-            'r3' => 'Delimiter such as parentheses, braces, comma, or semicolon',
-            'r4' => 'Spaces and tabs generally ignored except as delimiters',
+            'r1' => 'Odd-length binary palindromes',
+            'r2' => 'Strings of the form a^n b^n',
+            'r3' => 'Strings of the form a^n b^n c^n',
+            'r4' => 'An ambiguous grammar for arithmetic expressions',
         ],
         'answer' => [
             'a' => 'r1',
@@ -271,22 +271,22 @@ $questions = [
             'c' => 'r3',
             'd' => 'r4',
         ],
-        'explain' => 'These are the token categories and definitions listed in Section 2.1.',
+        'explain' => 'G1 generates odd palindromes, G2 generates a^n b^n, G3 generates a^n b^n c^n, and G4 is the ambiguous expression grammar.',
     ],
     [
         'type' => 'match',
-        'q' => 'Match each finite state machine term with its Chapter 2 meaning.',
+        'q' => 'Match each formal-language concept with its Chapter 3 meaning.',
         'left' => [
-            'a' => 'Starting state',
-            'b' => 'Accepting state',
-            'c' => 'Transition function',
-            'd' => 'Rejected string',
+            'a' => 'Equivalent grammars',
+            'b' => 'Left-most derivation',
+            'c' => 'Derivation tree',
+            'd' => 'Ambiguous grammar',
         ],
         'right' => [
-            'r1' => 'State where the machine initially begins',
-            'r2' => 'State that accepts the input if reached after all input is read',
-            'r3' => 'Function of current state and input symbol returning a state',
-            'r4' => 'Input that leaves the machine in a non-accepting state',
+            'r1' => 'Two grammars that specify the same language',
+            'r2' => 'Always rewrites the left-most nonterminal',
+            'r3' => 'Interior nodes are nonterminals and leaves are terminals',
+            'r4' => 'Allows multiple derivation trees for one string',
         ],
         'answer' => [
             'a' => 'r1',
@@ -294,22 +294,22 @@ $questions = [
             'c' => 'r3',
             'd' => 'r4',
         ],
-        'explain' => 'Section 2.0.2 defines these FSM components and how acceptance/rejection works.',
+        'explain' => 'All four definitions appear in the discussion of context-free grammars and derivations.',
     ],
     [
         'type' => 'match',
-        'q' => 'Match each Decaf token definition with the kind of token it recognizes.',
+        'q' => 'Match each language class with the corresponding machine or notation.',
         'left' => [
-            'a' => "compare = '==' | '<' | '>' | '<=' | '>=' | '!='",
-            'b' => "identifier = letter (letter | digit | '_')*",
-            'c' => "number = (digits '.'? digits? | '.'digits) exp?",
-            'd' => "space = ' ' | 9 | newline",
+            'a' => 'Right linear language',
+            'b' => 'Regular language',
+            'c' => 'Deterministic context-free language',
+            'd' => 'Context-free language',
         ],
         'right' => [
-            'r1' => 'Relational operators',
-            'r2' => 'Identifier beginning with a letter',
-            'r3' => 'Numeric constant with optional decimal point and exponent',
-            'r4' => 'White space including tab and newline',
+            'r1' => 'Can be specified by a right linear grammar',
+            'r2' => 'Can be represented using a regular expression',
+            'r3' => 'Can be accepted by a deterministic pushdown machine',
+            'r4' => 'May require a nondeterministic pushdown machine',
         ],
         'answer' => [
             'a' => 'r1',
@@ -317,22 +317,22 @@ $questions = [
             'c' => 'r3',
             'd' => 'r4',
         ],
-        'explain' => 'These definitions are taken from the Decaf Tokens section in Chapter 2.',
+        'explain' => 'Chapter 3 explains the correspondence between finite state machines, right linear grammars, regular expressions, and pushdown machines.',
     ],
     [
         'type' => 'match',
-        'q' => 'Match each SableCC state notation with its meaning.',
+        'q' => 'Match each grammar G5 nonterminal with its production choices.',
         'left' => [
-            'a' => '{statename} token = def;',
-            'b' => '{statename->newstate} token = def;',
-            'c' => 'token = def;',
-            'd' => 'States def, currency;',
+            'a' => 'Expr',
+            'b' => 'Term',
+            'c' => 'Factor',
+            'd' => 'G5 as a whole',
         ],
         'right' => [
-            'r1' => 'Apply only in that state and remain in that state',
-            'r2' => 'Apply in one state and change to another state',
-            'r3' => 'Apply regardless of current scanner state',
-            'r4' => 'Declare scanner states, with the first as start state',
+            'r1' => 'Expr + Term or Term',
+            'r2' => 'Term * Factor or Factor',
+            'r3' => '(Expr), var, or const',
+            'r4' => 'An unambiguous expression grammar',
         ],
         'answer' => [
             'a' => 'r1',
@@ -340,22 +340,22 @@ $questions = [
             'c' => 'r3',
             'd' => 'r4',
         ],
-        'explain' => 'Section 2.4 explains scanner states and the transition operator ->.',
+        'explain' => 'Grammar G5 removes the ambiguity of G4 while preserving normal multiplication precedence and left associativity.',
     ],
     [
         'type' => 'match',
-        'q' => 'Match each Chapter 2 concept with the table or output it relates to.',
+        'q' => 'Match each syntax-analysis term with its correct description.',
         'left' => [
-            'a' => 'Symbol table',
-            'b' => 'Numeric constants table',
-            'c' => 'Stream of tokens',
-            'd' => 'File of atoms',
+            'a' => 'Parsing problem',
+            'b' => 'Parsing algorithm',
+            'c' => 'Top-down parsing',
+            'd' => 'Bottom-up parsing',
         ],
         'right' => [
-            'r1' => 'Stores each identifier once and related information',
-            'r2' => 'Stores converted numeric constants',
-            'r3' => 'Output of lexical analysis, one token for each word',
-            'r4' => 'One output of the Decaf syntax and lexical phases',
+            'r1' => 'Decide membership in L(G) and determine the string structure',
+            'r2' => 'A method that solves parsing for a class of grammars',
+            'r3' => 'Builds or traverses the derivation tree from the root toward the leaves',
+            'r4' => 'Builds or traverses the derivation tree from the leaves toward the root',
         ],
         'answer' => [
             'a' => 'r1',
@@ -363,7 +363,7 @@ $questions = [
             'c' => 'r3',
             'd' => 'r4',
         ],
-        'explain' => 'Chapter 2 discusses symbol/numeric tables, token streams, and Decaf producing a file of atoms and numeric constants.',
+        'explain' => 'The final sections define the parsing problem and identify top-down and bottom-up as the two major parsing approaches.',
     ],
 ];
 
@@ -422,7 +422,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $totalPoints = $basePoints + $bonusPoints;
     $scorepoint = $totalPoints;
-    $quiz_id = 'Q006'; // Chapter 2 Hard
+    $quiz_id = 'Q009'; // Chapter 3 Hard
 
     $attemptResult = $conn->query("
         SELECT qa_id
@@ -548,7 +548,7 @@ $pct = $submitted ? round($score / $total * 100) : 0;
 
 <head>
     <meta charset="UTF-8">
-    <title>Chapter 2 Hard Quiz</title>
+    <title>Chapter 3 Hard Quiz</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -1743,9 +1743,9 @@ $pct = $submitted ? round($score / $total * 100) : 0;
         }
 
         .control-locked {
-    pointer-events: none;
-    cursor: default;
-}
+            pointer-events: none;
+            cursor: default;
+        }
     </style>
 </head>
 
@@ -1800,8 +1800,15 @@ $pct = $submitted ? round($score / $total * 100) : 0;
     <div class="page">
         <div class="header">
             <div class="chip">Hard Level</div>
-            <h1>Chapter 2 Hard Quiz</h1>
-            <p>20 mixed questions based only on Chapter 2: Lexical Analysis, formal languages, FSMs, regular expressions, SableCC, and Decaf lexical rules.</p>
+
+            <h1>Chapter 3 Hard Quiz</h1>
+
+            <p>
+                20 mixed questions based only on Chapter 3:
+                Syntax Analysis, grammars, derivations, Chomsky's grammar
+                classifications, ambiguity, pushdown machines, expression
+                grammars, if-else ambiguity, and parsing.
+            </p>
         </div>
 
         <?php if (!$submitted): ?>

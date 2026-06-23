@@ -111,35 +111,177 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $totalPoints = $basePoints + $bonusPoints;
     $pct         = round($score / $total * 100);
 
-    // Generate board ID like BD1, BD2, BD3
-    $result = $conn->query("
-    SELECT board_id
-    FROM leaderboard
-    ORDER BY CAST(SUBSTRING(board_id, 3) AS UNSIGNED) DESC
+    $scorepoint = $totalPoints;
+$quiz_id = 'Q004'; // Chapter 2 Easy
+
+/*
+ * Save the new quiz attempt
+ */
+$attemptResult = $conn->query("
+    SELECT qa_id
+    FROM quiz_attempt
+    WHERE qa_id REGEXP '^QA[0-9]+$'
+    ORDER BY CAST(SUBSTRING(qa_id, 3) AS UNSIGNED) DESC
     LIMIT 1
 ");
 
-    if ($result && $result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        $last_number = (int) substr($row['board_id'], 2);
-        $next_number = $last_number + 1;
+if ($attemptResult && $attemptResult->num_rows > 0) {
+    $attemptRow = $attemptResult->fetch_assoc();
+    $nextAttemptNumber =
+        (int)substr($attemptRow['qa_id'], 2) + 1;
+} else {
+    $nextAttemptNumber = 1;
+}
+
+$qa_id = 'QA' . str_pad(
+    $nextAttemptNumber,
+    3,
+    '0',
+    STR_PAD_LEFT
+);
+
+$attemptStmt = $conn->prepare("
+    INSERT INTO quiz_attempt
+        (qa_id, user_id, quiz_id, scorepoint, answered_at)
+    VALUES (?, ?, 'Q004', ?, NOW())
+");
+
+if (!$attemptStmt) {
+    die('Unable to prepare quiz attempt: ' . $conn->error);
+}
+
+$attemptStmt->bind_param(
+    "sii",
+    $qa_id,
+    $user_id,
+    $scorepoint
+);
+
+if (!$attemptStmt->execute()) {
+    die('Unable to save quiz attempt: ' . $attemptStmt->error);
+}
+
+$attemptStmt->close();
+
+
+/*
+ * Check whether the user already has a Q004 leaderboard row
+ */
+$leaderboardStmt = $conn->prepare("
+    SELECT board_id, best_score
+    FROM leaderboard
+    WHERE user_id = ?
+      AND quiz_id = 'Q004'
+    LIMIT 1
+");
+
+if (!$leaderboardStmt) {
+    die('Unable to prepare leaderboard: ' . $conn->error);
+}
+
+$leaderboardStmt->bind_param("i", $user_id);
+$leaderboardStmt->execute();
+
+$leaderboardResult = $leaderboardStmt->get_result();
+
+if ($leaderboardResult->num_rows > 0) {
+    /*
+     * Update only when the new score is higher
+     */
+    $leaderboardRow = $leaderboardResult->fetch_assoc();
+    $currentBestScore = (int)$leaderboardRow['best_score'];
+
+    if ($scorepoint > $currentBestScore) {
+        $updateStmt = $conn->prepare("
+            UPDATE leaderboard
+            SET best_score = ?,
+                updated_at = NOW()
+            WHERE board_id = ?
+        ");
+
+        if (!$updateStmt) {
+            die(
+                'Unable to prepare leaderboard update: '
+                . $conn->error
+            );
+        }
+
+        $board_id = $leaderboardRow['board_id'];
+
+        $updateStmt->bind_param(
+            "is",
+            $scorepoint,
+            $board_id
+        );
+
+        if (!$updateStmt->execute()) {
+            die(
+                'Unable to update leaderboard: '
+                . $updateStmt->error
+            );
+        }
+
+        $updateStmt->close();
+    }
+} else {
+    /*
+     * Create a new leaderboard row
+     */
+    $boardResult = $conn->query("
+        SELECT board_id
+        FROM leaderboard
+        WHERE board_id REGEXP '^BD[0-9]+$'
+        ORDER BY CAST(SUBSTRING(board_id, 3) AS UNSIGNED) DESC
+        LIMIT 1
+    ");
+
+    if ($boardResult && $boardResult->num_rows > 0) {
+        $boardRow = $boardResult->fetch_assoc();
+        $nextBoardNumber =
+            (int)substr($boardRow['board_id'], 2) + 1;
     } else {
-        $next_number = 1;
+        $nextBoardNumber = 1;
     }
 
-    $board_id = 'BD' . $next_number;
+    $board_id = 'BD' . $nextBoardNumber;
 
-    $board_chap = 2;
-    $quiz_type = "Easy";
-    $scorepoint = $totalPoints;
+    $insertStmt = $conn->prepare("
+        INSERT INTO leaderboard
+            (
+                board_id,
+                user_id,
+                quiz_id,
+                best_score,
+                updated_at
+            )
+        VALUES (?, ?, 'Q004', ?, NOW())
+    ");
 
-    $stmt = $conn->prepare("
-    INSERT INTO leaderboard (board_id, board_chap, quiz_type, scorepoint, user_id)
-    VALUES (?, ?, ?, ?, ?)
-");
-    $stmt->bind_param("sisii", $board_id, $board_chap, $quiz_type, $scorepoint, $user_id);
-    $stmt->execute();
-    $stmt->close();
+    if (!$insertStmt) {
+        die(
+            'Unable to prepare leaderboard insert: '
+            . $conn->error
+        );
+    }
+
+    $insertStmt->bind_param(
+        "sii",
+        $board_id,
+        $user_id,
+        $scorepoint
+    );
+
+    if (!$insertStmt->execute()) {
+        die(
+            'Unable to save leaderboard: '
+            . $insertStmt->error
+        );
+    }
+
+    $insertStmt->close();
+}
+
+$leaderboardStmt->close();
 }
 
 $pct = $submitted ? round($score / $total * 100) : 0;
@@ -326,7 +468,7 @@ $palette = [
 
 <body>
 
-    <nav id="navbar" class="navbar navbar-expand-lg">
+    <nav id="navbar" class="navbar navbar-expand-lg fixed-top">
         <div class="container-fluid">
             <a id="title" class="navbar-brand" href="#">CompileX</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -335,27 +477,20 @@ $palette = [
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="home.php">Home</a>
+                        <a class="nav-link" aria-current="page" href="../../home.php">Home</a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Chapter
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Chap 1</a></li>
-                            <li><a class="dropdown-item" href="#">Chap 2</a></li>
-                            <li><a class="dropdown-item" href="#">Chap 3</a></li>
-                            <li><a class="dropdown-item" href="#">Chap 4</a></li>
-                        </ul>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../quiz/">Quiz</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="quiz.php">Quiz</a>
+                        <a class="nav-link" href="../../tools/">Quiz</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="leaderboard.php">Leaderboard</a>
+                        <a class="nav-link" href="../../leaderboard.php">Leaderboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="profile.php">Profile</a>
+                        <a class="nav-link " href="../../profile.php">Profile</a>
                     </li>
                 </ul>
             </div>

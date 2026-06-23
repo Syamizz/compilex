@@ -13,257 +13,257 @@ $questions = [
     // 10 MULTIPLE CHOICE QUESTIONS
     [
         'type' => 'mcq',
-        'q' => 'In Chapter 2, lexical analysis identifies words in the source program and passes them to later compiler phases. What does each token consist of?',
+        'q' => 'What does a compiler produce when translating a statement such as x = x * 9?',
         'choices' => [
-            'A' => 'Only the original source character',
-            'B' => 'A class and a value',
-            'C' => 'A parse tree and a grammar rule',
-            'D' => 'A machine instruction and address',
+            'A' => 'The result of the multiplication',
+            'B' => 'A sequence of instructions containing a multiply operation',
+            'C' => 'Only a syntax tree',
+            'D' => 'The value stored in x',
         ],
         'answer' => 'B',
-        'explain' => 'The note states that words are passed as tokens, with each token consisting of a class and value.',
+        'explain' => 'Chapter 1 states that the compiler does not perform the multiplication. It generates instructions that perform it when the object program runs.',
     ],
     [
         'type' => 'mcq',
-        'q' => 'Which statement correctly describes comments during lexical analysis?',
+        'q' => 'When are two programs considered equivalent?',
         'choices' => [
-            'A' => 'Comments must be detected but are not put out as tokens',
-            'B' => 'Comments are always passed to syntax analysis as keyword tokens',
-            'C' => 'Comments are stored in the numeric constant table',
-            'D' => 'Comments are treated as identifiers',
-        ],
-        'answer' => 'A',
-        'explain' => 'Chapter 2 says comments must be detected in lexical analysis, but they are not put out as tokens.',
-    ],
-    [
-        'type' => 'mcq',
-        'q' => 'A deterministic finite state machine must have which property?',
-        'choices' => [
-            'A' => 'At least two starting states',
-            'B' => 'Exactly one arc leaving each state for each possible input symbol',
-            'C' => 'No accepting states',
-            'D' => 'Only one state in total',
-        ],
-        'answer' => 'B',
-        'explain' => 'The note defines deterministic machines as completely specified with no contradictions: exactly one arc for each state and input symbol.',
-    ],
-    [
-        'type' => 'mcq',
-        'q' => 'In regular expressions from Chapter 2, what is the correct precedence from highest to lowest?',
-        'choices' => [
-            'A' => 'Union, concatenation, Kleene star',
-            'B' => 'Concatenation, union, Kleene star',
-            'C' => 'Kleene star, concatenation, union',
-            'D' => 'Kleene star, union, concatenation',
+            'A' => 'They contain the same number of statements',
+            'B' => 'They use the same programming language',
+            'C' => 'They always produce the same output for the same input',
+            'D' => 'They generate object programs of the same size',
         ],
         'answer' => 'C',
-        'explain' => 'The note says Kleene star takes precedence over concatenation, and concatenation takes precedence over union.',
+        'explain' => 'The notes define two programs as equivalent when they always produce the same output when given the same input.',
     ],
     [
         'type' => 'mcq',
-        'q' => 'What language is described by the regular expression 1(0+1)*0?',
+        'q' => 'What is the major difference between compiler output and interpreter output?',
         'choices' => [
-            'A' => 'All strings of zeros and ones',
-            'B' => 'All strings beginning with 1 and ending with 0',
-            'C' => 'All strings with an even number of ones',
-            'D' => 'Only the string 10',
-        ],
-        'answer' => 'B',
-        'explain' => 'Chapter 2 gives this expression as the set of all strings of zeros and ones which begin with 1 and end with 0.',
-    ],
-    [
-        'type' => 'mcq',
-        'q' => 'For the Java input while ( x33 <= 2.5e+33 - total ) calc ( x33 ) ; //! which item is not put out as a token?',
-        'choices' => [
-            'A' => 'while',
-            'B' => '<=',
-            'C' => ';',
-            'D' => '//!',
-        ],
-        'answer' => 'D',
-        'explain' => 'The note shows that the comment is not put out. The semicolon is still a special-character token.',
-    ],
-    [
-        'type' => 'mcq',
-        'q' => 'What does the lexical analysis phase do with the syntactically incorrect input } while if ( { ?',
-        'choices' => [
-            'A' => 'It checks syntax and rejects the whole input',
-            'B' => 'It outputs five tokens corresponding to the five words',
-            'C' => 'It outputs only while and if',
-            'D' => 'It converts the symbols into numeric constants',
-        ],
-        'answer' => 'B',
-        'explain' => 'The note says lexical analysis does not check proper syntax; that error is left for syntax analysis.',
-    ],
-    [
-        'type' => 'mcq',
-        'q' => 'In SableCC, which source-file section defines macros such as digit, letter, and newline?',
-        'choices' => [
-            'A' => 'Helpers',
-            'B' => 'States',
-            'C' => 'Tokens',
-            'D' => 'Ignored Tokens',
+            'A' => 'A compiler produces a program, while an interpreter produces the source program\'s output',
+            'B' => 'A compiler produces tokens, while an interpreter produces comments',
+            'C' => 'A compiler executes only one instruction',
+            'D' => 'An interpreter always produces machine language',
         ],
         'answer' => 'A',
-        'explain' => 'Chapter 2 describes Helpers as macros used by the Tokens section.',
+        'explain' => 'Chapter 1 explains that compiler output is an object program, whereas an interpreter carries out the source computations and produces their results.',
     ],
     [
         'type' => 'mcq',
-        'q' => 'In the Decaf case study, why is the keyword class named clas in the SableCC Tokens section?',
+        'q' => 'Which error from Chapter 1 is normally detected at run time?',
         'choices' => [
-            'A' => 'Because Decaf does not support classes',
-            'B' => 'Because SableCC will not permit class as a token name',
-            'C' => 'Because class is treated as a comment',
-            'D' => 'Because class is stored only in the symbol table',
-        ],
-        'answer' => 'B',
-        'explain' => 'The note says class is an exception; for some reason SableCC will not permit class as a name, so it is shortened to clas.',
-    ],
-    [
-        'type' => 'mcq',
-        'q' => 'In the Decaf Tokens section, what does misc = [0..0xffff] represent?',
-        'choices' => [
-            'A' => 'Only valid identifiers',
-            'B' => 'Only white space',
-            'C' => 'Any character not matched as part of the previous tokens',
-            'D' => 'Only arithmetic operators',
+            'A' => 'Mismatched parentheses',
+            'B' => 'A missing semicolon',
+            'C' => 'Division by zero',
+            'D' => 'An incorrectly formed if statement',
         ],
         'answer' => 'C',
-        'explain' => 'The note says any character not matched as part of the above tokens is called a misc token and will likely cause a syntax error.',
+        'explain' => 'The chapter lists division by zero as a run-time error. Incorrect syntax is normally reported at compile time.',
+    ],
+    [
+        'type' => 'mcq',
+        'q' => 'Which three languages are involved when describing a compiler?',
+        'choices' => [
+            'A' => 'Source, object, and implementation languages',
+            'B' => 'Lexical, syntax, and semantic languages',
+            'C' => 'Assembly, binary, and database languages',
+            'D' => 'Input, output, and error languages',
+        ],
+        'answer' => 'A',
+        'explain' => 'A compiler involves the source language, object language, and the language in which the compiler is written or exists.',
+    ],
+    [
+        'type' => 'mcq',
+        'q' => 'For the source statement A = B + C * D, why must the MULT atom be produced before the ADD atom?',
+        'choices' => [
+            'A' => 'Addition is not supported by the target machine',
+            'B' => 'Multiplication has precedence over addition',
+            'C' => 'The value B must be ignored',
+            'D' => 'Atoms must always be alphabetically ordered',
+        ],
+        'answer' => 'B',
+        'explain' => 'The parser must respect operator precedence, so C * D is computed before its result is added to B.',
+    ],
+    [
+        'type' => 'mcq',
+        'q' => 'Why is global optimization called machine-independent optimization?',
+        'choices' => [
+            'A' => 'It is performed before the code generator on atoms or syntax trees',
+            'B' => 'It can only run on the target machine',
+            'C' => 'It directly changes CPU registers',
+            'D' => 'It is performed after machine instructions are produced',
+        ],
+        'answer' => 'A',
+        'explain' => 'Global optimization examines atoms before code generation, so it is not dependent on the target machine instructions.',
+    ],
+    [
+        'type' => 'mcq',
+        'q' => 'Which change is an example of global optimization from Chapter 1?',
+        'choices' => [
+            'A' => 'Moving a loop-invariant square-root calculation outside a loop',
+            'B' => 'Changing every identifier into a comment',
+            'C' => 'Replacing a compiler with an interpreter',
+            'D' => 'Adding redundant load and store instructions',
+        ],
+        'answer' => 'A',
+        'explain' => 'The notes move x = Math.sqrt(y) outside a loop because y does not change during the loop.',
+    ],
+    [
+        'type' => 'mcq',
+        'q' => 'What makes the compiler arrangement described in Chapter 1 a single-pass compiler?',
+        'choices' => [
+            'A' => 'Every phase writes its complete output into a separate disk file',
+            'B' => 'The parser requests tokens as needed and calls the code generator when atoms are ready',
+            'C' => 'The source program is interpreted twice',
+            'D' => 'Only lexical analysis is performed',
+        ],
+        'answer' => 'B',
+        'explain' => 'In the single-pass arrangement, phases work together as subroutines instead of completing separate full passes over files.',
+    ],
+    [
+        'type' => 'mcq',
+        'q' => 'For n high-level languages and m computers, how many complete compilers would be needed without an intermediate form?',
+        'choices' => [
+            'A' => 'n + m',
+            'B' => 'n * m',
+            'C' => '(n + m) / 2',
+            'D' => 'n - m',
+        ],
+        'answer' => 'B',
+        'explain' => 'Chapter 1 states that without an intermediate form, n languages and m computers require n times m different compilers.',
     ],
 
     // 5 DRAG AND DROP QUESTIONS
     [
         'type' => 'drag',
-        'q' => 'Drag each lexical item to the correct token class from Chapter 2.',
+        'q' => 'Drag each compiler term to its correct meaning.',
         'items' => [
-            'item1' => 'while',
-            'item2' => 'x33',
-            'item3' => '<=',
-            'item4' => '2.5e+33',
+            'item1' => 'Source program',
+            'item2' => 'Object program',
+            'item3' => 'Source language',
+            'item4' => 'Target machine',
         ],
         'targets' => [
-            'keyword' => 'Keyword',
-            'identifier' => 'Identifier',
-            'operator' => 'Operator',
-            'numeric' => 'Numeric constant',
+            'input_program' => 'The program supplied as compiler input',
+            'output_program' => 'The equivalent program produced by the compiler',
+            'input_language' => 'The language used by the input program',
+            'execution_machine' => 'The machine for which the object program is produced',
         ],
         'answer' => [
-            'item1' => 'keyword',
-            'item2' => 'identifier',
-            'item3' => 'operator',
-            'item4' => 'numeric',
+            'item1' => 'input_program',
+            'item2' => 'output_program',
+            'item3' => 'input_language',
+            'item4' => 'execution_machine',
         ],
-        'explain' => 'Chapter 2 lists keywords, identifiers, operators, and numeric constants as lexical token classes.',
+        'explain' => 'These terms are defined in Section 1.1 when the chapter introduces the purpose of a compiler.',
     ],
     [
         'type' => 'drag',
-        'q' => 'Drag each regular-expression operation to its meaning.',
+        'q' => 'Drag each compiler phase to its primary output or responsibility.',
         'items' => [
-            'item1' => 'Union',
-            'item2' => 'Concatenation',
-            'item3' => 'Kleene star',
-            'item4' => 'Parentheses',
+            'item1' => 'Lexical analysis',
+            'item2' => 'Syntax analysis',
+            'item3' => 'Code generation',
+            'item4' => 'Local optimization',
         ],
         'targets' => [
-            'combine' => 'Set union of languages',
-            'join' => 'Juxtaposition of strings',
-            'repeat' => 'Zero or more repetitions',
-            'group' => 'Controls precedence',
+            'tokens' => 'Finds word boundaries and produces tokens',
+            'atoms' => 'Checks syntax and produces atoms or syntax trees',
+            'instructions' => 'Translates atoms or trees into target instructions',
+            'improve_instructions' => 'Removes redundant target instructions',
         ],
         'answer' => [
-            'item1' => 'combine',
-            'item2' => 'join',
-            'item3' => 'repeat',
-            'item4' => 'group',
+            'item1' => 'tokens',
+            'item2' => 'atoms',
+            'item3' => 'instructions',
+            'item4' => 'improve_instructions',
         ],
-        'explain' => 'The note defines union, concatenation, and Kleene star as the three regular-expression operations; parentheses specify precedence.',
+        'explain' => 'Figure 1.4 and the chapter summary describe these compiler phases and their outputs.',
     ],
     [
         'type' => 'drag',
-        'q' => 'Drag each SableCC section or feature to its role.',
+        'q' => 'Drag each atom from A = B + C * D to its correct purpose.',
         'items' => [
-            'item1' => 'Helpers',
-            'item2' => 'States',
-            'item3' => 'Tokens',
-            'item4' => 'Ignored Tokens',
+            'item1' => '(MULT, C, D, TEMP1)',
+            'item2' => '(ADD, B, TEMP1, TEMP2)',
+            'item3' => '(MOVE, TEMP2, A)',
+            'item4' => 'TEMP1',
         ],
         'targets' => [
-            'macros' => 'Defines useful macros',
-            'modes' => 'Defines scanner modes',
-            'patterns' => 'Defines named token patterns',
-            'skip' => 'Tokens the parser never sees',
+            'multiply' => 'Computes C multiplied by D',
+            'addition' => 'Adds B to the multiplication result',
+            'assignment' => 'Stores the final result in A',
+            'temporary' => 'Holds the multiplication result',
         ],
         'answer' => [
-            'item1' => 'macros',
-            'item2' => 'modes',
-            'item3' => 'patterns',
-            'item4' => 'skip',
+            'item1' => 'multiply',
+            'item2' => 'addition',
+            'item3' => 'assignment',
+            'item4' => 'temporary',
         ],
-        'explain' => 'Chapter 2 says SableCC lexical analysis uses Helpers, States, and Tokens; Decaf comments and white space are ignored tokens.',
+        'explain' => 'Sample Problem 1.2(b) gives this exact atom sequence for A = B + C * D.',
     ],
     [
         'type' => 'drag',
-        'q' => 'Drag each Decaf helper to the correct meaning.',
+        'q' => 'Drag each implementation technique to the correct description.',
         'items' => [
-            'item1' => 'letter',
-            'item2' => 'digit',
-            'item3' => 'digits',
-            'item4' => 'exp',
+            'item1' => 'Bootstrapping',
+            'item2' => 'Cross compiling',
+            'item3' => 'Intermediate form',
+            'item4' => 'Compiler-compiler',
         ],
         'targets' => [
-            'single_letter' => 'One upper or lower case letter',
-            'single_digit' => 'One numeric digit',
-            'many_digits' => 'One or more digits',
-            'exponent' => 'Exponent part of a numeric constant',
+            'self_compile' => 'Uses a language subset to build a compiler for the full language',
+            'new_machine' => 'Uses an existing machine to produce a compiler for another machine',
+            'front_back' => 'Separates implementation into front ends and back ends',
+            'automatic' => 'Automatically generates a compiler from specifications',
         ],
         'answer' => [
-            'item1' => 'single_letter',
-            'item2' => 'single_digit',
-            'item3' => 'many_digits',
-            'item4' => 'exponent',
+            'item1' => 'self_compile',
+            'item2' => 'new_machine',
+            'item3' => 'front_back',
+            'item4' => 'automatic',
         ],
-        'explain' => 'These helper definitions are listed in the Decaf case study Helpers section.',
+        'explain' => 'Sections 1.3.1 through 1.3.4 introduce these four compiler implementation techniques.',
     ],
     [
         'type' => 'drag',
-        'q' => 'Drag each SableCC command or Java command to the correct step.',
+        'q' => 'Drag each Decaf or Mini feature to the correct description.',
         'items' => [
-            'item1' => 'sablecc lexing.grammar',
-            'item2' => 'javac lexing/*.java',
-            'item3' => 'java lexing.Lexing',
-            'item4' => 'ctrl-z on Windows/DOS',
+            'item1' => 'Decaf',
+            'item2' => 'Mini',
+            'item3' => 'int and float',
+            'item4' => 'while, for, and if',
         ],
         'targets' => [
-            'generate' => 'Generate Java class definitions',
-            'compile' => 'Compile generated Java files',
-            'run' => 'Execute the scanner',
-            'eof' => 'Terminate standard input',
+            'language' => 'A bare-bones language used for the compiler case study',
+            'target' => 'The fictitious target computer',
+            'types' => 'The only Decaf data types',
+            'control' => 'Control structures supported by Decaf',
         ],
         'answer' => [
-            'item1' => 'generate',
-            'item2' => 'compile',
-            'item3' => 'run',
-            'item4' => 'eof',
+            'item1' => 'language',
+            'item2' => 'target',
+            'item3' => 'types',
+            'item4' => 'control',
         ],
-        'explain' => 'Chapter 2 explains the two-step SableCC process, then running the scanner and ending input with the EOF character.',
+        'explain' => 'Section 1.4 describes Decaf as a simple case-study language and Mini as its target machine.',
     ],
 
     // 5 MIX AND MATCH QUESTIONS
     [
         'type' => 'match',
-        'q' => 'Match each token class with the description from Chapter 2.',
+        'q' => 'Match each lexical item with its example from Chapter 1.',
         'left' => [
             'a' => 'Keyword',
             'b' => 'Identifier',
-            'c' => 'Special character',
-            'd' => 'White space',
+            'c' => 'Numeric constant',
+            'd' => 'Special character',
         ],
         'right' => [
-            'r1' => 'A word with predefined meaning to the compiler',
-            'r2' => 'A programmer-created name for a construct',
-            'r3' => 'Delimiter such as parentheses, braces, comma, or semicolon',
-            'r4' => 'Spaces and tabs generally ignored except as delimiters',
+            'r1' => 'while',
+            'r2' => 'sum',
+            'r3' => '1.2e-12',
+            'r4' => 'Semicolon',
         ],
         'answer' => [
             'a' => 'r1',
@@ -271,22 +271,22 @@ $questions = [
             'c' => 'r3',
             'd' => 'r4',
         ],
-        'explain' => 'These are the token categories and definitions listed in Section 2.1.',
+        'explain' => 'Section 1.2.1 lists keywords, identifiers, constants, operators, special characters, and comments as lexical items.',
     ],
     [
         'type' => 'match',
-        'q' => 'Match each finite state machine term with its Chapter 2 meaning.',
+        'q' => 'Match each syntax-tree element with its meaning.',
         'left' => [
-            'a' => 'Starting state',
-            'b' => 'Accepting state',
-            'c' => 'Transition function',
-            'd' => 'Rejected string',
+            'a' => 'Interior node',
+            'b' => 'Leaf node',
+            'c' => 'If node',
+            'd' => 'While node',
         ],
         'right' => [
-            'r1' => 'State where the machine initially begins',
-            'r2' => 'State that accepts the input if reached after all input is read',
-            'r3' => 'Function of current state and input symbol returning a state',
-            'r4' => 'Input that leaves the machine in a non-accepting state',
+            'r1' => 'Represents an operation or control structure',
+            'r2' => 'Represents an operand',
+            'r3' => 'Has condition, true statement, and optional else statement children',
+            'r4' => 'Has a loop condition and repeated-statement child',
         ],
         'answer' => [
             'a' => 'r1',
@@ -294,22 +294,22 @@ $questions = [
             'c' => 'r3',
             'd' => 'r4',
         ],
-        'explain' => 'Section 2.0.2 defines these FSM components and how acceptance/rejection works.',
+        'explain' => 'Chapter 1 explains the structure of syntax trees and gives the children used for if and while statements.',
     ],
     [
         'type' => 'match',
-        'q' => 'Match each Decaf token definition with the kind of token it recognizes.',
+        'q' => 'Match each optimization concept with its Chapter 1 example.',
         'left' => [
-            'a' => "compare = '==' | '<' | '>' | '<=' | '>=' | '!='",
-            'b' => "identifier = letter (letter | digit | '_')*",
-            'c' => "number = (digits '.'? digits? | '.'digits) exp?",
-            'd' => "space = ' ' | 9 | newline",
+            'a' => 'Unreachable code',
+            'b' => 'Loop invariant',
+            'c' => 'Local optimization',
+            'd' => 'Optimization switch',
         ],
         'right' => [
-            'r1' => 'Relational operators',
-            'r2' => 'Identifier beginning with a letter',
-            'r3' => 'Numeric constant with optional decimal point and exponent',
-            'r4' => 'White space including tab and newline',
+            'r1' => 'Statements after an unconditional jump that cannot execute',
+            'r2' => 'A calculation moved outside a loop because its value does not change',
+            'r3' => 'Eliminating unnecessary load and store instructions',
+            'r4' => 'Turned off while debugging and enabled after the program works',
         ],
         'answer' => [
             'a' => 'r1',
@@ -317,45 +317,22 @@ $questions = [
             'c' => 'r3',
             'd' => 'r4',
         ],
-        'explain' => 'These definitions are taken from the Decaf Tokens section in Chapter 2.',
+        'explain' => 'The global and local optimization sections use these examples to explain how object programs are made more efficient.',
     ],
     [
         'type' => 'match',
-        'q' => 'Match each SableCC state notation with its meaning.',
-        'left' => [
-            'a' => '{statename} token = def;',
-            'b' => '{statename->newstate} token = def;',
-            'c' => 'token = def;',
-            'd' => 'States def, currency;',
-        ],
-        'right' => [
-            'r1' => 'Apply only in that state and remain in that state',
-            'r2' => 'Apply in one state and change to another state',
-            'r3' => 'Apply regardless of current scanner state',
-            'r4' => 'Declare scanner states, with the first as start state',
-        ],
-        'answer' => [
-            'a' => 'r1',
-            'b' => 'r2',
-            'c' => 'r3',
-            'd' => 'r4',
-        ],
-        'explain' => 'Section 2.4 explains scanner states and the transition operator ->.',
-    ],
-    [
-        'type' => 'match',
-        'q' => 'Match each Chapter 2 concept with the table or output it relates to.',
+        'q' => 'Match each compiler phase or component with the information it handles.',
         'left' => [
             'a' => 'Symbol table',
-            'b' => 'Numeric constants table',
-            'c' => 'Stream of tokens',
-            'd' => 'File of atoms',
+            'b' => 'Semantic analysis',
+            'c' => 'Register allocation',
+            'd' => 'Postfix traversal',
         ],
         'right' => [
-            'r1' => 'Stores each identifier once and related information',
-            'r2' => 'Stores converted numeric constants',
-            'r3' => 'Output of lexical analysis, one token for each word',
-            'r4' => 'One output of the Decaf syntax and lexical phases',
+            'r1' => 'Stores identifiers and their relevant attributes',
+            'r2' => 'Checks data types and performs necessary conversions',
+            'r3' => 'Tracks which target CPU registers are available or in use',
+            'r4' => 'Visits subtrees before generating instructions for their parent node',
         ],
         'answer' => [
             'a' => 'r1',
@@ -363,7 +340,30 @@ $questions = [
             'c' => 'r3',
             'd' => 'r4',
         ],
-        'explain' => 'Chapter 2 discusses symbol/numeric tables, token streams, and Decaf producing a file of atoms and numeric constants.',
+        'explain' => 'All four concepts are described in the compiler-phase discussion in Section 1.2.',
+    ],
+    [
+        'type' => 'match',
+        'q' => 'Match each intermediate-form concept with its description.',
+        'left' => [
+            'a' => 'Front end',
+            'b' => 'Back end',
+            'c' => 'P-code',
+            'd' => 'Java byte code',
+        ],
+        'right' => [
+            'r1' => 'Translates one high-level language into the intermediate form',
+            'r2' => 'Translates or interprets the intermediate form for one computer',
+            'r3' => 'An intermediate form developed at the University of California at San Diego',
+            'r4' => 'The intermediate form used by the Java Virtual Machine',
+        ],
+        'answer' => [
+            'a' => 'r1',
+            'b' => 'r2',
+            'c' => 'r3',
+            'd' => 'r4',
+        ],
+        'explain' => 'Section 1.3.3 explains front ends, back ends, p-code, and Java byte code as examples of compiling to intermediate form.',
     ],
 ];
 
@@ -422,7 +422,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $totalPoints = $basePoints + $bonusPoints;
     $scorepoint = $totalPoints;
-    $quiz_id = 'Q006'; // Chapter 2 Hard
+    $quiz_id = 'Q003'; // Chapter 1 Hard
 
     $attemptResult = $conn->query("
         SELECT qa_id
@@ -548,7 +548,7 @@ $pct = $submitted ? round($score / $total * 100) : 0;
 
 <head>
     <meta charset="UTF-8">
-    <title>Chapter 2 Hard Quiz</title>
+    <title>Chapter 1 Hard Quiz</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -1743,9 +1743,9 @@ $pct = $submitted ? round($score / $total * 100) : 0;
         }
 
         .control-locked {
-    pointer-events: none;
-    cursor: default;
-}
+            pointer-events: none;
+            cursor: default;
+        }
     </style>
 </head>
 
@@ -1800,8 +1800,15 @@ $pct = $submitted ? round($score / $total * 100) : 0;
     <div class="page">
         <div class="header">
             <div class="chip">Hard Level</div>
-            <h1>Chapter 2 Hard Quiz</h1>
-            <p>20 mixed questions based only on Chapter 2: Lexical Analysis, formal languages, FSMs, regular expressions, SableCC, and Decaf lexical rules.</p>
+
+            <h1>Chapter 1 Hard Quiz</h1>
+
+            <p>
+                20 mixed questions based only on Chapter 1:
+                compilers and interpreters, compiler phases, tokens, atoms,
+                syntax trees, optimization, implementation techniques,
+                intermediate forms, Decaf, and the Mini target machine.
+            </p>
         </div>
 
         <?php if (!$submitted): ?>

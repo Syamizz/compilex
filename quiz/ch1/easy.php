@@ -92,38 +92,121 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $scorepoint = $correct_answers * 100;
 
-    // Generate board ID like BD1, BD2, BD3
+    // Chapter 1 Easy quiz is stored in the quiz table as Q001.
+    $quiz_id = 'Q001';
+
+    // Generate the next attempt ID in the format QA001, QA002, QA003, ...
     $result = $conn->query("
-    SELECT board_id
-    FROM leaderboard
-    ORDER BY CAST(SUBSTRING(board_id, 3) AS UNSIGNED) DESC
-    LIMIT 1
+        SELECT qa_id
+        FROM quiz_attempt
+        WHERE qa_id REGEXP '^QA[0-9]+$'
+        ORDER BY CAST(SUBSTRING(qa_id, 3) AS UNSIGNED) DESC
+        LIMIT 1
 ");
 
     if ($result && $result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        $last_number = (int) substr($row['board_id'], 2);
+        $last_number = (int) substr($row['qa_id'], 2);
         $next_number = $last_number + 1;
     } else {
         $next_number = 1;
     }
 
-    $board_id = 'BD' . $next_number;
-
-    $board_chap = 1;
-    $quiz_type = "Easy";
+    $qa_id = 'QA' . str_pad($next_number, 3, '0', STR_PAD_LEFT);
 
     $stmt = $conn->prepare("
-    INSERT INTO leaderboard (board_id, board_chap, quiz_type, scorepoint, user_id)
-    VALUES (?, ?, ?, ?, ?)
+        INSERT INTO quiz_attempt (qa_id, user_id, quiz_id, scorepoint, answered_at)
+        VALUES (?, ?, ?, ?, NOW())
 ");
-    $stmt->bind_param("sisii", $board_id, $board_chap, $quiz_type, $scorepoint, $user_id);
-    $stmt->execute();
+
+    if (!$stmt) {
+        die('Unable to prepare quiz attempt: ' . $conn->error);
+    }
+
+    $stmt->bind_param("sisi", $qa_id, $user_id, $quiz_id, $scorepoint);
+
+    if (!$stmt->execute()) {
+        die('Unable to save quiz attempt: ' . $stmt->error);
+    }
+
     $stmt->close();
 }
 
 $score = $correct_answers;
 $pct = $submitted ? round($score / $total * 100) : 0;
+
+// Check whether this user already has a leaderboard record for Q001.
+$leaderboardStmt = $conn->prepare("
+    SELECT board_id, best_score
+    FROM leaderboard
+    WHERE user_id = ?
+      AND quiz_id = 'Q001'
+    LIMIT 1
+");
+
+$leaderboardStmt->bind_param("i", $user_id);
+$leaderboardStmt->execute();
+$leaderboardResult = $leaderboardStmt->get_result();
+
+if ($leaderboardResult->num_rows > 0) {
+    $leaderboardRow = $leaderboardResult->fetch_assoc();
+    $currentBestScore = (int)$leaderboardRow['best_score'];
+
+    // Update only when the new score is higher.
+    if ($scorepoint > $currentBestScore) {
+        $updateStmt = $conn->prepare("
+            UPDATE leaderboard
+            SET best_score = ?, updated_at = NOW()
+            WHERE board_id = ?
+        ");
+
+        $updateStmt->bind_param(
+            "is",
+            $scorepoint,
+            $leaderboardRow['board_id']
+        );
+
+        $updateStmt->execute();
+        $updateStmt->close();
+    }
+} else {
+    // Generate the next board ID: BD1, BD2, BD3, ...
+    $boardResult = $conn->query("
+        SELECT board_id
+        FROM leaderboard
+        WHERE board_id REGEXP '^BD[0-9]+$'
+        ORDER BY CAST(SUBSTRING(board_id, 3) AS UNSIGNED) DESC
+        LIMIT 1
+    ");
+
+    if ($boardResult && $boardResult->num_rows > 0) {
+        $boardRow = $boardResult->fetch_assoc();
+        $nextBoardNumber =
+            (int)substr($boardRow['board_id'], 2) + 1;
+    } else {
+        $nextBoardNumber = 1;
+    }
+
+    $board_id = 'BD' . $nextBoardNumber;
+
+    $insertStmt = $conn->prepare("
+    INSERT INTO leaderboard
+        (board_id, user_id, quiz_id, best_score, updated_at)
+    VALUES (?, ?, 'Q001', ?, NOW())
+");
+
+$insertStmt->bind_param(
+    "sii",
+    $board_id,
+    $user_id,
+    $scorepoint
+);
+
+$insertStmt->execute();
+$insertStmt->close();
+}
+
+$leaderboardStmt->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -451,7 +534,7 @@ $pct = $submitted ? round($score / $total * 100) : 0;
 
 <body>
 
-    <nav id="navbar" class="navbar navbar-expand-lg">
+    <nav id="navbar" class="navbar navbar-expand-lg fixed-top">
         <div class="container-fluid">
             <a id="title" class="navbar-brand" href="#">CompileX</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -460,27 +543,20 @@ $pct = $submitted ? round($score / $total * 100) : 0;
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="home.php">Home</a>
+                        <a class="nav-link" aria-current="page" href="../../home.php">Home</a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Chapter
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Chap 1</a></li>
-                            <li><a class="dropdown-item" href="#">Chap 2</a></li>
-                            <li><a class="dropdown-item" href="#">Chap 3</a></li>
-                            <li><a class="dropdown-item" href="#">Chap 4</a></li>
-                        </ul>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../quiz/">Quiz</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="quiz.php">Quiz</a>
+                        <a class="nav-link" href="../../tools/">Tools</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="leaderboard.php">Leaderboard</a>
+                        <a class="nav-link" href="../../leaderboard.php">Leaderboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " href="profile.php">Profile</a>
+                        <a class="nav-link " href="../../profile.php">Profile</a>
                     </li>
                 </ul>
             </div>

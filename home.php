@@ -234,20 +234,12 @@ $stmt = $conn->prepare("
     SELECT
         u.user_id,
         u.username,
-        SUM(best_scores.scorepoint) AS total_score
-    FROM users u
-    INNER JOIN (
-        SELECT
-            user_id,
-            board_chap,
-            LOWER(quiz_type) AS quiz_type,
-            MAX(scorepoint) AS scorepoint
-        FROM leaderboard
-        GROUP BY user_id, board_chap, LOWER(quiz_type)
-    ) best_scores
-        ON best_scores.user_id = u.user_id
+        SUM(l.best_score) AS total_score
+    FROM leaderboard l
+    INNER JOIN users u
+        ON u.user_id = l.user_id
     GROUP BY u.user_id, u.username
-    ORDER BY total_score DESC
+    ORDER BY total_score DESC, u.username ASC
     LIMIT 5
 ");
 
@@ -261,12 +253,24 @@ while ($row = $result->fetch_assoc()) {
         'rank'  => $rank,
         'name'  => $row['username'],
         'score' => (int)$row['total_score'],
+        'is_placeholder' => false,
     ];
 
     $rank++;
 }
 
 $stmt->close();
+
+while ($rank <= 5) {
+    $leaderboard[] = [
+        'rank'  => $rank,
+        'name'  => '-',
+        'score' => '-',
+        'is_placeholder' => true,
+    ];
+
+    $rank++;
+}
 
 
 $quizLevels = [
@@ -291,12 +295,14 @@ for ($chapter = 1; $chapter <= 4; $chapter++) {
 
 $stmt = $conn->prepare("
     SELECT
-        board_chap,
-        LOWER(quiz_type) AS quiz_type,
-        MAX(scorepoint) AS scorepoint
-    FROM leaderboard
-    WHERE user_id = ?
-    GROUP BY board_chap, LOWER(quiz_type)
+        q.quiz_chap,
+        LOWER(q.quiz_type) AS quiz_type,
+        MAX(qa.scorepoint) AS scorepoint
+    FROM quiz_attempt qa
+    INNER JOIN quiz q
+        ON q.quiz_id = qa.quiz_id
+    WHERE qa.user_id = ?
+    GROUP BY q.quiz_chap, LOWER(q.quiz_type)
 ");
 
 $stmt->bind_param("i", $userId);
@@ -304,12 +310,14 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 while ($row = $result->fetch_assoc()) {
-    $chapter = (int)$row['board_chap'];
+    $chapter = (int)$row['quiz_chap'];
     $level = strtolower($row['quiz_type']);
 
     if (isset($quizProgress[$chapter][$level])) {
         $quizProgress[$chapter][$level]['answered'] = true;
-        $quizProgress[$chapter][$level]['score'] = (int)$row['scorepoint'];
+        $quizProgress[$chapter][$level]['score'] =
+            (int)$row['scorepoint'];
+
         $answeredQuizCount++;
     }
 }
@@ -758,6 +766,17 @@ $showTutorial = !$hasAnySavedProgress || $allChapterProgressZero;
             background: var(--color-background-secondary);
             color: var(--color-text-secondary);
             border: 0.5px solid var(--color-border-secondary);
+        }
+
+        .lb-placeholder .rank-medal,
+        .lb-placeholder .score-pill {
+            background: var(--color-background-secondary);
+            color: var(--color-text-secondary);
+            border: 0.5px solid var(--color-border-secondary);
+        }
+
+        .lb-placeholder td {
+            color: var(--color-text-secondary);
         }
 
         .score-pill {
@@ -1265,7 +1284,7 @@ $showTutorial = !$hasAnySavedProgress || $allChapterProgressZero;
     <div class="page-wrap">
         <h1>Welcome back, <?php echo $username; ?></h1>
         <br>
-        <div class="main-grid" style="display:grid; grid-template-columns:1.25fr 0.9fr 1.35fr; gap:32px; align-items:start;">
+        <div class="main-grid" style="display:grid; grid-template-columns:1.25fr 1.1fr 1.35fr; gap:32px; align-items:start;">
 
             <div id="tutorial-learning-progress">
                 <div class="section-heading">Your learning progress</div>
@@ -1410,7 +1429,9 @@ $showTutorial = !$hasAnySavedProgress || $allChapterProgressZero;
                         </thead>
                         <tbody>
                             <?php foreach ($leaderboard as $entry):
-                                if ($entry['rank'] <= 3) {
+                                if (!empty($entry['is_placeholder'])) {
+                                    $rankClass = 'rank-n lb-placeholder';
+                                } elseif ($entry['rank'] <= 3) {
                                     $rankClass = 'rank-' . $entry['rank'];
                                 } else {
                                     $rankClass = 'rank-n';

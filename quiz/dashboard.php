@@ -9,9 +9,11 @@
                     <li class="nav-item">
                         <a class="nav-link " aria-current="page" href="../home.php">Home</a>
                     </li>
-                
                     <li class="nav-item">
                         <a class="nav-link active" href="../quiz.php">Quiz</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="../tools">Tools</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="../leaderboard.php">Leaderboard</a>

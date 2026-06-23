@@ -977,11 +977,9 @@
 
             <!-- Card header -->
             <div style="background: #18181B; padding: 20px 28px;">
-                <p style="font-size: 12px; font-weight: 600; letter-spacing: .1em; color: #A5B4FC; margin: 0 0 6px;">CHAPTER 2 — SYMBOL TABLES &amp; LEXICAL ANALYSIS</p>
-                <h2 style="font-size: 22px; font-weight: 700; color: #FFFFFF; margin: 0 0 6px;">Interactive Compiler Tools</h2>
-                <p style="font-size: 14px; color: #A1A1AA; margin: 0; line-height: 1.6;">
-                    Explore lexical scanning, token classification, and symbol table structures hands-on — all linked to your textbook examples.
-                </p>
+                <h2 style="font-size: 22px; font-weight: 700; color: #FFFFFF; margin: 0 0 6px;">CHAPTER 2</h2>
+                <p style="font-size: 12px; font-weight: 600; letter-spacing: .1em; color: #A5B4FC; margin: 0 0 6px;">SYMBOL TABLES &amp; LEXICAL ANALYSIS</p>
+                
             </div>
 
             <!-- Tool buttons -->

@@ -86,6 +86,67 @@ if (!isset($_SESSION['user_id'])) {
             box-shadow: none;
             transform: translateY(0);
         }
+
+        #titleTools {
+            width: fit-content;
+            margin: 35px auto 55px;
+            padding: 12px 24px;
+            position: relative;
+
+            font-size: 30px;
+            font-weight: 800;
+            text-align: center;
+            color: #18181B;
+
+            cursor: default;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        /* Animated underline */
+        #titleTools::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+
+            width: 45%;
+            height: 4px;
+            border-radius: 20px;
+            background: linear-gradient(90deg, #6366F1, #A855F7, #06B6D4);
+
+            transform: translateX(-50%);
+            transition: width 0.35s ease;
+        }
+
+        #titleTools:hover {
+            color: #6366F1;
+            transform: translateY(-4px) scale(1.03);
+        }
+
+        #titleTools:hover::after {
+            width: 100%;
+        }
+
+        /* Small interactive icon */
+        #titleTools::before {
+            content: "⚙";
+            display: inline-block;
+            margin-right: 10px;
+            color: #6366F1;
+            transition: transform 0.5s ease;
+        }
+
+        #titleTools:hover::before {
+            transform: rotate(180deg);
+        }
+
+        @media (max-width: 600px) {
+            #titleTools {
+                font-size: 23px;
+                margin-bottom: 35px;
+                padding-inline: 12px;
+            }
+        }
     </style>
 
 
@@ -93,7 +154,7 @@ if (!isset($_SESSION['user_id'])) {
 
 <body>
     <!-- Navbar -->
-    <nav id="navbar" class="navbar navbar-expand-lg">
+    <nav id="navbar" class="navbar navbar-expand-lg fixed-top">
         <div class="container-fluid">
             <a id="title" class="navbar-brand" href="../home.php">CompileX</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -127,7 +188,15 @@ if (!isset($_SESSION['user_id'])) {
         </div>
     </nav>
 
+    <br><br><br><br>
     <div>
+
+        <h2 id="titleTools">Interactive Compiler Tools</h2>
+
+    </div>
+
+    
+    <div class="main-grid" style="display:grid; grid-template-columns:1.25fr 1.35fr; gap:32px; align-items:start;">
         <div>
             <?php
             include "tools.php";
@@ -138,10 +207,11 @@ if (!isset($_SESSION['user_id'])) {
             include "tools2.php";
             ?>
         </div>
+
     </div>
 
 
-
+    <br><br><br><br>
 
     <footer>
         © <?php echo date("Y"); ?> CompileX • Compiler Learning Platform

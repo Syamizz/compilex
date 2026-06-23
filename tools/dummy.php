@@ -332,9 +332,9 @@
 
             <!-- Card header -->
             <div style="background:#18181B; padding:20px 28px;">
+                <p style="font-size:12px; font-weight:600; letter-spacing:.1em; color:#A5B4FC; margin:0 0 6px;">CHAPTER 3 — SYNTAX ANALYSIS</p>
+                <h2 style="font-size:22px; font-weight:700; color:#FFFFFF; margin:0 0 6px;">CHAPTER 3 — SYNTAX ANALYSIS</h2>
                 
-                <h2 style="font-size:22px; font-weight:700; color:#FFFFFF; margin:0 0 6px;">CHAPTER 3</h2>
-                <p style="font-size:12px; font-weight:600; letter-spacing:.1em; color:#A5B4FC; margin:0 0 6px;">SYNTAX ANALYSIS</p>
             </div>
 
             <!-- Tool buttons -->

@@ -13,257 +13,257 @@ $questions = [
     // 10 MULTIPLE CHOICE QUESTIONS
     [
         'type' => 'mcq',
-        'q' => 'In Chapter 2, lexical analysis identifies words in the source program and passes them to later compiler phases. What does each token consist of?',
+        'q' => 'In a top-down parsing algorithm, where does construction of the derivation tree begin?',
         'choices' => [
-            'A' => 'Only the original source character',
-            'B' => 'A class and a value',
-            'C' => 'A parse tree and a grammar rule',
-            'D' => 'A machine instruction and address',
+            'A' => 'At the leaves',
+            'B' => 'At the starting nonterminal',
+            'C' => 'At the final input symbol',
+            'D' => 'At the code generator',
         ],
         'answer' => 'B',
-        'explain' => 'The note states that words are passed as tokens, with each token consisting of a class and value.',
+        'explain' => 'Chapter 4 states that a top-down algorithm begins with the starting nonterminal and applies rules in a downward direction through the derivation tree.',
     ],
     [
         'type' => 'mcq',
-        'q' => 'Which statement correctly describes comments during lexical analysis?',
+        'q' => 'Which condition must every rule of a simple grammar satisfy?',
         'choices' => [
-            'A' => 'Comments must be detected but are not put out as tokens',
-            'B' => 'Comments are always passed to syntax analysis as keyword tokens',
-            'C' => 'Comments are stored in the numeric constant table',
-            'D' => 'Comments are treated as identifiers',
-        ],
-        'answer' => 'A',
-        'explain' => 'Chapter 2 says comments must be detected in lexical analysis, but they are not put out as tokens.',
-    ],
-    [
-        'type' => 'mcq',
-        'q' => 'A deterministic finite state machine must have which property?',
-        'choices' => [
-            'A' => 'At least two starting states',
-            'B' => 'Exactly one arc leaving each state for each possible input symbol',
-            'C' => 'No accepting states',
-            'D' => 'Only one state in total',
-        ],
-        'answer' => 'B',
-        'explain' => 'The note defines deterministic machines as completely specified with no contradictions: exactly one arc for each state and input symbol.',
-    ],
-    [
-        'type' => 'mcq',
-        'q' => 'In regular expressions from Chapter 2, what is the correct precedence from highest to lowest?',
-        'choices' => [
-            'A' => 'Union, concatenation, Kleene star',
-            'B' => 'Concatenation, union, Kleene star',
-            'C' => 'Kleene star, concatenation, union',
-            'D' => 'Kleene star, union, concatenation',
+            'A' => 'Every rule must begin with a nonterminal',
+            'B' => 'Every rule must contain an epsilon symbol',
+            'C' => 'Every rule must have the form A -> a alpha',
+            'D' => 'Every rule must contain exactly one symbol',
         ],
         'answer' => 'C',
-        'explain' => 'The note says Kleene star takes precedence over concatenation, and concatenation takes precedence over union.',
+        'explain' => 'A simple grammar requires each rule to have the form A -> a alpha, where A is a nonterminal, a is a terminal, and alpha is a string of symbols.',
     ],
     [
         'type' => 'mcq',
-        'q' => 'What language is described by the regular expression 1(0+1)*0?',
+        'q' => 'Why must rules defining the same nonterminal have disjoint selection sets?',
         'choices' => [
-            'A' => 'All strings of zeros and ones',
-            'B' => 'All strings beginning with 1 and ending with 0',
-            'C' => 'All strings with an even number of ones',
-            'D' => 'Only the string 10',
-        ],
-        'answer' => 'B',
-        'explain' => 'Chapter 2 gives this expression as the set of all strings of zeros and ones which begin with 1 and end with 0.',
-    ],
-    [
-        'type' => 'mcq',
-        'q' => 'For the Java input while ( x33 <= 2.5e+33 - total ) calc ( x33 ) ; //! which item is not put out as a token?',
-        'choices' => [
-            'A' => 'while',
-            'B' => '<=',
-            'C' => ';',
-            'D' => '//!',
-        ],
-        'answer' => 'D',
-        'explain' => 'The note shows that the comment is not put out. The semicolon is still a special-character token.',
-    ],
-    [
-        'type' => 'mcq',
-        'q' => 'What does the lexical analysis phase do with the syntactically incorrect input } while if ( { ?',
-        'choices' => [
-            'A' => 'It checks syntax and rejects the whole input',
-            'B' => 'It outputs five tokens corresponding to the five words',
-            'C' => 'It outputs only while and if',
-            'D' => 'It converts the symbols into numeric constants',
-        ],
-        'answer' => 'B',
-        'explain' => 'The note says lexical analysis does not check proper syntax; that error is left for syntax analysis.',
-    ],
-    [
-        'type' => 'mcq',
-        'q' => 'In SableCC, which source-file section defines macros such as digit, letter, and newline?',
-        'choices' => [
-            'A' => 'Helpers',
-            'B' => 'States',
-            'C' => 'Tokens',
-            'D' => 'Ignored Tokens',
+            'A' => 'So the parser can uniquely decide which rule to apply',
+            'B' => 'So every rule can contain epsilon',
+            'C' => 'So the parser can process several inputs simultaneously',
+            'D' => 'So all nonterminals become terminals',
         ],
         'answer' => 'A',
-        'explain' => 'Chapter 2 describes Helpers as macros used by the Tokens section.',
+        'explain' => 'Disjoint selection sets allow the current input symbol to uniquely determine which grammar rule should be applied.',
     ],
     [
         'type' => 'mcq',
-        'q' => 'In the Decaf case study, why is the keyword class named clas in the SableCC Tokens section?',
+        'q' => 'When applying a grammar rule with a pushdown parser, why are the right-side symbols placed onto the stack in reverse order?',
         'choices' => [
-            'A' => 'Because Decaf does not support classes',
-            'B' => 'Because SableCC will not permit class as a token name',
-            'C' => 'Because class is treated as a comment',
-            'D' => 'Because class is stored only in the symbol table',
+            'A' => 'The last grammar symbol must be processed first',
+            'B' => 'The first grammar symbol must end up on top of the stack',
+            'C' => 'The stack can contain only terminals',
+            'D' => 'The input must be read from right to left',
         ],
         'answer' => 'B',
-        'explain' => 'The note says class is an exception; for some reason SableCC will not permit class as a name, so it is shortened to clas.',
+        'explain' => 'Because a stack is last-in first-out, reversing the right side places its first symbol on top so it is processed first.',
     ],
     [
         'type' => 'mcq',
-        'q' => 'In the Decaf Tokens section, what does misc = [0..0xffff] represent?',
+        'q' => 'For an epsilon rule N -> epsilon in a quasi-simple grammar, what is its selection set?',
         'choices' => [
-            'A' => 'Only valid identifiers',
-            'B' => 'Only white space',
-            'C' => 'Any character not matched as part of the previous tokens',
-            'D' => 'Only arithmetic operators',
+            'A' => 'First(N)',
+            'B' => 'Every terminal in the grammar',
+            'C' => 'The follow set of N',
+            'D' => 'Only the endmarker',
         ],
         'answer' => 'C',
-        'explain' => 'The note says any character not matched as part of the above tokens is called a misc token and will likely cause a syntax error.',
+        'explain' => 'Chapter 4 defines the selection set of an epsilon rule as the follow set of the nonterminal on its left side.',
+    ],
+    [
+        'type' => 'mcq',
+        'q' => 'What does LL(1) mean?',
+        'choices' => [
+            'A' => 'The parser scans left to right, produces a left-most derivation, and uses one lookahead symbol',
+            'B' => 'The parser scans right to left and uses one stack symbol',
+            'C' => 'The parser produces a right-most derivation using one rule',
+            'D' => 'The grammar has one terminal and one nonterminal',
+        ],
+        'answer' => 'A',
+        'explain' => 'The two L characters refer to scanning left to right and finding a left-most derivation. The 1 means at most one lookahead symbol.',
+    ],
+    [
+        'type' => 'mcq',
+        'q' => 'Why is the rule Expr -> Expr + Term unsuitable for recursive-descent parsing?',
+        'choices' => [
+            'A' => 'It contains an addition operator',
+            'B' => 'It causes immediate left recursion and infinite recursive calls',
+            'C' => 'It has too many terminal symbols',
+            'D' => 'It cannot generate arithmetic expressions',
+        ],
+        'answer' => 'B',
+        'explain' => 'A recursive-descent method for Expr would call itself before consuming input, causing infinite recursion.',
+    ],
+    [
+        'type' => 'mcq',
+        'q' => 'How are action symbols represented in a translation grammar?',
+        'choices' => [
+            'A' => 'Inside square brackets',
+            'B' => 'Inside parentheses',
+            'C' => 'Inside curly braces',
+            'D' => 'As lowercase nonterminals',
+        ],
+        'answer' => 'C',
+        'explain' => 'Chapter 4 encloses action symbols in curly braces, such as {ADD}, {MULT}, or {var}.',
+    ],
+    [
+        'type' => 'mcq',
+        'q' => 'Which statement correctly distinguishes synthesized and inherited attributes?',
+        'choices' => [
+            'A' => 'Synthesized attributes come from lower nodes; inherited attributes come from higher nodes',
+            'B' => 'Both types must come from terminal symbols',
+            'C' => 'Synthesized attributes come only from the scanner',
+            'D' => 'Inherited attributes always contain labels',
+        ],
+        'answer' => 'A',
+        'explain' => 'Synthesized values move upward from lower nodes, while inherited values are passed from higher nodes or across the tree.',
+    ],
+    [
+        'type' => 'mcq',
+        'q' => 'Why does the Decaf boolean-expression translation use comparison code 7 - c in its TST atom?',
+        'choices' => [
+            'A' => 'To allocate seven temporary variables',
+            'B' => 'To convert the comparison into an assignment',
+            'C' => 'To use the logical complement and branch when the condition is false',
+            'D' => 'To make every comparison true',
+        ],
+        'answer' => 'C',
+        'explain' => 'The TST used by control structures must branch when the source condition is false. Subtracting the comparison code from 7 produces its logical complement.',
     ],
 
     // 5 DRAG AND DROP QUESTIONS
     [
         'type' => 'drag',
-        'q' => 'Drag each lexical item to the correct token class from Chapter 2.',
+        'q' => 'Drag each relation term to its correct definition.',
         'items' => [
-            'item1' => 'while',
-            'item2' => 'x33',
-            'item3' => '<=',
-            'item4' => '2.5e+33',
+            'item1' => 'Relation',
+            'item2' => 'Transitive',
+            'item3' => 'Reflexive',
+            'item4' => 'R*',
         ],
         'targets' => [
-            'keyword' => 'Keyword',
-            'identifier' => 'Identifier',
-            'operator' => 'Operator',
-            'numeric' => 'Numeric constant',
+            'pairs' => 'A set of ordered pairs',
+            'chain' => 'If (a,b) and (b,c) occur, then (a,c) occurs',
+            'self' => 'Contains a pair such as (a,a)',
+            'closure' => 'The reflexive transitive closure of R',
         ],
         'answer' => [
-            'item1' => 'keyword',
-            'item2' => 'identifier',
-            'item3' => 'operator',
-            'item4' => 'numeric',
+            'item1' => 'pairs',
+            'item2' => 'chain',
+            'item3' => 'self',
+            'item4' => 'closure',
         ],
-        'explain' => 'Chapter 2 lists keywords, identifiers, operators, and numeric constants as lexical token classes.',
+        'explain' => 'Section 4.0 defines relations and the reflexive transitive closure used later when calculating selection sets.',
     ],
     [
         'type' => 'drag',
-        'q' => 'Drag each regular-expression operation to its meaning.',
+        'q' => 'Drag each simple-grammar pushdown action to the correct situation.',
         'items' => [
-            'item1' => 'Union',
-            'item2' => 'Concatenation',
-            'item3' => 'Kleene star',
-            'item4' => 'Parentheses',
+            'item1' => 'REP',
+            'item2' => 'Pop and advance',
+            'item3' => 'Accept',
+            'item4' => 'Reject',
         ],
         'targets' => [
-            'combine' => 'Set union of languages',
-            'join' => 'Juxtaposition of strings',
-            'repeat' => 'Zero or more repetitions',
-            'group' => 'Controls precedence',
+            'grammar_rule' => 'A grammar rule is selected for a nonterminal',
+            'terminal_match' => 'The stack terminal matches the input terminal',
+            'finished' => 'The bottom marker and endmarker are reached together',
+            'invalid' => 'No valid table action exists',
         ],
         'answer' => [
-            'item1' => 'combine',
-            'item2' => 'join',
-            'item3' => 'repeat',
-            'item4' => 'group',
+            'item1' => 'grammar_rule',
+            'item2' => 'terminal_match',
+            'item3' => 'finished',
+            'item4' => 'invalid',
         ],
-        'explain' => 'The note defines union, concatenation, and Kleene star as the three regular-expression operations; parentheses specify precedence.',
+        'explain' => 'The one-state pushdown construction uses REP for grammar rules, pop and advance for matching terminals, and accepts only when input and stack finish together.',
     ],
     [
         'type' => 'drag',
-        'q' => 'Drag each SableCC section or feature to its role.',
+        'q' => 'Drag each selection-set concept to its correct meaning.',
         'items' => [
-            'item1' => 'Helpers',
-            'item2' => 'States',
-            'item3' => 'Tokens',
-            'item4' => 'Ignored Tokens',
+            'item1' => 'Nullable nonterminal',
+            'item2' => 'First(A)',
+            'item3' => 'Fol(A)',
+            'item4' => 'Selection set',
         ],
         'targets' => [
-            'macros' => 'Defines useful macros',
-            'modes' => 'Defines scanner modes',
-            'patterns' => 'Defines named token patterns',
-            'skip' => 'Tokens the parser never sees',
+            'epsilon' => 'A nonterminal from which epsilon can be derived',
+            'begin' => 'Terminals that can begin a string derived from A',
+            'after' => 'Terminals or endmarker that can immediately follow A',
+            'choose' => 'Input symbols that direct the parser to use a rule',
         ],
         'answer' => [
-            'item1' => 'macros',
-            'item2' => 'modes',
-            'item3' => 'patterns',
-            'item4' => 'skip',
+            'item1' => 'epsilon',
+            'item2' => 'begin',
+            'item3' => 'after',
+            'item4' => 'choose',
         ],
-        'explain' => 'Chapter 2 says SableCC lexical analysis uses Helpers, States, and Tokens; Decaf comments and white space are ignored tokens.',
+        'explain' => 'These concepts are used by the Chapter 4 algorithm for finding the selection set of each grammar rule.',
     ],
     [
         'type' => 'drag',
-        'q' => 'Drag each Decaf helper to the correct meaning.',
+        'q' => 'Drag each expression-grammar nonterminal to its role in grammar G16.',
         'items' => [
-            'item1' => 'letter',
-            'item2' => 'digit',
-            'item3' => 'digits',
-            'item4' => 'exp',
+            'item1' => 'Expr',
+            'item2' => 'Elist',
+            'item3' => 'Term',
+            'item4' => 'Tlist',
         ],
         'targets' => [
-            'single_letter' => 'One upper or lower case letter',
-            'single_digit' => 'One numeric digit',
-            'many_digits' => 'One or more digits',
-            'exponent' => 'Exponent part of a numeric constant',
+            'expression' => 'Begins with a Term followed by an addition list',
+            'addition_tail' => 'Represents repeated + Term portions',
+            'term' => 'Begins with a Factor followed by a multiplication list',
+            'multiplication_tail' => 'Represents repeated * Factor portions',
         ],
         'answer' => [
-            'item1' => 'single_letter',
-            'item2' => 'single_digit',
-            'item3' => 'many_digits',
-            'item4' => 'exponent',
+            'item1' => 'expression',
+            'item2' => 'addition_tail',
+            'item3' => 'term',
+            'item4' => 'multiplication_tail',
         ],
-        'explain' => 'These helper definitions are listed in the Decaf case study Helpers section.',
+        'explain' => 'Grammar G16 removes left recursion by introducing Elist and Tlist while preserving normal operator precedence.',
     ],
     [
         'type' => 'drag',
-        'q' => 'Drag each SableCC command or Java command to the correct step.',
+        'q' => 'Drag each control-flow atom to its correct purpose.',
         'items' => [
-            'item1' => 'sablecc lexing.grammar',
-            'item2' => 'javac lexing/*.java',
-            'item3' => 'java lexing.Lexing',
-            'item4' => 'ctrl-z on Windows/DOS',
+            'item1' => 'LBL',
+            'item2' => 'JMP',
+            'item3' => 'TST',
+            'item4' => 'MOV',
         ],
         'targets' => [
-            'generate' => 'Generate Java class definitions',
-            'compile' => 'Compile generated Java files',
-            'run' => 'Execute the scanner',
-            'eof' => 'Terminate standard input',
+            'mark' => 'Marks a branch destination',
+            'unconditional' => 'Branches unconditionally to a label',
+            'conditional' => 'Compares expressions and branches when a condition is true',
+            'assignment' => 'Assigns a source value to a target',
         ],
         'answer' => [
-            'item1' => 'generate',
-            'item2' => 'compile',
-            'item3' => 'run',
-            'item4' => 'eof',
+            'item1' => 'mark',
+            'item2' => 'unconditional',
+            'item3' => 'conditional',
+            'item4' => 'assignment',
         ],
-        'explain' => 'Chapter 2 explains the two-step SableCC process, then running the scanner and ending input with the EOF character.',
+        'explain' => 'Sections 4.8 and 4.9 introduce LBL, JMP, TST, and MOV atoms for Decaf expressions and control structures.',
     ],
 
     // 5 MIX AND MATCH QUESTIONS
     [
         'type' => 'match',
-        'q' => 'Match each token class with the description from Chapter 2.',
+        'q' => 'Match each grammar class with its Chapter 4 property.',
         'left' => [
-            'a' => 'Keyword',
-            'b' => 'Identifier',
-            'c' => 'Special character',
-            'd' => 'White space',
+            'a' => 'Simple grammar',
+            'b' => 'Quasi-simple grammar',
+            'c' => 'LL(1) grammar',
+            'd' => 'Translation grammar',
         ],
         'right' => [
-            'r1' => 'A word with predefined meaning to the compiler',
-            'r2' => 'A programmer-created name for a construct',
-            'r3' => 'Delimiter such as parentheses, braces, comma, or semicolon',
-            'r4' => 'Spaces and tabs generally ignored except as delimiters',
+            'r1' => 'Rules have form A -> a alpha and alternatives begin differently',
+            'r2' => 'A simple-style grammar that may also contain epsilon rules',
+            'r3' => 'Alternatives have disjoint selection sets with one-symbol lookahead',
+            'r4' => 'Contains action symbols that can produce output',
         ],
         'answer' => [
             'a' => 'r1',
@@ -271,22 +271,22 @@ $questions = [
             'c' => 'r3',
             'd' => 'r4',
         ],
-        'explain' => 'These are the token categories and definitions listed in Section 2.1.',
+        'explain' => 'Chapter 4 gradually extends simple grammars to quasi-simple, LL(1), and translation grammars.',
     ],
     [
         'type' => 'match',
-        'q' => 'Match each finite state machine term with its Chapter 2 meaning.',
+        'q' => 'Match each recursive-descent operation with its behavior.',
         'left' => [
-            'a' => 'Starting state',
-            'b' => 'Accepting state',
-            'c' => 'Transition function',
-            'd' => 'Rejected string',
+            'a' => 'Nonterminal on the right side',
+            'b' => 'Terminal on the right side',
+            'c' => 'Epsilon rule',
+            'd' => 'Action symbol',
         ],
         'right' => [
-            'r1' => 'State where the machine initially begins',
-            'r2' => 'State that accepts the input if reached after all input is read',
-            'r3' => 'Function of current state and input symbol returning a state',
-            'r4' => 'Input that leaves the machine in a non-accepting state',
+            'r1' => 'Call the corresponding method',
+            'r2' => 'Confirm it matches and read the next token',
+            'r3' => 'Return without consuming input',
+            'r4' => 'Produce output or call another method',
         ],
         'answer' => [
             'a' => 'r1',
@@ -294,22 +294,22 @@ $questions = [
             'c' => 'r3',
             'd' => 'r4',
         ],
-        'explain' => 'Section 2.0.2 defines these FSM components and how acceptance/rejection works.',
+        'explain' => 'These are the basic actions used when implementing ordinary and translation grammars with recursive descent.',
     ],
     [
         'type' => 'match',
-        'q' => 'Match each Decaf token definition with the kind of token it recognizes.',
+        'q' => 'Match each grammar with its purpose or property.',
         'left' => [
-            'a' => "compare = '==' | '<' | '>' | '<=' | '>=' | '!='",
-            'b' => "identifier = letter (letter | digit | '_')*",
-            'c' => "number = (digits '.'? digits? | '.'digits) exp?",
-            'd' => "space = ' ' | 9 | newline",
+            'a' => 'G5',
+            'b' => 'G16',
+            'c' => 'G17',
+            'd' => 'G21',
         ],
         'right' => [
-            'r1' => 'Relational operators',
-            'r2' => 'Identifier beginning with a letter',
-            'r3' => 'Numeric constant with optional decimal point and exponent',
-            'r4' => 'White space including tab and newline',
+            'r1' => 'Left-recursive arithmetic-expression grammar',
+            'r2' => 'LL(1) arithmetic grammar after eliminating left recursion',
+            'r3' => 'Translation grammar that converts infix expressions to postfix',
+            'r4' => 'Attributed translation grammar that produces expression atoms',
         ],
         'answer' => [
             'a' => 'r1',
@@ -317,22 +317,22 @@ $questions = [
             'c' => 'r3',
             'd' => 'r4',
         ],
-        'explain' => 'These definitions are taken from the Decaf Tokens section in Chapter 2.',
+        'explain' => 'The chapter transforms the expression grammar from G5 into G16, then extends it into translation grammar G17 and attributed translation grammar G21.',
     ],
     [
         'type' => 'match',
-        'q' => 'Match each SableCC state notation with its meaning.',
+        'q' => 'Match each comparison operator with its atom comparison code.',
         'left' => [
-            'a' => '{statename} token = def;',
-            'b' => '{statename->newstate} token = def;',
-            'c' => 'token = def;',
-            'd' => 'States def, currency;',
+            'a' => '==',
+            'b' => '<',
+            'c' => '<=',
+            'd' => '!=',
         ],
         'right' => [
-            'r1' => 'Apply only in that state and remain in that state',
-            'r2' => 'Apply in one state and change to another state',
-            'r3' => 'Apply regardless of current scanner state',
-            'r4' => 'Declare scanner states, with the first as start state',
+            'r1' => 'Code 1',
+            'r2' => 'Code 2',
+            'r3' => 'Code 4',
+            'r4' => 'Code 6',
         ],
         'answer' => [
             'a' => 'r1',
@@ -340,22 +340,22 @@ $questions = [
             'c' => 'r3',
             'd' => 'r4',
         ],
-        'explain' => 'Section 2.4 explains scanner states and the transition operator ->.',
+        'explain' => 'Chapter 4 assigns codes 1 through 6 to ==, <, >, <=, >=, and != respectively.',
     ],
     [
         'type' => 'match',
-        'q' => 'Match each Chapter 2 concept with the table or output it relates to.',
+        'q' => 'Match each attributed-grammar concept with its description.',
         'left' => [
-            'a' => 'Symbol table',
-            'b' => 'Numeric constants table',
-            'c' => 'Stream of tokens',
-            'd' => 'File of atoms',
+            'a' => 'Synthesized attribute',
+            'b' => 'Inherited attribute',
+            'c' => 'Alloc()',
+            'd' => 'Atom()',
         ],
         'right' => [
-            'r1' => 'Stores each identifier once and related information',
-            'r2' => 'Stores converted numeric constants',
-            'r3' => 'Output of lexical analysis, one token for each word',
-            'r4' => 'One output of the Decaf syntax and lexical phases',
+            'r1' => 'Returns information from lower nodes to a calling method',
+            'r2' => 'Passes information from higher nodes or earlier symbols',
+            'r3' => 'Provides storage for a temporary expression result',
+            'r4' => 'Outputs an atom record',
         ],
         'answer' => [
             'a' => 'r1',
@@ -363,7 +363,7 @@ $questions = [
             'c' => 'r3',
             'd' => 'r4',
         ],
-        'explain' => 'Chapter 2 discusses symbol/numeric tables, token streams, and Decaf producing a file of atoms and numeric constants.',
+        'explain' => 'Attributed recursive-descent translators use parameters for attributes, Alloc() for temporary storage, and Atom() to emit output.',
     ],
 ];
 
@@ -422,7 +422,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $totalPoints = $basePoints + $bonusPoints;
     $scorepoint = $totalPoints;
-    $quiz_id = 'Q006'; // Chapter 2 Hard
+    $quiz_id = 'Q012'; // Chapter 4 Hard
 
     $attemptResult = $conn->query("
         SELECT qa_id
@@ -548,7 +548,7 @@ $pct = $submitted ? round($score / $total * 100) : 0;
 
 <head>
     <meta charset="UTF-8">
-    <title>Chapter 2 Hard Quiz</title>
+    <title>Chapter 4 Hard Quiz</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -1743,9 +1743,9 @@ $pct = $submitted ? round($score / $total * 100) : 0;
         }
 
         .control-locked {
-    pointer-events: none;
-    cursor: default;
-}
+            pointer-events: none;
+            cursor: default;
+        }
     </style>
 </head>
 
@@ -1800,8 +1800,16 @@ $pct = $submitted ? round($score / $total * 100) : 0;
     <div class="page">
         <div class="header">
             <div class="chip">Hard Level</div>
-            <h1>Chapter 2 Hard Quiz</h1>
-            <p>20 mixed questions based only on Chapter 2: Lexical Analysis, formal languages, FSMs, regular expressions, SableCC, and Decaf lexical rules.</p>
+
+            <h1>Chapter 4 Hard Quiz</h1>
+
+            <p>
+                20 mixed questions based only on Chapter 4:
+                top-down parsing, relations and closure, simple and
+                quasi-simple grammars, LL(1), selection sets,
+                recursive descent, translation grammars, attributed
+                grammars, Decaf expressions, and control structures.
+            </p>
         </div>
 
         <?php if (!$submitted): ?>

@@ -4,95 +4,144 @@ include 'dbconn.php';
 
 $leaderboards = [];
 
+/*
+ * Get each user's total best score for every chapter.
+ * The inner query prevents duplicate leaderboard records
+ * for the same user and quiz from being counted twice.
+ */
 $stmt = $conn->prepare("
     SELECT
-        l.board_chap,
+        q.quiz_chap,
+        u.user_id,
         u.username,
-        MAX(l.scorepoint) AS scorepoint
-    FROM leaderboard l
-    INNER JOIN users u
-        ON l.user_id = u.user_id
-    GROUP BY l.board_chap, l.user_id, u.username
-    ORDER BY l.board_chap ASC, scorepoint DESC
+        SUM(lb.best_score) AS total_score
+    FROM (
+        SELECT
+            user_id,
+            quiz_id,
+            MAX(best_score) AS best_score
+        FROM leaderboard
+        GROUP BY user_id, quiz_id
+    ) AS lb
+    INNER JOIN users AS u
+        ON u.user_id = lb.user_id
+    INNER JOIN quiz AS q
+        ON q.quiz_id = lb.quiz_id
+    GROUP BY
+        q.quiz_chap,
+        u.user_id,
+        u.username
+    ORDER BY
+        q.quiz_chap ASC,
+        total_score DESC,
+        u.username ASC
 ");
+
+if (!$stmt) {
+    die('Unable to prepare leaderboard: ' . $conn->error);
+}
 
 $stmt->execute();
 $result = $stmt->get_result();
 
 while ($row = $result->fetch_assoc()) {
-    $chapter = (int)$row['board_chap'];
+    $chapter = (int)$row['quiz_chap'];
 
     $leaderboards[$chapter][] = [
         'username' => $row['username'],
-        'scorepoint' => (int)$row['scorepoint'],
+        'score'    => (int)$row['total_score'],
     ];
 }
 
 $stmt->close();
 
+/* This function was missing and caused your fatal error. */
 function rankLabel(int $rank): string
 {
-    if ($rank === 1) return '🥇 1';
-    if ($rank === 2) return '🥈 2';
-    if ($rank === 3) return '🥉 3';
+    if ($rank === 1) {
+        return '🥇 1';
+    }
+
+    if ($rank === 2) {
+        return '🥈 2';
+    }
+
+    if ($rank === 3) {
+        return '🥉 3';
+    }
 
     return (string)$rank;
 }
-
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CompileX</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>CompileX Leaderboard</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js">
+    </script>
 
     <link rel="stylesheet" href="css/body.css">
-    <!-- font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playwrite+NZ+Basic:wght@100..400&display=swap" rel="stylesheet">
+
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+    >
 
     <style>
-        /* === LEADERBOARD REDESIGN === */
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
-
         body {
+            margin: 0;
+            padding-top: 70px;
             font-family: 'Syne', sans-serif;
             background: #F5F4F2;
         }
 
-        .section {
-            max-width: 1050px;
+        .leaderboard-container {
+            max-width: 1100px;
             margin: auto;
-            padding: 50px 20px;
+            padding: 40px 20px 80px;
         }
 
-        .section h2 {
-            text-align: left;
+        .chapter-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 32px;
+            margin-bottom: 38px;
+        }
+
+        .chapter-heading {
+            margin-bottom: 12px;
+            color: #534AB7;
+            font-family: 'JetBrains Mono', monospace;
             font-size: 14px;
             font-weight: 700;
             letter-spacing: 0.12em;
             text-transform: uppercase;
-            color: #534AB7;
-            margin-bottom: 12px;
-            font-family: 'JetBrains Mono', monospace;
         }
 
-        /* Card */
-        .card.leaderboard-card {
-            padding: 0;
-            border: 0.5px solid #D3D1C7;
-            border-radius: 14px;
+        .leaderboard-card {
             overflow: hidden;
-            box-shadow: none;
-            background: #fff;
+            padding: 0;
+            background: #FFFFFF;
+            border: 1px solid #D3D1C7;
+            border-radius: 14px;
         }
 
-        /* Table */
         .leaderboard-table {
             width: 100%;
             border-collapse: collapse;
@@ -100,187 +149,283 @@ function rankLabel(int $rank): string
 
         .leaderboard-table thead tr {
             background: #F1EFE8;
-            border-bottom: 0.5px solid #D3D1C7;
+            border-bottom: 1px solid #D3D1C7;
         }
 
         .leaderboard-table th {
-            background: transparent;
+            padding: 12px 16px;
             color: #888780;
-            padding: 10px 16px;
-            text-align: left;
+            font-family: 'JetBrains Mono', monospace;
             font-size: 11px;
             font-weight: 600;
             letter-spacing: 0.1em;
+            text-align: left;
             text-transform: uppercase;
-            font-family: 'JetBrains Mono', monospace;
         }
 
         .leaderboard-table td {
-            padding: 11px 16px;
-            text-align: left;
-            border-bottom: 0.5px solid #F1EFE8;
-            font-size: 14px;
+            padding: 13px 16px;
             color: #2C2C2A;
+            font-size: 14px;
+            text-align: left;
+            border-bottom: 1px solid #F1EFE8;
         }
 
         .leaderboard-table tbody tr:last-child td {
             border-bottom: none;
         }
 
-        /* Top rows subtle highlight */
+        .leaderboard-table tbody tr:hover {
+            background: #F8F7F4;
+        }
+
         .leaderboard-table tbody tr:nth-child(1) {
-            background: linear-gradient(90deg, rgba(255, 215, 0, 0.06) 0%, transparent 70%);
+            background: linear-gradient(
+                90deg,
+                rgba(255, 215, 0, 0.09),
+                transparent 70%
+            );
         }
 
         .leaderboard-table tbody tr:nth-child(2) {
-            background: linear-gradient(90deg, rgba(180, 180, 180, 0.06) 0%, transparent 70%);
+            background: linear-gradient(
+                90deg,
+                rgba(180, 180, 180, 0.09),
+                transparent 70%
+            );
         }
 
         .leaderboard-table tbody tr:nth-child(3) {
-            background: linear-gradient(90deg, rgba(205, 127, 50, 0.06) 0%, transparent 70%);
+            background: linear-gradient(
+                90deg,
+                rgba(205, 127, 50, 0.09),
+                transparent 70%
+            );
         }
 
-        .leaderboard-table tbody tr:hover {
-            background: #F5F4F2;
+        .rank-column {
+            width: 90px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
         }
 
-        /* Rank */
         .rank-1 {
-            color: #c9920b;
-            font-size: 18px;
+            color: #C9920B !important;
         }
 
         .rank-2 {
-            color: #888780;
-            font-size: 18px;
+            color: #777777 !important;
         }
 
         .rank-3 {
-            color: #a0541e;
-            font-size: 18px;
+            color: #A0541E !important;
         }
 
-        /* Score column */
-        .leaderboard-table td:last-child {
+        .score-column {
+            width: 130px;
+            color: #534AB7 !important;
             font-family: 'JetBrains Mono', monospace;
             font-weight: 600;
-            color: #534AB7;
         }
 
-        /* Score bar (add this inside <td> for score) */
-        .score-bar-wrap {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .empty-value {
+            color: #AAA7A0;
         }
 
-        .score-bar-bg {
-            flex: 1;
-            height: 4px;
-            background: #E5E7EB;
-            border-radius: 2px;
-            overflow: hidden;
-            max-width: 80px;
+        footer {
+            padding: 24px;
+            color: #777;
+            font-size: 13px;
+            text-align: center;
         }
 
-        .score-bar {
-            height: 100%;
-            border-radius: 2px;
-            background: #6366F1;
+        @media (max-width: 768px) {
+            .chapter-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .leaderboard-container {
+                padding: 30px 14px 60px;
+            }
+
+            .leaderboard-table th,
+            .leaderboard-table td {
+                padding: 11px 12px;
+            }
         }
     </style>
 </head>
 
 <body>
-    <!-- Navbar -->
-    <nav id="navbar" class="navbar navbar-expand-lg fixed-top">
+
+    <nav
+        id="navbar"
+        class="navbar navbar-expand-lg fixed-top"
+    >
         <div class="container-fluid">
-            <a id="title" class="navbar-brand" href="#">CompileX</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <a
+                id="title"
+                class="navbar-brand"
+                href="home.php"
+            >
+                CompileX
+            </a>
+
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+            >
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
+
+            <div
+                class="collapse navbar-collapse"
+                id="navbarNav"
+            >
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="home.php">Home</a>
+                        <a class="nav-link" href="home.php">
+                            Home
+                        </a>
                     </li>
-                   
+
                     <li class="nav-item">
-                        <a class="nav-link" href="quiz.php">Quiz</a>
+                        <a class="nav-link" href="quiz.php">
+                            Quiz
+                        </a>
                     </li>
+
                     <li class="nav-item">
-                        <a class="nav-link active" href="leaderboard.php">Leaderboard</a>
+                        <a class="nav-link" href="tools/">
+                            Tools
+                        </a>
                     </li>
+
                     <li class="nav-item">
-                        <a class="nav-link " href="profile.php">Profile</a>
+                        <a
+                            class="nav-link active"
+                            href="leaderboard.php"
+                        >
+                            Leaderboard
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="profile.php">
+                            Profile
+                        </a>
                     </li>
                 </ul>
             </div>
+
             <div class="collapse navbar-collapse">
                 <div class="ms-auto">
-                    <a href="logout.php" class="button-28">LOGOUT</a>
+                    <a href="logout.php" class="button-28">
+                        LOGOUT
+                    </a>
                 </div>
             </div>
         </div>
     </nav>
 
+    <main class="leaderboard-container">
 
-
-   <?php for ($section = 1; $section <= 2; $section++): ?>
-    <div class="section">
-        <div class="row">
+        <?php for ($section = 1; $section <= 2; $section++): ?>
             <?php
-            $startChapter = ($section - 1) * 2 + 1;
+            $startChapter = (($section - 1) * 2) + 1;
             $endChapter = $startChapter + 1;
             ?>
 
-            <?php for ($chapter = $startChapter; $chapter <= $endChapter; $chapter++): ?>
-                <div class="col-md-6">
-                    <h2>Quiz Chapter <?= $chapter ?></h2>
+            <div class="chapter-grid">
+                <?php for (
+                    $chapter = $startChapter;
+                    $chapter <= $endChapter;
+                    $chapter++
+                ): ?>
+                    <section>
+                        <h2 class="chapter-heading">
+                            Quiz Chapter <?= $chapter ?>
+                        </h2>
 
-                    <div class="card leaderboard-card">
-                        <table class="leaderboard-table">
-                            <thead>
-                                <tr>
-                                    <th>Rank</th>
-                                    <th>Username</th>
-                                    <th>Score Points</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                <?php if (!empty($leaderboards[$chapter])): ?>
-                                    <?php foreach ($leaderboards[$chapter] as $index => $entry): ?>
-                                        <?php
-                                        $rank = $index + 1;
-                                        $rankClass = $rank <= 3 ? 'rank-' . $rank : '';
-                                        ?>
-                                        <tr>
-                                            <td class="<?= $rankClass ?>">
-                                                <?= htmlspecialchars(rankLabel($rank)) ?>
-                                            </td>
-                                            <td><?= htmlspecialchars($entry['username']) ?></td>
-                                            <td><?= htmlspecialchars((string)$entry['scorepoint']) ?></td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
+                        <div class="leaderboard-card">
+                            <table class="leaderboard-table">
+                                <thead>
                                     <tr>
-                                        <td colspan="3">No scores yet</td>
+                                        <th>Rank</th>
+                                        <th>Username</th>
+                                        <th>Score Points</th>
                                     </tr>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            <?php endfor; ?>
-        </div>
-    </div>
-<?php endfor; ?>
+                                </thead>
+
+                                <tbody>
+                                    <?php for (
+                                        $rank = 1;
+                                        $rank <= 5;
+                                        $rank++
+                                    ): ?>
+                                        <?php
+                                        $entry =
+                                            $leaderboards[$chapter][$rank - 1]
+                                            ?? null;
+
+                                        $rankClass =
+                                            $rank <= 3
+                                                ? 'rank-' . $rank
+                                                : '';
+                                        ?>
+
+                                        <tr>
+                                            <td
+                                                class="rank-column <?= $rankClass ?>"
+                                            >
+                                                <?= htmlspecialchars(
+                                                    rankLabel($rank)
+                                                ) ?>
+                                            </td>
+
+                                            <td>
+                                                <?php if ($entry): ?>
+                                                    <?= htmlspecialchars(
+                                                        $entry['username']
+                                                    ) ?>
+                                                <?php else: ?>
+                                                    <span class="empty-value">
+                                                        —
+                                                    </span>
+                                                <?php endif; ?>
+                                            </td>
+
+                                            <td class="score-column">
+                                                <?php if ($entry): ?>
+                                                    <?= htmlspecialchars(
+                                                        (string)$entry['score']
+                                                    ) ?>
+                                                <?php else: ?>
+                                                    <span class="empty-value">
+                                                        —
+                                                    </span>
+                                                <?php endif; ?>
+                                            </td>
+                                        </tr>
+                                    <?php endfor; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                <?php endfor; ?>
+            </div>
+        <?php endfor; ?>
+
+    </main>
 
     <footer>
-        © <?php echo date("Y"); ?> ezComp • Compiler Learning Platform
+        © <?= date('Y') ?> CompileX • Compiler Learning Platform
     </footer>
 
 </body>
-
 </html>
