@@ -463,10 +463,170 @@ $palette = [
             line-height: 1.6;
             margin-bottom: 16px;
         }
+
+        /* Match the completed Chapter 1 Easy interaction and layout. */
+        .q-nav {
+            box-sizing: border-box;
+            width: 230px;
+            padding-bottom: 16px;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+        }
+
+        .q-nav > .timer-wrap {
+            position: static;
+            grid-column: 1 / -1;
+            width: 100%;
+            margin: 0 0 14px;
+        }
+
+        .q-nav > .timer-wrap .timer-box {
+            box-sizing: border-box;
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            padding: 10px 12px;
+        }
+
+        .q-nav-btn {
+            justify-self: center;
+        }
+
+        .q-nav-label,
+        .nav-count,
+        .nav-submit-wrap {
+            min-width: 0;
+        }
+
+        .q-card.answer-locked .tf-group label {
+            pointer-events: none;
+        }
+
+        .tf-group label.answer-muted {
+            opacity: .5;
+        }
+
+        .tf-group label.correct-choice {
+            opacity: 1;
+        }
+
+        .tf-group label.correct-choice .tf-btn {
+            border-color: var(--green) !important;
+            background: var(--green-s) !important;
+            color: var(--green-t) !important;
+        }
+
+        /* The user's wrong selection is blue; the correct answer stays green. */
+        .tf-group label.wrong-choice .tf-btn {
+            border-color: #60A5FA !important;
+            background: #DBEAFE !important;
+            color: #1D4ED8 !important;
+            box-shadow: 0 0 0 2px rgba(96, 165, 250, .18);
+        }
+
+        .answer-feedback {
+            display: none;
+            width: fit-content;
+            margin-bottom: 10px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .answer-feedback.show {
+            display: block;
+        }
+
+        .explain-box {
+            display: none;
+        }
+
+        .explain-box.show {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 28px 16px 0;
+            }
+
+            .page-header h1 {
+                font-size: 23px;
+            }
+
+            .page-layout {
+                display: block;
+                padding: 0 14px;
+            }
+
+            .q-nav {
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                width: 100%;
+                margin: 18px 0;
+                grid-template-columns: repeat(5, minmax(0, 1fr));
+            }
+
+            .q-nav-btn {
+                width: 100%;
+                max-width: 42px;
+                margin: auto;
+            }
+
+            .quiz-wrap {
+                width: 100%;
+                margin-top: 18px;
+            }
+
+            .q-card {
+                padding: 20px 16px;
+            }
+
+            .tf-group {
+                flex-direction: column;
+            }
+
+            .tf-btn {
+                padding: 12px;
+            }
+
+            .score-row {
+                flex-wrap: wrap;
+                gap: 24px;
+            }
+
+            .score-card {
+                padding: 24px 16px;
+            }
+
+            .score-big {
+                font-size: 34px;
+            }
+
+            .btn-submit {
+                width: 100%;
+                padding: 14px 20px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .q-card {
+                padding: 17px 12px;
+            }
+
+            .q-text {
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 
 <body>
+
+    <audio id="correctSound" src="../../sound/correct answer.mp3" preload="auto"></audio>
+    <audio id="wrongSound" src="../../sound/wrong answer.mp3" preload="auto"></audio>
+    <audio id="submitSound" src="../../sound/alert2.mp3" preload="auto"></audio>
 
     <nav id="navbar" class="navbar navbar-expand-lg fixed-top">
         <div class="container-fluid">
@@ -484,7 +644,7 @@ $palette = [
                         <a class="nav-link" href="../../quiz/">Quiz</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="../../tools/">Quiz</a>
+                        <a class="nav-link" href="../../tools/">Tools</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="../../leaderboard.php">Leaderboard</a>
@@ -512,6 +672,15 @@ $palette = [
 
         <!-- ── Left Nav ── -->
         <nav class="q-nav" id="qNav">
+            <?php if (!$submitted): ?>
+                <div class="timer-wrap">
+                    <div class="timer-box" id="timerBox">
+                        <span class="timer-icon" aria-hidden="true">⏱</span>
+                        <span id="timerDisplay">10:00</span>
+                    </div>
+                </div>
+            <?php endif; ?>
+
             <div class="q-nav-label">Question</div>
             <?php for ($i = 0; $i < $total; $i++):
                 $nc = 'q-nav-btn';
@@ -526,7 +695,12 @@ $palette = [
             <?php endfor; ?>
 
             <!-- answered counter -->
-            <div class="nav-count" id="nav-count">0 / <?= $total ?></div>
+            <div class="nav-count" id="nav-count">
+                <?= $submitted
+                    ? count(array_filter($results, fn($r) => $r['answered']))
+                    : 0 ?>
+                / <?= $total ?>
+            </div>
 
             <!-- submit inside nav -->
             <?php if (!$submitted): ?>
@@ -539,15 +713,6 @@ $palette = [
 
         <!-- ── Questions ── -->
         <div class="quiz-wrap">
-            <?php if (!$submitted): ?>
-                <div class="timer-wrap">
-                    <div class="timer-box" id="timerBox">
-                        <span class="timer-icon">⏱</span>
-                        <span id="timerDisplay">20:00</span>
-                    </div>
-                </div>
-            <?php endif; ?>
-
             <?php if ($submitted):
                 $wrong   = array_reduce(array_keys($results), fn($c, $i) => $c + (!$results[$i]['correct'] && $results[$i]['answered'] ? 1 : 0), 0);
                 $skipped = array_reduce($results, fn($c, $r) => $c + (!$r['answered'] ? 1 : 0), 0);
@@ -624,30 +789,64 @@ $palette = [
                         else                   $cls = 'wrong';
                     }
                 ?>
-                    <div id="q-<?= $i ?>" class="q-card color-<?= $q['color'] ?> <?= $cls ?>">
+                    <div id="q-<?= $i ?>"
+                        class="q-card color-<?= $q['color'] ?> <?= $cls ?>"
+                        data-question="<?= $i ?>"
+                        data-answer="<?= $q['answer'] ? 'true' : 'false' ?>">
 
                         <?php if ($submitted && $r): ?>
                             <?php if (!$r['answered']): ?>
-                                <span class="result-badge badge-skipped">⚪ Skipped</span>
+                                <div class="answer-feedback show badge-skipped">
+                                    ⚪ Skipped — Correct answer:
+                                    <?= $q['answer'] ? 'True' : 'False' ?>
+                                </div>
                             <?php elseif ($r['correct']): ?>
-                                <span class="result-badge badge-correct">✔ Correct</span>
+                                <div class="answer-feedback show badge-correct">
+                                    ✔ Correct
+                                </div>
                             <?php else: ?>
-                                <span class="result-badge badge-wrong">✘ Incorrect — Answer: <?= $q['answer'] ? 'True' : 'False' ?></span>
+                                <div class="answer-feedback show badge-wrong">
+                                    ✘ Incorrect — Correct answer:
+                                    <?= $q['answer'] ? 'True' : 'False' ?>
+                                </div>
                             <?php endif; ?>
+                        <?php else: ?>
+                            <div class="answer-feedback"
+                                id="feedback-<?= $i ?>"></div>
                         <?php endif; ?>
 
                         <div class="q-num">Question <?= $i + 1 ?> of <?= $total ?></div>
                         <div class="q-text"><?= htmlspecialchars($q['q']) ?></div>
 
                         <div class="tf-group">
-                            <label>
+                            <label data-value="true"
+                                class="<?=
+                                    $submitted && $q['answer'] === true
+                                        ? 'correct-choice'
+                                        : (
+                                            $submitted && $r && $r['answered'] &&
+                                            $r['userAns'] === true
+                                                ? 'wrong-choice'
+                                                : ($submitted ? 'answer-muted' : '')
+                                        )
+                                ?>">
                                 <input type="radio" name="q<?= $i ?>" value="true"
                                     <?= ($submitted && $r && $r['answered'] && $r['userAns'] === true) ? 'checked' : '' ?>>
                                 <div class="tf-btn true-btn">
                                     <span>✓</span> True
                                 </div>
                             </label>
-                            <label>
+                            <label data-value="false"
+                                class="<?=
+                                    $submitted && $q['answer'] === false
+                                        ? 'correct-choice'
+                                        : (
+                                            $submitted && $r && $r['answered'] &&
+                                            $r['userAns'] === false
+                                                ? 'wrong-choice'
+                                                : ($submitted ? 'answer-muted' : '')
+                                        )
+                                ?>">
                                 <input type="radio" name="q<?= $i ?>" value="false"
                                     <?= ($submitted && $r && $r['answered'] && $r['userAns'] === false) ? 'checked' : '' ?>>
                                 <div class="tf-btn false-btn">
@@ -656,9 +855,10 @@ $palette = [
                             </label>
                         </div>
 
-                        <?php if ($submitted): ?>
-                            <div class="explain-box">💡 <?= htmlspecialchars($q['explain']) ?></div>
-                        <?php endif; ?>
+                        <div class="explain-box <?= $submitted ? 'show' : '' ?>"
+                            id="explanation-<?= $i ?>">
+                            💡 <?= htmlspecialchars($q['explain']) ?>
+                        </div>
 
                     </div>
                 <?php endforeach; ?>
@@ -673,7 +873,7 @@ $palette = [
         </div><!-- end quiz-wrap -->
     </div><!-- end page-layout -->
 
-    <script>
+    <script type="text/plain" id="legacyQuizScript">
         const navBtns = document.querySelectorAll('.q-nav-btn');
         const cards = document.querySelectorAll('.q-card');
         const countEl = document.getElementById('nav-count');
@@ -772,6 +972,176 @@ $palette = [
             // Intercept manual submit to capture remaining time
             document.getElementById('quizForm').addEventListener('submit', function() {
                 if (timeInput) timeInput.value = remaining;
+            });
+        }
+    </script>
+
+    <script>
+        const totalQuestions = <?= $total ?>;
+        const quizSubmitted = <?= $submitted ? 'true' : 'false' ?>;
+        const answeredQuestions = new Set();
+
+        function playQuizSound(soundId) {
+            const sound = document.getElementById(soundId);
+            if (!sound) return;
+            sound.currentTime = 0;
+            sound.play().catch(function() {});
+        }
+
+        function answerQuestion(input) {
+            if (quizSubmitted) return;
+
+            const card = input.closest(".q-card");
+            if (!card || card.dataset.answered === "true") return;
+
+            const index = card.dataset.question;
+            const selected = input.value;
+            const correct = card.dataset.answer;
+            const selectedLabel = input.closest("label");
+            const correctLabel = card.querySelector(
+                `.tf-group label[data-value="${correct}"]`
+            );
+
+            input.checked = true;
+            card.dataset.answered = "true";
+            card.classList.add("answer-locked");
+            answeredQuestions.add(index);
+
+            card.querySelectorAll(".tf-group label").forEach(function(label) {
+                if (label !== selectedLabel && label !== correctLabel) {
+                    label.classList.add("answer-muted");
+                }
+            });
+
+            if (correctLabel) correctLabel.classList.add("correct-choice");
+
+            const feedback = document.getElementById("feedback-" + index);
+            const explanation = document.getElementById("explanation-" + index);
+            const navButton = document.getElementById("nav-btn-" + index);
+
+            if (selected === correct) {
+                playQuizSound("correctSound");
+                card.classList.add("correct");
+
+                if (feedback) {
+                    feedback.textContent = "✔ Correct";
+                    feedback.className = "answer-feedback show badge-correct";
+                }
+
+                if (navButton) navButton.classList.add("nav-correct");
+            } else {
+                playQuizSound("wrongSound");
+                card.classList.add("wrong");
+
+                if (selectedLabel) selectedLabel.classList.add("wrong-choice");
+
+                if (feedback) {
+                    feedback.textContent =
+                        "✘ Incorrect — Correct answer: " +
+                        (correct === "true" ? "True" : "False");
+                    feedback.className = "answer-feedback show badge-wrong";
+                }
+
+                if (navButton) navButton.classList.add("nav-wrong");
+            }
+
+            if (explanation) explanation.classList.add("show");
+
+            const count = document.getElementById("nav-count");
+            if (count) {
+                count.textContent =
+                    answeredQuestions.size + " / " + totalQuestions;
+            }
+        }
+
+        document.querySelectorAll('.q-card input[type="radio"]').forEach(
+            function(input) {
+                input.addEventListener("change", function() {
+                    answerQuestion(input);
+                });
+            }
+        );
+
+        const questionNavButtons = document.querySelectorAll(".q-nav-btn");
+
+        document.querySelectorAll(".q-card").forEach(function(card) {
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (!entry.isIntersecting) return;
+
+                    questionNavButtons.forEach(function(button) {
+                        button.classList.remove("nav-active");
+                    });
+
+                    const active = document.getElementById(
+                        "nav-btn-" + entry.target.dataset.question
+                    );
+                    if (active) active.classList.add("nav-active");
+                });
+            }, { threshold: .35 });
+
+            observer.observe(card);
+        });
+
+        const EASY_DURATION = 10 * 60;
+        const easyTimerBox = document.getElementById("timerBox");
+        const easyTimerDisplay = document.getElementById("timerDisplay");
+        const easyTimeInput = document.getElementById("timeRemainingInput");
+        const easyQuizForm = document.getElementById("quizForm");
+
+        if (
+            !quizSubmitted &&
+            easyTimerBox &&
+            easyTimerDisplay &&
+            easyQuizForm
+        ) {
+            let remaining = EASY_DURATION;
+            let isSubmitting = false;
+
+            function formatEasyTime(seconds) {
+                return String(Math.floor(seconds / 60)).padStart(2, "0") +
+                    ":" + String(seconds % 60).padStart(2, "0");
+            }
+
+            function easyTick() {
+                easyTimerDisplay.textContent = formatEasyTime(remaining);
+
+                if (remaining <= 120 && remaining > 30) {
+                    easyTimerBox.classList.add("warning");
+                    easyTimerBox.classList.remove("danger");
+                } else if (remaining <= 30) {
+                    easyTimerBox.classList.remove("warning");
+                    easyTimerBox.classList.add("danger");
+                }
+
+                if (remaining <= 0) {
+                    clearInterval(easyTimerInterval);
+                    if (easyTimeInput) easyTimeInput.value = 0;
+                    playQuizSound("submitSound");
+                    setTimeout(function() {
+                        easyQuizForm.submit();
+                    }, 500);
+                    return;
+                }
+
+                remaining--;
+            }
+
+            easyTick();
+            const easyTimerInterval = setInterval(easyTick, 1000);
+
+            easyQuizForm.addEventListener("submit", function(event) {
+                if (isSubmitting) return;
+
+                event.preventDefault();
+                isSubmitting = true;
+                clearInterval(easyTimerInterval);
+                if (easyTimeInput) easyTimeInput.value = remaining;
+                playQuizSound("submitSound");
+
+                setTimeout(function() {
+                    easyQuizForm.submit();
+                }, 500);
             });
         }
     </script>

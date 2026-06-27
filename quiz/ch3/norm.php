@@ -225,6 +225,7 @@ $results   = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $submitted = true;
+    $timeRemaining = intval($_POST['time_remaining'] ?? 0);
 
     foreach ($questions as $i => $q) {
         $userAns  = $_POST['q' . $i] ?? null;
@@ -1040,10 +1041,202 @@ function getImage(string $key): string
             transform: translateY(-2px);
             box-shadow: 0 8px 24px rgba(99, 102, 241, .4);
         }
+
+        /* Chapter 2-style interactive answer feedback */
+        .choice-btn input[type="radio"] {
+            display: none;
+        }
+
+        .choice-btn.answer-locked {
+            cursor: default;
+            pointer-events: none;
+        }
+
+        .choice-btn.answer-muted {
+            opacity: .55;
+        }
+
+        .choice-btn.correct-ans,
+        .choice-btn.correct-ans.answer-muted {
+            opacity: 1;
+        }
+
+        .answer-feedback {
+            display: none;
+            width: fit-content;
+            margin-bottom: 10px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .answer-feedback.show {
+            display: block;
+        }
+
+        .explain-box {
+            display: none;
+        }
+
+        .explain-box.show {
+            display: block;
+        }
+
+        /* Timer occupies one complete row in the question navbar. */
+        .q-nav {
+            box-sizing: border-box;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+        }
+
+        .q-nav > .timer-wrap {
+            position: static;
+            grid-column: 1 / -1;
+            width: 100%;
+            margin: 0 0 14px;
+            text-align: center;
+        }
+
+        .timer-box {
+            box-sizing: border-box;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 10px 12px;
+            border: 1.5px solid #E0E7FF;
+            border-radius: 12px;
+            background: #fff;
+            box-shadow: 0 4px 18px rgba(99, 102, 241, .10);
+            color: #6366F1;
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            transition: all .3s;
+        }
+
+        .timer-box.warning {
+            border-color: #F59E0B;
+            color: #92400E;
+            background: #FFFBEB;
+        }
+
+        .timer-box.danger {
+            border-color: #EF4444;
+            color: #991B1B;
+            background: #FFF5F5;
+            animation: timerPulse .6s infinite alternate;
+        }
+
+        @keyframes timerPulse {
+            from {
+                box-shadow: 0 4px 18px rgba(239, 68, 68, .15);
+            }
+            to {
+                box-shadow: 0 4px 28px rgba(239, 68, 68, .45);
+            }
+        }
+
+        .q-nav-btn {
+            justify-self: center;
+        }
+
+        .q-nav-label,
+        .nav-count,
+        .nav-submit-wrap {
+            min-width: 0;
+        }
+
+        /* Responsive layout matching Chapter 2 Normal. */
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 28px 16px 0;
+            }
+
+            .page-header h1 {
+                font-size: 23px;
+            }
+
+            .page-layout {
+                display: block;
+                padding: 0 14px;
+            }
+
+            .q-nav {
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                width: 100%;
+                margin: 18px 0;
+                grid-template-columns: repeat(5, minmax(0, 1fr));
+            }
+
+            .q-nav-btn {
+                width: 100%;
+                max-width: 42px;
+                margin: auto;
+            }
+
+            .quiz-wrap {
+                width: 100%;
+                margin-top: 18px;
+            }
+
+            .q-card {
+                padding: 20px 16px;
+            }
+
+            .choice-btn {
+                padding: 11px;
+                font-size: 13px;
+            }
+
+            .score-row {
+                flex-wrap: wrap;
+                gap: 24px;
+            }
+
+            .score-card {
+                padding: 24px 16px;
+            }
+
+            .score-big {
+                font-size: 34px;
+            }
+
+            .btn-submit {
+                width: 100%;
+                padding: 14px 20px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .q-card {
+                padding: 17px 12px;
+            }
+
+            .choice-btn {
+                gap: 8px;
+            }
+
+            .choice-btn .letter {
+                min-width: 24px;
+                height: 24px;
+            }
+
+            .q-text {
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 
 <body>
+
+    <audio id="correctSound" src="../../sound/correct answer.mp3" preload="auto"></audio>
+    <audio id="wrongSound" src="../../sound/wrong answer.mp3" preload="auto"></audio>
+    <audio id="submitSound" src="../../sound/alert2.mp3" preload="auto"></audio>
 
     <nav id="navbar" class="navbar navbar-expand-lg fixed-top">
         <div class="container-fluid">
@@ -1089,6 +1282,15 @@ function getImage(string $key): string
 
         <!-- ── Left Nav ── -->
         <nav class="q-nav" id="qNav">
+            <?php if (!$submitted): ?>
+                <div class="timer-wrap">
+                    <div class="timer-box" id="timerBox">
+                        <span aria-hidden="true">⏱</span>
+                        <span id="timerDisplay">25:00</span>
+                    </div>
+                </div>
+            <?php endif; ?>
+
             <div class="q-nav-label">Question</div>
             <?php for ($i = 0; $i < $total; $i++):
                 $nc = 'q-nav-btn';
@@ -1154,6 +1356,11 @@ function getImage(string $key): string
             <?php endif; ?>
 
             <form method="POST" id="quizForm">
+                <input type="hidden"
+                    name="time_remaining"
+                    id="timeRemainingInput"
+                    value="0">
+
                 <?php foreach ($questions as $i => $q):
                     $r = $results[$i] ?? null;
                     $extra = '';
@@ -1163,16 +1370,25 @@ function getImage(string $key): string
                         else                    $extra = ' result-wrong';
                     }
                 ?>
-                    <div id="q-<?= $i ?>" class="q-card color-<?= $q['color'] ?><?= $extra ?>">
+                    <div id="q-<?= $i ?>"
+                        class="q-card color-<?= $q['color'] ?><?= $extra ?>"
+                        data-question="<?= $i ?>"
+                        data-answer="<?= htmlspecialchars($q['answer']) ?>">
 
                         <?php if ($submitted && $r): ?>
                             <?php if (!$r['answered']): ?>
-                                <span class="result-badge badge-skipped">⚪ Skipped</span>
+                                <div class="answer-feedback show badge-skipped">
+                                    ⚪ Skipped — Correct answer: <?= $q['answer'] ?>
+                                </div>
                             <?php elseif ($r['correct']): ?>
-                                <span class="result-badge badge-correct">✔ Correct</span>
+                                <div class="answer-feedback show badge-correct">✔ Correct</div>
                             <?php else: ?>
-                                <span class="result-badge badge-wrong">✘ Wrong — Answer: <?= $q['answer'] ?></span>
+                                <div class="answer-feedback show badge-wrong">
+                                    ✘ Wrong — Correct answer: <?= $q['answer'] ?>
+                                </div>
                             <?php endif; ?>
+                        <?php else: ?>
+                            <div class="answer-feedback" id="feedback-<?= $i ?>"></div>
                         <?php endif; ?>
 
                         <div class="q-num">Question <?= $i + 1 ?> of <?= $total ?></div>
@@ -1189,24 +1405,30 @@ function getImage(string $key): string
                             <?php foreach ($q['choices'] as $letter => $text):
                                 $bc  = 'choice-btn';
                                 if ($submitted && $r) {
-                                    $bc .= ' disabled';
-                                    if ($letter === $q['answer'])                          $bc .= ' correct-ans';
-                                    elseif ($r['answered'] && $letter === $r['userAns'])   $bc .= ' wrong-ans';
+                                    $bc .= ' answer-locked';
+                                    if ($letter === $q['answer']) {
+                                        $bc .= ' correct-ans';
+                                    } elseif ($r['answered'] && $letter === $r['userAns']) {
+                                        $bc .= ' wrong-ans';
+                                    } else {
+                                        $bc .= ' answer-muted';
+                                    }
                                 }
                                 $chk = ($submitted && $r && $r['answered'] && $r['userAns'] === $letter);
                             ?>
                                 <button type="button" class="<?= $bc ?>" data-qi="<?= $i ?>" data-val="<?= $letter ?>"
                                     onclick="selectChoice(this)" <?= $submitted ? 'disabled' : '' ?>>
                                     <span class="letter"><?= $letter ?></span>
-                                    <span><?= htmlspecialchars($text) ?></span>
-                                    <input type="radio" name="q<?= $i ?>" value="<?= $letter ?>" style="display:none" <?= $chk ? 'checked' : '' ?>>
+                                    <span class="choice-text"><?= htmlspecialchars($text) ?></span>
+                                    <input type="radio" name="q<?= $i ?>" value="<?= $letter ?>" <?= $chk ? 'checked' : '' ?>>
                                 </button>
                             <?php endforeach; ?>
                         </div>
 
-                        <?php if ($submitted): ?>
-                            <div class="explain-box">💡 <?= htmlspecialchars($q['explain']) ?></div>
-                        <?php endif; ?>
+                        <div class="explain-box <?= $submitted ? 'show' : '' ?>"
+                            id="explanation-<?= $i ?>">
+                            💡 <?= htmlspecialchars($q['explain']) ?>
+                        </div>
 
                     </div>
                 <?php endforeach; ?>
@@ -1223,26 +1445,100 @@ function getImage(string $key): string
 
     <script>
         const total = <?= $total ?>;
-        let answered = new Set();
+        const quizSubmitted = <?= $submitted ? 'true' : 'false' ?>;
+        const answered = new Set();
 
-        function selectChoice(btn) {
-            const qi = btn.dataset.qi;
-            const val = btn.dataset.val;
+        function playSound(soundId) {
+            const sound = document.getElementById(soundId);
+            if (!sound) return;
 
-            document.querySelectorAll(`.choice-btn[data-qi="${qi}"]`).forEach(b => {
-                b.classList.remove('selected');
-                b.querySelector('input[type=radio]').checked = false;
+            sound.currentTime = 0;
+            sound.play().catch(function() {
+                // Browsers may block audio until the first user interaction.
+            });
+        }
+
+        function selectChoice(button) {
+            if (quizSubmitted) return;
+
+            const questionIndex = button.dataset.qi;
+            const selectedAnswer = button.dataset.val;
+            const card = document.getElementById("q-" + questionIndex);
+
+            if (!card || card.dataset.answered === "true") return;
+
+            const correctAnswer = card.dataset.answer;
+            const buttons = card.querySelectorAll(".choice-btn");
+            const correctButton = card.querySelector(
+                `.choice-btn[data-val="${correctAnswer}"]`
+            );
+            const radio = button.querySelector('input[type="radio"]');
+
+            if (radio) radio.checked = true;
+
+            card.dataset.answered = "true";
+            answered.add(questionIndex);
+
+            buttons.forEach(function(choice) {
+                choice.classList.add("answer-locked");
+
+                if (choice !== button && choice.dataset.val !== correctAnswer) {
+                    choice.classList.add("answer-muted");
+                }
             });
 
-            btn.classList.add('selected');
-            btn.querySelector('input[type=radio]').checked = true;
-            answered.add(qi);
+            if (correctButton) {
+                correctButton.classList.add("correct-ans");
+            }
 
-            const nb = document.getElementById('nav-btn-' + qi);
-            if (nb && !nb.classList.contains('nav-correct') && !nb.classList.contains('nav-wrong'))
-                nb.classList.add('nav-answered');
+            const feedback = document.getElementById(
+                "feedback-" + questionIndex
+            );
+            const explanation = document.getElementById(
+                "explanation-" + questionIndex
+            );
+            const navigationButton = document.getElementById(
+                "nav-btn-" + questionIndex
+            );
 
-            document.getElementById('nav-count').textContent = answered.size + ' / ' + total;
+            if (selectedAnswer === correctAnswer) {
+                playSound("correctSound");
+                card.classList.add("result-correct");
+
+                if (feedback) {
+                    feedback.textContent = "✔ Correct";
+                    feedback.className =
+                        "answer-feedback show badge-correct";
+                }
+
+                if (navigationButton) {
+                    navigationButton.classList.add("nav-correct");
+                }
+            } else {
+                playSound("wrongSound");
+                card.classList.add("result-wrong");
+                button.classList.add("wrong-ans");
+
+                if (feedback) {
+                    feedback.textContent =
+                        "✘ Wrong — Correct answer: " + correctAnswer;
+                    feedback.className =
+                        "answer-feedback show badge-wrong";
+                }
+
+                if (navigationButton) {
+                    navigationButton.classList.add("nav-wrong");
+                }
+            }
+
+            if (explanation) {
+                explanation.classList.add("show");
+            }
+
+            const count = document.getElementById("nav-count");
+            if (count) {
+                count.textContent = answered.size + " / " + total;
+            }
         }
 
         // Active scroll highlight
@@ -1253,7 +1549,7 @@ function getImage(string $key): string
             new IntersectionObserver(entries => {
                 entries.forEach(e => {
                     if (e.isIntersecting) {
-                        const idx = e.target.id.split('-')[1];
+                        const idx = e.target.dataset.question;
                         navBtns.forEach(b => b.classList.remove('nav-active'));
                         const ab = document.getElementById('nav-btn-' + idx);
                         if (ab) ab.classList.add('nav-active');
@@ -1264,20 +1560,82 @@ function getImage(string $key): string
             }).observe(card);
         });
 
-        // Restore selections after form resubmit / back navigation
-        document.querySelectorAll('input[type=radio]:checked').forEach(inp => {
-            const btn = inp.closest('.choice-btn');
-            if (btn) {
-                btn.classList.add('selected');
-                const qi = btn.dataset.qi;
-                answered.add(qi);
-                const nb = document.getElementById('nav-btn-' + qi);
-                if (nb) nb.classList.add('nav-answered');
-            }
-        });
+        // Timer and submit behavior
+        const DURATION = 25 * 60;
+        const timerBox = document.getElementById("timerBox");
+        const timerDisplay = document.getElementById("timerDisplay");
+        const timeInput = document.getElementById("timeRemainingInput");
+        const quizForm = document.getElementById("quizForm");
 
-        if (answered.size)
-            document.getElementById('nav-count').textContent = answered.size + ' / ' + total;
+        if (!quizSubmitted && timerBox && timerDisplay && quizForm) {
+            let remaining = DURATION;
+            let isSubmitting = false;
+
+            function formatTime(seconds) {
+                const minutes = String(
+                    Math.floor(seconds / 60)
+                ).padStart(2, "0");
+                const secondsLeft = String(seconds % 60).padStart(2, "0");
+                return minutes + ":" + secondsLeft;
+            }
+
+            function tick() {
+                timerDisplay.textContent = formatTime(remaining);
+
+                if (remaining <= 300 && remaining > 60) {
+                    timerBox.classList.add("warning");
+                    timerBox.classList.remove("danger");
+                } else if (remaining <= 60) {
+                    timerBox.classList.remove("warning");
+                    timerBox.classList.add("danger");
+                }
+
+                if (remaining <= 0) {
+                    clearInterval(timerInterval);
+                    if (timeInput) timeInput.value = 0;
+                    sessionStorage.setItem("chapter3ScrollTop", "1");
+                    quizForm.submit();
+                    return;
+                }
+
+                remaining--;
+            }
+
+            tick();
+            const timerInterval = setInterval(tick, 1000);
+
+            quizForm.addEventListener("submit", function(event) {
+                if (isSubmitting) return;
+
+                event.preventDefault();
+                isSubmitting = true;
+                clearInterval(timerInterval);
+
+                if (timeInput) timeInput.value = remaining;
+
+                sessionStorage.setItem("chapter3ScrollTop", "1");
+                playSound("submitSound");
+
+                setTimeout(function() {
+                    quizForm.submit();
+                }, 500);
+            });
+        }
+
+        // Ensure the result page starts at the score card/top.
+        if (
+            quizSubmitted ||
+            sessionStorage.getItem("chapter3ScrollTop") === "1"
+        ) {
+            sessionStorage.removeItem("chapter3ScrollTop");
+            if ("scrollRestoration" in history) {
+                history.scrollRestoration = "manual";
+            }
+
+            window.addEventListener("load", function() {
+                window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+            });
+        }
     </script>
 
 </body>

@@ -22,7 +22,7 @@ if ($result->num_rows > 0) {
         $_SESSION['username'] = $user['username'];
         $_SESSION['user_id'] = $user['user_id'];
 
-        header("Location: /compilex/home");
+        header("Location: /compilex/index?login=success");
         exit();
 
     } else {

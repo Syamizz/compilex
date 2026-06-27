@@ -470,10 +470,170 @@ function getImage(string $key): string
                 transform: translateY(0);
             }
         }
+
+        /*
+         * Chapter 4 overrides.
+         * Kept inline so the quiz still renders correctly if an older norm.css
+         * is cached by the browser.
+         */
+        .q-nav {
+            box-sizing: border-box;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+        }
+
+        .q-nav > .timer-wrap {
+            position: static;
+            grid-column: 1 / -1;
+            width: 100%;
+            margin: 0 0 14px;
+        }
+
+        .q-nav > .timer-wrap .timer-box {
+            box-sizing: border-box;
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            padding: 10px 12px;
+        }
+
+        .q-nav-btn {
+            justify-self: center;
+        }
+
+        .q-nav-label,
+        .nav-count,
+        .nav-submit-wrap {
+            min-width: 0;
+        }
+
+        .choice-btn input[type="radio"] {
+            display: none !important;
+        }
+
+        .choice-btn.answer-locked {
+            cursor: default;
+            pointer-events: none;
+        }
+
+        .choice-btn.answer-muted {
+            opacity: .55;
+        }
+
+        .choice-btn.correct-ans,
+        .choice-btn.correct-ans.answer-muted {
+            opacity: 1;
+        }
+
+        .answer-feedback {
+            display: none;
+            width: fit-content;
+            margin-bottom: 10px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .answer-feedback.show {
+            display: block;
+        }
+
+        .explain-box {
+            display: none;
+        }
+
+        .explain-box.show {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 28px 16px 0;
+            }
+
+            .page-header h1 {
+                font-size: 23px;
+            }
+
+            .page-layout {
+                display: block;
+                padding: 0 14px;
+            }
+
+            .q-nav {
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                width: 100%;
+                margin: 18px 0;
+                grid-template-columns: repeat(5, minmax(0, 1fr));
+            }
+
+            .q-nav-btn {
+                width: 100%;
+                max-width: 42px;
+                margin: auto;
+            }
+
+            .quiz-wrap {
+                width: 100%;
+                margin-top: 18px;
+            }
+
+            .q-card {
+                padding: 20px 16px;
+            }
+
+            .choice-btn {
+                padding: 11px;
+                font-size: 13px;
+            }
+
+            .score-row {
+                flex-wrap: wrap;
+                gap: 24px;
+            }
+
+            .score-card {
+                padding: 24px 16px;
+            }
+
+            .score-big {
+                font-size: 34px;
+            }
+
+            .btn-submit {
+                width: 100%;
+                padding: 14px 20px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .q-card {
+                padding: 17px 12px;
+            }
+
+            .choice-btn {
+                gap: 8px;
+            }
+
+            .choice-btn .letter {
+                min-width: 24px;
+                height: 24px;
+            }
+
+            .q-text {
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 
 <body>
+
+    <audio id="correctSound" src="../../sound/correct answer.mp3" preload="auto"></audio>
+    <audio id="wrongSound" src="../../sound/wrong answer.mp3" preload="auto"></audio>
+    <audio id="submitSound" src="../../sound/alert2.mp3" preload="auto"></audio>
 
     <nav id="navbar" class="navbar navbar-expand-lg fixed-top">
         <div class="container-fluid">
@@ -517,6 +677,15 @@ function getImage(string $key): string
 
     <div class="page-layout">
         <nav class="q-nav" id="qNav">
+            <?php if (!$submitted): ?>
+                <div class="timer-wrap">
+                    <div class="timer-box" id="timerBox">
+                        <span class="timer-icon" aria-hidden="true">⏱</span>
+                        <span id="timerDisplay">25:00</span>
+                    </div>
+                </div>
+            <?php endif; ?>
+
             <div class="q-nav-label">Question</div>
 
             <?php for ($i = 0; $i < $total; $i++):
@@ -541,15 +710,6 @@ function getImage(string $key): string
         </nav>
 
         <div class="quiz-wrap">
-            <?php if (!$submitted): ?>
-                <div class="timer-wrap">
-                    <div class="timer-box" id="timerBox">
-                        <span class="timer-icon">Timer</span>
-                        <span id="timerDisplay">25:00</span>
-                    </div>
-                </div>
-            <?php endif; ?>
-
             <?php if ($submitted):
                 $wrong = array_reduce(array_keys($results), fn($c, $i) => $c + (!$results[$i]['correct'] && $results[$i]['answered'] ? 1 : 0), 0);
                 $skipped = array_reduce($results, fn($c, $r) => $c + (!$r['answered'] ? 1 : 0), 0);
@@ -627,15 +787,25 @@ function getImage(string $key): string
                         else $extra = ' result-wrong';
                     }
                 ?>
-                    <div id="q-<?= $i ?>" class="q-card color-<?= $q['color'] ?><?= $extra ?>">
+                    <div id="q-<?= $i ?>"
+                        class="q-card color-<?= $q['color'] ?><?= $extra ?>"
+                        data-question="<?= $i ?>"
+                        data-answer="<?= htmlspecialchars($q['answer']) ?>">
+
                         <?php if ($submitted && $r): ?>
                             <?php if (!$r['answered']): ?>
-                                <span class="result-badge badge-skipped">Skipped</span>
+                                <div class="answer-feedback show badge-skipped">
+                                    Skipped — Correct answer: <?= $q['answer'] ?>
+                                </div>
                             <?php elseif ($r['correct']): ?>
-                                <span class="result-badge badge-correct">Correct</span>
+                                <div class="answer-feedback show badge-correct">✔ Correct</div>
                             <?php else: ?>
-                                <span class="result-badge badge-wrong">Wrong - Answer: <?= $q['answer'] ?></span>
+                                <div class="answer-feedback show badge-wrong">
+                                    ✘ Wrong — Correct answer: <?= $q['answer'] ?>
+                                </div>
                             <?php endif; ?>
+                        <?php else: ?>
+                            <div class="answer-feedback" id="feedback-<?= $i ?>"></div>
                         <?php endif; ?>
 
                         <div class="q-num">Question <?= $i + 1 ?> of <?= $total ?></div>
@@ -652,9 +822,14 @@ function getImage(string $key): string
                             <?php foreach ($q['choices'] as $letter => $text):
                                 $bc = 'choice-btn';
                                 if ($submitted && $r) {
-                                    $bc .= ' disabled';
-                                    if ($letter === $q['answer']) $bc .= ' correct-ans';
-                                    elseif ($r['answered'] && $letter === $r['userAns']) $bc .= ' wrong-ans';
+                                    $bc .= ' answer-locked';
+                                    if ($letter === $q['answer']) {
+                                        $bc .= ' correct-ans';
+                                    } elseif ($r['answered'] && $letter === $r['userAns']) {
+                                        $bc .= ' wrong-ans';
+                                    } else {
+                                        $bc .= ' answer-muted';
+                                    }
                                 }
 
                                 $chk = ($submitted && $r && $r['answered'] && $r['userAns'] === $letter);
@@ -662,15 +837,16 @@ function getImage(string $key): string
                                 <button type="button" class="<?= $bc ?>" data-qi="<?= $i ?>" data-val="<?= $letter ?>"
                                     onclick="selectChoice(this)" <?= $submitted ? 'disabled' : '' ?>>
                                     <span class="letter"><?= $letter ?></span>
-                                    <span><?= htmlspecialchars($text) ?></span>
-                                    <input type="radio" name="q<?= $i ?>" value="<?= $letter ?>" style="display:none" <?= $chk ? 'checked' : '' ?>>
+                                    <span class="choice-text"><?= htmlspecialchars($text) ?></span>
+                                    <input type="radio" name="q<?= $i ?>" value="<?= $letter ?>" <?= $chk ? 'checked' : '' ?>>
                                 </button>
                             <?php endforeach; ?>
                         </div>
 
-                        <?php if ($submitted): ?>
-                            <div class="explain-box"><?= htmlspecialchars($q['explain']) ?></div>
-                        <?php endif; ?>
+                        <div class="explain-box <?= $submitted ? 'show' : '' ?>"
+                            id="explanation-<?= $i ?>">
+                            💡 <?= htmlspecialchars($q['explain']) ?>
+                        </div>
                     </div>
                 <?php endforeach; ?>
 
@@ -685,26 +861,100 @@ function getImage(string $key): string
 
     <script>
         const total = <?= $total ?>;
-        let answered = new Set();
+        const quizSubmitted = <?= $submitted ? 'true' : 'false' ?>;
+        const answered = new Set();
 
-        function selectChoice(btn) {
-            const qi = btn.dataset.qi;
+        function playSound(soundId) {
+            const sound = document.getElementById(soundId);
+            if (!sound) return;
 
-            document.querySelectorAll(`.choice-btn[data-qi="${qi}"]`).forEach(b => {
-                b.classList.remove('selected');
-                b.querySelector('input[type=radio]').checked = false;
+            sound.currentTime = 0;
+            sound.play().catch(function() {
+                // Audio can be blocked until the browser receives user input.
+            });
+        }
+
+        function selectChoice(button) {
+            if (quizSubmitted) return;
+
+            const questionIndex = button.dataset.qi;
+            const selectedAnswer = button.dataset.val;
+            const card = document.getElementById("q-" + questionIndex);
+
+            if (!card || card.dataset.answered === "true") return;
+
+            const correctAnswer = card.dataset.answer;
+            const buttons = card.querySelectorAll(".choice-btn");
+            const correctButton = card.querySelector(
+                `.choice-btn[data-val="${correctAnswer}"]`
+            );
+            const radio = button.querySelector('input[type="radio"]');
+
+            if (radio) radio.checked = true;
+
+            card.dataset.answered = "true";
+            answered.add(questionIndex);
+
+            buttons.forEach(function(choice) {
+                choice.classList.add("answer-locked");
+
+                if (choice !== button && choice.dataset.val !== correctAnswer) {
+                    choice.classList.add("answer-muted");
+                }
             });
 
-            btn.classList.add('selected');
-            btn.querySelector('input[type=radio]').checked = true;
-            answered.add(qi);
-
-            const nb = document.getElementById('nav-btn-' + qi);
-            if (nb && !nb.classList.contains('nav-correct') && !nb.classList.contains('nav-wrong')) {
-                nb.classList.add('nav-answered');
+            if (correctButton) {
+                correctButton.classList.add("correct-ans");
             }
 
-            document.getElementById('nav-count').textContent = answered.size + ' / ' + total;
+            const feedback = document.getElementById(
+                "feedback-" + questionIndex
+            );
+            const explanation = document.getElementById(
+                "explanation-" + questionIndex
+            );
+            const navigationButton = document.getElementById(
+                "nav-btn-" + questionIndex
+            );
+
+            if (selectedAnswer === correctAnswer) {
+                playSound("correctSound");
+                card.classList.add("result-correct");
+
+                if (feedback) {
+                    feedback.textContent = "✔ Correct";
+                    feedback.className =
+                        "answer-feedback show badge-correct";
+                }
+
+                if (navigationButton) {
+                    navigationButton.classList.add("nav-correct");
+                }
+            } else {
+                playSound("wrongSound");
+                card.classList.add("result-wrong");
+                button.classList.add("wrong-ans");
+
+                if (feedback) {
+                    feedback.textContent =
+                        "✘ Wrong — Correct answer: " + correctAnswer;
+                    feedback.className =
+                        "answer-feedback show badge-wrong";
+                }
+
+                if (navigationButton) {
+                    navigationButton.classList.add("nav-wrong");
+                }
+            }
+
+            if (explanation) {
+                explanation.classList.add("show");
+            }
+
+            const count = document.getElementById("nav-count");
+            if (count) {
+                count.textContent = answered.size + " / " + total;
+            }
         }
 
         const cards = document.querySelectorAll('.q-card');
@@ -714,7 +964,7 @@ function getImage(string $key): string
             new IntersectionObserver(entries => {
                 entries.forEach(e => {
                     if (e.isIntersecting) {
-                        const idx = e.target.id.split('-')[1];
+                        const idx = e.target.dataset.question;
                         navBtns.forEach(b => b.classList.remove('nav-active'));
                         const ab = document.getElementById('nav-btn-' + idx);
                         if (ab) ab.classList.add('nav-active');
@@ -725,29 +975,15 @@ function getImage(string $key): string
             }).observe(c)
         );
 
-        document.querySelectorAll('input[type=radio]:checked').forEach(inp => {
-            const btn = inp.closest('.choice-btn');
-            if (btn) {
-                btn.classList.add('selected');
-                const qi = btn.dataset.qi;
-                answered.add(qi);
-
-                const nb = document.getElementById('nav-btn-' + qi);
-                if (nb) nb.classList.add('nav-answered');
-            }
-        });
-
-        if (answered.size) {
-            document.getElementById('nav-count').textContent = answered.size + ' / ' + total;
-        }
-
         const DURATION = 25 * 60;
         const timerBox = document.getElementById('timerBox');
         const timerDisp = document.getElementById('timerDisplay');
         const timeInput = document.getElementById('timeRemainingInput');
+        const quizForm = document.getElementById('quizForm');
 
-        if (timerBox && timerDisp) {
+        if (!quizSubmitted && timerBox && timerDisp && quizForm) {
             let remaining = DURATION;
+            let isSubmitting = false;
 
             function formatTime(s) {
                 const m = String(Math.floor(s / 60)).padStart(2, '0');
@@ -772,7 +1008,11 @@ function getImage(string $key): string
                     clearInterval(timerInterval);
                     timerDisp.textContent = '00:00';
                     if (timeInput) timeInput.value = 0;
-                    document.getElementById('quizForm').submit();
+                    sessionStorage.setItem('chapter4ScrollTop', '1');
+                    playSound('submitSound');
+                    setTimeout(function() {
+                        quizForm.submit();
+                    }, 500);
                     return;
                 }
 
@@ -782,8 +1022,40 @@ function getImage(string $key): string
             tick();
             const timerInterval = setInterval(tick, 1000);
 
-            document.getElementById('quizForm').addEventListener('submit', function() {
+            quizForm.addEventListener('submit', function(event) {
+                if (isSubmitting) return;
+
+                event.preventDefault();
+                isSubmitting = true;
+                clearInterval(timerInterval);
+
                 if (timeInput) timeInput.value = remaining;
+
+                sessionStorage.setItem('chapter4ScrollTop', '1');
+                playSound('submitSound');
+
+                setTimeout(function() {
+                    quizForm.submit();
+                }, 500);
+            });
+        }
+
+        if (
+            quizSubmitted ||
+            sessionStorage.getItem('chapter4ScrollTop') === '1'
+        ) {
+            sessionStorage.removeItem('chapter4ScrollTop');
+
+            if ('scrollRestoration' in history) {
+                history.scrollRestoration = 'manual';
+            }
+
+            window.addEventListener('load', function() {
+                window.scrollTo({
+                    top: 0,
+                    left: 0,
+                    behavior: 'auto'
+                });
             });
         }
     </script>

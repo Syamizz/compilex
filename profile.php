@@ -13,7 +13,7 @@ $result = $stmt->get_result();
 
 // Fetch data
 $user = $result->fetch_assoc();
-
+$user['user_id'] = $_SESSION['user_id'];
 
 // Define the default image path
 $default_img = "images/default-avatar-profile.jpg";
@@ -378,6 +378,43 @@ if (!empty($user['profile_image']) && file_exists("images/" . $user['profile_ima
             border: 2px solid #ccc;
             /* Optional: adds a nice border ring */
         }
+
+        /* 5 image selection */
+        .image-choice-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 14px;
+        }
+
+        .image-choice-btn {
+            border: 2px solid transparent;
+            background: #F8F7FF;
+            border-radius: 12px;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .image-choice-btn:hover {
+            border-color: #6366F1;
+            background: #EEF2FF;
+            transform: translateY(-2px);
+        }
+
+        .image-choice-btn img {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .image-choice-name {
+            display: block;
+            margin-top: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #374151;
+        }
     </style>
 </head>
 
@@ -386,7 +423,7 @@ if (!empty($user['profile_image']) && file_exists("images/" . $user['profile_ima
     <!-- Navbar -->
     <nav id="navbar" class="navbar navbar-expand-lg">
         <div class="container-fluid">
-            <a id="title" class="navbar-brand" href="#">CompileX</a>
+            <a id="title" class="navbar-brand" href="home.php">CompileX</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -398,6 +435,9 @@ if (!empty($user['profile_image']) && file_exists("images/" . $user['profile_ima
 
                     <li class="nav-item">
                         <a class="nav-link" href="quiz.php">Quiz</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="tools.php">Tools</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="leaderboard.php">Leaderboard</a>
@@ -434,6 +474,9 @@ if (!empty($user['profile_image']) && file_exists("images/" . $user['profile_ima
                                 <input type="file" name="profile_pic" id="file-input" style="display:none;" onchange="this.form.submit()">
                                 <button type="button" class="button-4" onclick="document.getElementById('file-input').click();">
                                     Edit Image
+                                </button>
+                                <button type="button" class="button-4" data-bs-toggle="modal" data-bs-target="#selectImageModal">
+                                    Select Image
                                 </button>
                             </form>
                         </div>
@@ -503,6 +546,41 @@ if (!empty($user['profile_image']) && file_exists("images/" . $user['profile_ima
 
 
 
+    <div class="modal fade" id="selectImageModal" tabindex="-1" aria-labelledby="selectImageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content" style="font-family: 'Syne', sans-serif;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="selectImageModalLabel">Select Profile Image</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="image-choice-grid">
+                        <?php
+                        $presetImages = [
+                            'image_1.png',
+                            'image_2.png',
+                            'image_3.png',
+                            'image_4.png',
+                            'image_5.png',
+                            'image_6.png'
+                        ];
+
+                        foreach ($presetImages as $img):
+                        ?>
+                            <form action="update_profile2.php" method="POST">
+                                <input type="hidden" name="profile_image" value="<?= htmlspecialchars($img) ?>">
+                                <button type="submit" class="image-choice-btn">
+                                    <img src="images/<?= htmlspecialchars($img) ?>" alt="<?= htmlspecialchars($img) ?>">
+                                    
+                                </button>
+                            </form>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <footer>
         © <?php echo date("Y"); ?> ezComp • Compiler Learning Platform

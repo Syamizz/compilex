@@ -265,6 +265,61 @@
             text-decoration: underline;
         }
 
+        .register-modal {
+            border: none;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
+            font-family: 'Syne', sans-serif;
+        }
+
+        .register-modal-header {
+            background: #1D9E75;
+            color: white;
+            border-bottom: none;
+            padding: 18px 22px;
+        }
+
+        .register-modal-header .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .register-modal-body {
+            padding: 24px 22px;
+            color: #333;
+            font-size: 15px;
+            line-height: 1.6;
+            background: #ffffff;
+        }
+
+        .register-modal-footer {
+            border-top: none;
+            padding: 0 22px 22px;
+            background: #ffffff;
+        }
+
+        .register-modal-btn {
+            width: 100%;
+            padding: 11px;
+            background: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .register-modal-btn:hover {
+            background: #34495e;
+        }
+
+        .register-modal-btn:active {
+            transform: scale(0.98);
+        }
+
         .toast {
             position: fixed;
             bottom: 24px;
@@ -302,7 +357,7 @@
 <body>
     <nav id="navbar" class="navbar navbar-expand-lg">
         <div class="container-fluid">
-            <a id="title" class="navbar-brand" href="#">CompileX</a>
+            <a id="title" class="navbar-brand" href="index.php">CompileX</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -312,9 +367,8 @@
 
 
 
-    <audio id="buttonSound" src="sound/btn_login.mp3" preload="auto"></audio>
 
-    
+
 
     <!-- content -->
     <div class="page">
@@ -322,7 +376,7 @@
         <div class="card">
             <p class="card-title">Login</p>
 
-            <form action="login" method="post">
+            <form id="login-form" action="login.php" method="post">
 
                 <div class="field">
                     <span class="icon">👤</span>
@@ -337,7 +391,7 @@
                     <div class="field-hint" id="pw-hint"></div>
                 </div>
                 <p class="register-link">Forgot password? <a href="reset_pass.php">Click here</a></p>
-                <button type="submit" class="btn-login" id="btn-login" onclick="playButtonSound()">Login</button>
+                <button type="submit" class="btn-login" id="btn-login">Login</button>
 
             </form>
 
@@ -361,21 +415,36 @@
 
     <div class="toast" id="toast"></div>
 
+    <div class="modal fade" id="registerSuccessModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content register-modal">
+                <div class="modal-header register-modal-header">
+                    <h5 class="modal-title">Registration Successful</h5>
+                </div>
+
+                <div class="modal-body register-modal-body">
+                    Your account has been registered successfully. You can now log in.
+                </div>
+
+                <div class="modal-footer register-modal-footer">
+                    <button type="button" class="register-modal-btn" data-bs-dismiss="modal">
+                        OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <footer>
         © <?php echo date("Y"); ?> CompileX • Compiler Learning Platform
     </footer>
 
-    <script>
-        function playButtonSound() {
-            const sound = document.getElementById("buttonSound");
-            sound.currentTime = 0;
-            sound.play();
-        }
-    </script>
+
 
     <script>
         const usernameEl = document.getElementById('username');
         const passwordEl = document.getElementById('password');
+        const loginForm = document.getElementById('login-form');
         const btnLogin = document.getElementById('btn-login');
         const togglePw = document.getElementById('toggle-pw');
         const userHint = document.getElementById('user-hint');
@@ -427,22 +496,43 @@
             togglePw.textContent = isText ? 'Show' : 'Hide';
         });
 
-        btnLogin.addEventListener('click', (e) => {
-            e.preventDefault(); // stop instant submit
-            if (!validate()) return;
+        loginForm.addEventListener('submit', (e) => {
+            playButtonSound();
+            if (!validate()) {
+                e.preventDefault();
+                return;
+            }
 
             btnLogin.classList.add('loading');
             btnLogin.disabled = true;
-            showToast('Login successful! Redirecting…', false);
-
-            setTimeout(() => {
-                document.querySelector('form').submit(); // actually submit after toast
-            }, 1500);
         });
+
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('error') === '1') {
+            usernameEl.className = 'invalid';
+            passwordEl.className = 'invalid';
+            userHint.textContent = 'Username or password is wrong';
+            showToast('Username or password is wrong', true);
+        }
+
+        if (params.get('login') === 'success') {
+            showToast('Login successful! Redirecting...', false);
+            setTimeout(() => {
+                window.location.href = 'home.php';
+            }, 500);
+        }
 
         document.getElementById('btn-google').addEventListener('click', () => {
             showToast('Redirecting to Google…', false);
         });
+
+        if (params.get('register') === 'success') {
+            const registerModal = new bootstrap.Modal(
+                document.getElementById('registerSuccessModal')
+            );
+
+            registerModal.show();
+        }
     </script>
 </body>
 

@@ -1521,6 +1521,45 @@ $pct = $submitted ? round($score / $total * 100) : 0;
             }
         }
 
+        .q-nav {
+            box-sizing: border-box;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+        }
+
+      .q-nav>.timer {
+            box-sizing: border-box;
+            grid-column: 1 / -1;
+            width: 100%;
+            justify-content: center;
+            justify-self: stretch;
+            padding: 10px 12px;
+            margin-bottom: 0;
+        }
+
+        .q-nav-btn {
+            justify-self: center;
+        }
+
+        .q-nav-label,
+        .nav-count,
+        .nav-submit-wrap {
+            min-width: 0;
+        }
+
+        .nav-submit-btn {
+            box-sizing: border-box;
+            display: block;
+            max-width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .q-nav {
+                grid-template-columns: repeat(5, minmax(0, 1fr));
+            }
+        }
+
+
+
         /* Live answer results */
         .q-card.result-correct {
             border-left: 5px solid #22C55E !important;
@@ -1743,9 +1782,9 @@ $pct = $submitted ? round($score / $total * 100) : 0;
         }
 
         .control-locked {
-    pointer-events: none;
-    cursor: default;
-}
+            pointer-events: none;
+            cursor: default;
+        }
     </style>
 </head>
 
@@ -1804,9 +1843,7 @@ $pct = $submitted ? round($score / $total * 100) : 0;
             <p>20 mixed questions based only on Chapter 2: Lexical Analysis, formal languages, FSMs, regular expressions, SableCC, and Decaf lexical rules.</p>
         </div>
 
-        <?php if (!$submitted): ?>
-            <div class="timer" id="timerDisplay">35:00</div>
-        <?php endif; ?>
+
 
         <?php if ($submitted): ?>
             <?php
@@ -1829,6 +1866,9 @@ $pct = $submitted ? round($score / $total * 100) : 0;
 
             <!-- Left Question Nav -->
             <nav class="q-nav" id="qNav">
+                <?php if (!$submitted): ?>
+                    <div class="timer" id="timerDisplay">35:00</div>
+                <?php endif; ?>
                 <div class="q-nav-label">Question</div>
 
                 <?php for ($i = 0; $i < $total; $i++):

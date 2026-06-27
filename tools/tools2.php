@@ -8,7 +8,6 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="body.css">
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
@@ -42,7 +41,6 @@
             margin: 0;
         }
 
-        /* ── Navbar ── */
         #navbar {
             background-color: #18181B;
         }
@@ -63,32 +61,6 @@
             border-bottom: 4px solid #6366F1;
         }
 
-        .button-28 {
-            appearance: none;
-            background-color: transparent;
-            border: 2px solid #f7f3f3;
-            border-radius: 15px;
-            color: #504141;
-            cursor: pointer;
-            display: inline-block;
-            font-size: 10px;
-            font-weight: 600;
-            min-height: 30px;
-            outline: none;
-            padding: 12px 20px;
-            text-align: center;
-            text-decoration: none;
-            transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
-            width: auto;
-        }
-
-        .button-28:hover {
-            color: #fff;
-            background-color: #1A1A1A;
-            box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
-            transform: translateY(-2px);
-        }
-
         footer {
             text-align: center;
             padding: 20px;
@@ -98,7 +70,6 @@
             color: #6B7280;
         }
 
-        /* ── Preset buttons ── */
         .preset-btns {
             display: flex;
             gap: 6px;
@@ -120,7 +91,6 @@
             background: var(--purple-s);
         }
 
-        /* ── Shared tool wrap ── */
         .tool-wrap {
             background: var(--card);
             border: 1px solid rgba(99, 102, 241, .15);
@@ -225,7 +195,6 @@
             line-height: 1.8;
         }
 
-        /* ── Chomsky badge colours ── */
         .badge-type0 {
             background: #FFF1F2;
             border: 1.5px solid #EF4444;
@@ -261,7 +230,6 @@
             margin-top: 10px;
         }
 
-        /* ── Derivation step chips ── */
         .deriv-stream {
             display: flex;
             flex-direction: column;
@@ -313,7 +281,6 @@
             white-space: nowrap;
         }
 
-        /* ── Parse tree SVG ── */
         #ptree-svg {
             display: block;
             width: 100%;
@@ -323,24 +290,17 @@
 
 <body>
 
-  
-    
-
     <!-- ══ Chapter 3 Tools Card ════════════════════════════════════ -->
     <div style="max-width:700px; margin:40px auto; padding:0 20px;">
         <div style="background:#FFFFFF; border-radius:16px; box-shadow:0 4px 24px rgba(99,102,241,.10); border:1px solid rgba(99,102,241,.15); overflow:hidden;">
 
-            <!-- Card header -->
             <div style="background:#18181B; padding:20px 28px;">
-                
                 <h2 style="font-size:22px; font-weight:700; color:#FFFFFF; margin:0 0 6px;">CHAPTER 3</h2>
                 <p style="font-size:12px; font-weight:600; letter-spacing:.1em; color:#A5B4FC; margin:0 0 6px;">SYNTAX ANALYSIS</p>
             </div>
 
-            <!-- Tool buttons -->
             <div style="padding:24px 28px; display:flex; flex-direction:column; gap:14px;">
 
-                <!-- Grammar Derivation Simulator -->
                 <button onclick="document.getElementById('derivModal').style.display='flex'"
                     style="display:flex;align-items:center;gap:16px;background:#F8F7FF;border:1px solid rgba(99,102,241,.2);border-radius:12px;padding:16px 20px;cursor:pointer;text-align:left;width:100%;transition:all .2s;"
                     onmouseover="this.style.borderColor='#6366F1';this.style.background='#EEF2FF';"
@@ -353,7 +313,6 @@
                     <div style="font-size:18px;color:#6366F1;flex-shrink:0;">▶</div>
                 </button>
 
-                <!-- Chomsky Hierarchy Classifier -->
                 <button onclick="document.getElementById('chomskyModal').style.display='flex'"
                     style="display:flex;align-items:center;gap:16px;background:#F8F7FF;border:1px solid rgba(99,102,241,.2);border-radius:12px;padding:16px 20px;cursor:pointer;text-align:left;width:100%;transition:all .2s;"
                     onmouseover="this.style.borderColor='#6366F1';this.style.background='#EEF2FF';"
@@ -366,7 +325,6 @@
                     <div style="font-size:18px;color:#6366F1;flex-shrink:0;">▶</div>
                 </button>
 
-                <!-- Parse Tree Builder -->
                 <button onclick="document.getElementById('ptreeModal').style.display='flex'"
                     style="display:flex;align-items:center;gap:16px;background:#F8F7FF;border:1px solid rgba(99,102,241,.2);border-radius:12px;padding:16px 20px;cursor:pointer;text-align:left;width:100%;transition:all .2s;"
                     onmouseover="this.style.borderColor='#6366F1';this.style.background='#EEF2FF';"
@@ -379,7 +337,6 @@
                     <div style="font-size:18px;color:#6366F1;flex-shrink:0;">▶</div>
                 </button>
 
-                <!-- Pushdown Machine Simulator -->
                 <button onclick="document.getElementById('pdmModal').style.display='flex'"
                     style="display:flex;align-items:center;gap:16px;background:#F8F7FF;border:1px solid rgba(99,102,241,.2);border-radius:12px;padding:16px 20px;cursor:pointer;text-align:left;width:100%;transition:all .2s;"
                     onmouseover="this.style.borderColor='#6366F1';this.style.background='#EEF2FF';"
@@ -394,7 +351,6 @@
 
             </div>
 
-            <!-- Card footer -->
             <div style="border-top:1px solid rgba(99,102,241,.1);padding:14px 28px;background:#F8F7FF;display:flex;align-items:center;gap:8px;">
                 <span style="font-size:12px;color:#9CA3AF;">🔗 All tools are based on examples from your compiler principles textbook.</span>
             </div>
@@ -431,7 +387,6 @@
                     </div>
                     <div class="tool-body">
 
-                        <!-- Presets -->
                         <div style="margin-bottom:12px;">
                             <span style="font-size:12px;color:var(--muted);margin-right:6px;">Presets:</span>
                             <div class="preset-btns" style="display:inline-flex;gap:6px;flex-wrap:wrap;">
@@ -464,7 +419,6 @@ S → 1</textarea>
                             <button class="tool-btn sec" onclick="derivReset()">↺ Reset</button>
                         </div>
 
-                        <!-- Rule selector -->
                         <div id="deriv-rule-picker" style="display:none;margin-top:14px;">
                             <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:6px;">Choose which rule to apply to <strong id="deriv-target-nt" style="color:var(--purple);"></strong>:</div>
                             <div id="deriv-rule-btns" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
@@ -529,7 +483,6 @@ AB → BA</textarea>
                             <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--text);margin-bottom:12px;">Classification results:</div>
                             <div id="chomsky-results"></div>
 
-                            <!-- Hierarchy diagram -->
                             <div style="margin-top:24px;background:var(--code-bg);border-radius:12px;padding:20px;">
                                 <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:#A5B4FC;margin-bottom:14px;letter-spacing:.05em;">CHOMSKY HIERARCHY (outer = less restricted)</div>
                                 <div style="position:relative;display:flex;flex-direction:column;gap:6px;">
@@ -578,7 +531,7 @@ AB → BA</textarea>
             <div style="padding:28px;">
                 <p style="font-size:14px;color:#6B7280;margin-bottom:20px;line-height:1.7;">
                     Enter an arithmetic expression using <code>var</code>, <code>const</code>, <code>+</code>, <code>*</code>, <code>-</code>, <code>/</code>, and parentheses.
-                    Grammar G5 enforces correct precedence (× before +) and left-associativity. The tree shows why the expression is unambiguous.
+                    Grammar G5 enforces correct precedence (× before +) and left-associativity.
                 </p>
 
                 <div class="tool-wrap">
@@ -592,7 +545,7 @@ AB → BA</textarea>
                             <span style="font-size:12px;color:var(--muted);margin-right:6px;">Presets:</span>
                             <div class="preset-btns" style="display:inline-flex;gap:6px;flex-wrap:wrap;">
                                 <button class="preset-btn" onclick="ptreeLoad('var + var * var')">var + var * var (Fig 3.9)</button>
-                                <button class="preset-btn" onclick="ptreeLoad('(var + var) * const')">( var + var ) * const</button>
+                                <button class="preset-btn" onclick="ptreeLoad('(var + var) * const')">(var + var) * const</button>
                                 <button class="preset-btn" onclick="ptreeLoad('var + var + var')">var + var + var (left-assoc)</button>
                                 <button class="preset-btn" onclick="ptreeLoad('var * var + const')">var * var + const</button>
                             </div>
@@ -613,7 +566,6 @@ AB → BA</textarea>
                     </div>
                 </div>
 
-                <!-- G5 rules reference -->
                 <div style="background:var(--code-bg);border-radius:10px;padding:16px 20px;margin-top:8px;">
                     <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:#A5B4FC;margin-bottom:10px;letter-spacing:.05em;">GRAMMAR G5 — UNAMBIGUOUS ARITHMETIC (Section 3.1)</div>
                     <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#CDD6F4;line-height:2;">
@@ -651,7 +603,7 @@ AB → BA</textarea>
 
             <div style="padding:28px;">
                 <p style="font-size:14px;color:#6B7280;margin-bottom:20px;line-height:1.7;">
-                    Choose a machine and enter an input string. The simulator traces every stack configuration and state transition, showing exactly how the pushdown machine accepts or rejects the input.
+                    Choose a machine and enter an input string. The simulator traces every stack configuration and state transition.
                 </p>
 
                 <div class="tool-wrap">
@@ -661,7 +613,6 @@ AB → BA</textarea>
                     </div>
                     <div class="tool-body">
 
-                        <!-- Machine selector -->
                         <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center;">
                             <div>
                                 <label style="font-size:12px;font-weight:700;color:var(--muted);display:block;margin-bottom:4px;">Machine:</label>
@@ -694,7 +645,6 @@ AB → BA</textarea>
                             <button class="tool-btn sec" onclick="pdmReset()">↺ Reset</button>
                         </div>
 
-                        <!-- Stack trace display -->
                         <div id="pdm-trace-wrap" style="margin-top:18px;display:none;">
                             <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--text);margin-bottom:10px;">Execution trace:</div>
                             <div style="overflow-x:auto;">
@@ -718,7 +668,6 @@ AB → BA</textarea>
                     </div>
                 </div>
 
-                <!-- Machine description box -->
                 <div id="pdm-desc" style="background:var(--code-bg);border-radius:10px;padding:16px 20px;margin-top:8px;">
                     <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:#A5B4FC;margin-bottom:8px;letter-spacing:.05em;">MACHINE DESCRIPTION — Fig 3.4 (Section 3.0.4)</div>
                     <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#CDD6F4;line-height:1.9;">
@@ -735,27 +684,24 @@ AB → BA</textarea>
     </div>
 
 
-    
-
-
     <!-- ══════════════════════════════════════════════════════════════
      JAVASCRIPT
      ══════════════════════════════════════════════════════════════ -->
     <script>
         // ════════════════════════════════════════════════════════════════
-        // TOOL 1 — Grammar Derivation Simulator
+        // TOOL 1 — Grammar Derivation Simulator  (FIXED)
         // ════════════════════════════════════════════════════════════════
 
         const DERIV_PRESETS = {
             g1: {
                 rules: 'S → 0S0\nS → 1S1\nS → 0\nS → 1',
                 start: 'S',
-                target: '0010100'
+                target: '0 0 1 0 1 0 0'
             },
             g2: {
                 rules: 'S → ASB\nS → ε\nA → a\nB → b',
                 start: 'S',
-                target: 'aabb'
+                target: 'a a b b'
             },
             g5: {
                 rules: 'Expr → Expr + Term\nExpr → Term\nTerm → Term * Factor\nTerm → Factor\nFactor → ( Expr )\nFactor → var\nFactor → const',
@@ -764,8 +710,7 @@ AB → BA</textarea>
             }
         };
 
-        let derivHistory = []; // array of sentential forms
-        let derivStepIdx = 0;
+        let derivHistory = [];
 
         function derivLoadPreset(key) {
             const p = DERIV_PRESETS[key];
@@ -775,104 +720,116 @@ AB → BA</textarea>
             derivReset();
         }
 
+        // Parse grammar rules from textarea
         function parseRules() {
             const lines = document.getElementById('deriv-rules').value.trim().split('\n');
             const rules = [];
             for (const line of lines) {
-                const sep = line.includes('→') ? '→' : (line.includes('->') ? '->' : null);
-                if (!sep) continue;
-                const [lhs, rhs] = line.split(sep).map(s => s.trim());
+                const hasFancy = line.includes('→');
+                const hasArrow = line.includes('->');
+                if (!hasFancy && !hasArrow) continue;
+                const sep = hasFancy ? '→' : '->';
+                const idx = line.indexOf(sep);
+                const lhs = line.slice(0, idx).trim();
+                const rhs = line.slice(idx + sep.length).trim();
+                if (!lhs) continue;
                 rules.push({
                     lhs,
-                    rhs: rhs === 'ε' || rhs === '' ? '' : rhs
+                    rhs: (rhs === 'ε' || rhs === '') ? '' : rhs
                 });
             }
             return rules;
         }
 
-        function isNonterminal(tok) {
-            // Capital letter word or multi-char starting with capital
-            return /^[A-Z]/.test(tok);
+        // Get sorted nonterminal list (longest first for greedy matching)
+        function getNTs(rules) {
+            return [...new Set(rules.map(r => r.lhs))].sort((a, b) => b.length - a.length);
         }
 
-        function tokeniseSentential(form) {
-            // Tokenise into known grammar symbols (multi-char like "Expr", "Term", etc.)
-            // Strategy: greedy longest match against known nonterminals, else char-by-char
-            const rules = parseRules();
-            const nts = [...new Set(rules.map(r => r.lhs))];
-            // Sort by length descending for greedy match
-            nts.sort((a, b) => b.length - a.length);
-
+        // Tokenise a sentential form string into an array of symbol tokens.
+        // Multi-char nonterminals (e.g. "Expr", "Term") are matched greedily and longest-first.
+        function tokeniseSentential(form, nts) {
             const tokens = [];
             let i = 0;
             while (i < form.length) {
+                // skip spaces
                 if (form[i] === ' ') {
                     i++;
                     continue;
                 }
+
+                // try matching a known nonterminal
                 let matched = false;
                 for (const nt of nts) {
                     if (form.startsWith(nt, i)) {
-                        tokens.push(nt);
-                        i += nt.length;
-                        matched = true;
-                        break;
+                        // boundary: after the NT must be end, space, or operator/paren
+                        const afterIdx = i + nt.length;
+                        const nextCh = afterIdx < form.length ? form[afterIdx] : '';
+                        if (nextCh === '' || nextCh === ' ' || '+-*/()'.includes(nextCh)) {
+                            tokens.push(nt);
+                            i += nt.length;
+                            matched = true;
+                            break;
+                        }
                     }
                 }
-                if (!matched) {
+                if (matched) continue;
+
+                // single-char operator or paren
+                if ('+-*/()'.includes(form[i])) {
                     tokens.push(form[i]);
                     i++;
+                    continue;
                 }
+
+                // run of lowercase/digit chars = terminal word (e.g. "var", "const", "a", "0")
+                let j = i;
+                while (j < form.length && form[j] !== ' ' && !'+-*/()'.includes(form[j])) j++;
+                if (j > i) {
+                    tokens.push(form.slice(i, j));
+                    i = j;
+                } else {
+                    tokens.push(form[i]);
+                    i++;
+                } // fallback: single unknown char
             }
             return tokens;
         }
 
-        function findLeftmostNT(form) {
-            const rules = parseRules();
-            const nts = new Set(rules.map(r => r.lhs));
-            const tokens = tokeniseSentential(form);
+        // Find the leftmost nonterminal token in a sentential form
+        function findLeftmostNT(form, rules) {
+            const ntSet = new Set(rules.map(r => r.lhs));
+            const nts = getNTs(rules);
+            const tokens = tokeniseSentential(form, nts);
             for (const tok of tokens) {
-                if (nts.has(tok)) return tok;
+                if (ntSet.has(tok)) return tok;
             }
             return null;
         }
 
-        function applyRule(form, rule) {
-            const rules = parseRules();
-            const nts = [...new Set(rules.map(r => r.lhs))].sort((a, b) => b.length - a.length);
-            // Replace first occurrence of lhs in form
-            const lhs = rule.lhs;
-            // Find position considering multi-char tokens
-            let i = 0;
-            while (i < form.length) {
-                if (form[i] === ' ') {
-                    i++;
-                    continue;
-                }
-                if (form.startsWith(lhs, i)) {
-                    const before = form.slice(0, i).trimEnd();
-                    const after = form.slice(i + lhs.length).trimStart();
-                    const mid = rule.rhs;
-                    return [before, mid, after].filter(s => s !== '').join(' ');
-                }
-                // skip token
-                let skipped = false;
-                for (const nt of nts) {
-                    if (form.startsWith(nt, i) && nt !== lhs) {
-                        i += nt.length;
-                        skipped = true;
-                        break;
-                    }
-                }
-                if (!skipped) i++;
-            }
-            return form;
+        // Replace the FIRST occurrence of rule.lhs in the token list with the RHS tokens,
+        // then rejoin into a space-separated sentential form string.
+        function applyRule(form, rule, rules) {
+            const nts = getNTs(rules);
+            const tokens = tokeniseSentential(form, nts);
+            const idx = tokens.indexOf(rule.lhs);
+            if (idx === -1) return form;
+
+            const rhsTokens = rule.rhs === '' ?
+                [] :
+                tokeniseSentential(rule.rhs, nts);
+
+            const newTokens = [
+                ...tokens.slice(0, idx),
+                ...rhsTokens,
+                ...tokens.slice(idx + 1)
+            ];
+            return newTokens.join(' ');
         }
 
         function derivReset() {
             const start = document.getElementById('deriv-start').value.trim();
             derivHistory = [start];
-            derivStepIdx = 0;
             document.getElementById('deriv-stream').innerHTML = '';
             document.getElementById('deriv-rule-picker').style.display = 'none';
             document.getElementById('deriv-log').textContent = 'Ready. Click Step to apply a rule.';
@@ -882,10 +839,11 @@ AB → BA</textarea>
         function renderDerivHistory() {
             const stream = document.getElementById('deriv-stream');
             stream.innerHTML = '';
+            const rules = parseRules();
             derivHistory.forEach((form, idx) => {
                 const div = document.createElement('div');
                 const isLast = idx === derivHistory.length - 1;
-                const isFinal = isLast && !findLeftmostNT(form);
+                const isFinal = isLast && !findLeftmostNT(form, rules);
                 div.className = 'deriv-step' + (isFinal ? ' ds-final' : (isLast ? ' ds-applied' : ''));
                 div.innerHTML = `<div class="ds-num">${idx}</div>
             <span style="flex:1;">${escH(form || 'ε')}</span>
@@ -901,30 +859,32 @@ AB → BA</textarea>
                 document.getElementById('deriv-log').textContent = 'Please enter grammar rules first.';
                 return;
             }
-
             const current = derivHistory[derivHistory.length - 1];
-            const nt = findLeftmostNT(current);
+            const nt = findLeftmostNT(current, rules);
 
             if (!nt) {
-                document.getElementById('deriv-log').textContent = `✅ "${current || 'ε'}" is a terminal string — derivation complete!`;
+                document.getElementById('deriv-log').textContent =
+                    `✅ "${current || 'ε'}" is a terminal string — derivation complete!`;
                 document.getElementById('deriv-rule-picker').style.display = 'none';
                 return;
             }
 
             const applicable = rules.filter(r => r.lhs === nt);
             if (applicable.length === 0) {
-                document.getElementById('deriv-log').textContent = `❌ No rule found for nonterminal "${nt}".`;
+                document.getElementById('deriv-log').textContent =
+                    `❌ No rule found for nonterminal "${nt}".`;
                 return;
             }
 
             if (applicable.length === 1) {
-                const newForm = applyRule(current, applicable[0]);
+                const newForm = applyRule(current, applicable[0], rules);
                 derivHistory.push(newForm);
                 renderDerivHistory();
                 document.getElementById('deriv-rule-picker').style.display = 'none';
-                document.getElementById('deriv-log').textContent = `Applied rule: ${applicable[0].lhs} → ${applicable[0].rhs || 'ε'}`;
+                document.getElementById('deriv-log').textContent =
+                    `Applied: ${applicable[0].lhs} → ${applicable[0].rhs || 'ε'}`;
             } else {
-                // Show rule picker
+                // Multiple rules for the same NT — let user pick
                 document.getElementById('deriv-target-nt').textContent = nt;
                 const btns = document.getElementById('deriv-rule-btns');
                 btns.innerHTML = '';
@@ -933,30 +893,39 @@ AB → BA</textarea>
                     btn.className = 'preset-btn';
                     btn.textContent = `${rule.lhs} → ${rule.rhs || 'ε'}`;
                     btn.onclick = () => {
-                        const newForm = applyRule(current, rule);
+                        const newForm = applyRule(current, rule, rules);
                         derivHistory.push(newForm);
                         renderDerivHistory();
                         document.getElementById('deriv-rule-picker').style.display = 'none';
-                        document.getElementById('deriv-log').textContent = `Applied rule: ${rule.lhs} → ${rule.rhs || 'ε'}`;
+                        document.getElementById('deriv-log').textContent =
+                            `Applied: ${rule.lhs} → ${rule.rhs || 'ε'}`;
                     };
                     btns.appendChild(btn);
                 });
                 document.getElementById('deriv-rule-picker').style.display = 'block';
-                document.getElementById('deriv-log').textContent = `Multiple rules for "${nt}" — choose one above.`;
+                document.getElementById('deriv-log').textContent =
+                    `Multiple rules for "${nt}" — choose one above.`;
             }
         }
 
         function derivAuto() {
             const rules = parseRules();
-            const target = document.getElementById('deriv-target').value.trim();
+            const rawTarget = document.getElementById('deriv-target').value.trim();
             const start = document.getElementById('deriv-start').value.trim();
             if (!rules.length) {
                 document.getElementById('deriv-log').textContent = 'Enter rules first.';
                 return;
             }
 
-            // BFS with depth limit
-            const MAX_DEPTH = 20;
+            // Normalise target to our token-join representation
+            const nts = getNTs(rules);
+            const normTarget = tokeniseSentential(rawTarget, nts).join(' ');
+
+            // Compute target token count for pruning
+            const targetLen = tokeniseSentential(rawTarget, nts).length;
+
+            // BFS with depth cap and token-count pruning to handle left-recursive grammars
+            const MAX_DEPTH = 30;
             const queue = [{
                 form: start,
                 history: [start]
@@ -970,13 +939,18 @@ AB → BA</textarea>
                 } = queue.shift();
                 if (history.length > MAX_DEPTH + 1) continue;
 
-                const nt = findLeftmostNT(form);
+                const nt = findLeftmostNT(form, rules);
+
                 if (!nt) {
-                    if (form === target || (form === '' && target === 'ε')) {
+                    // terminal string — check for match
+                    if (form === normTarget ||
+                        form === rawTarget ||
+                        (form === '' && (rawTarget === 'ε' || rawTarget === ''))) {
                         derivHistory = history;
                         renderDerivHistory();
                         document.getElementById('deriv-rule-picker').style.display = 'none';
-                        document.getElementById('deriv-log').textContent = `✅ Derivation found in ${history.length - 1} step(s)!`;
+                        document.getElementById('deriv-log').textContent =
+                            `✅ Derivation found in ${history.length - 1} step(s)!`;
                         return;
                     }
                     continue;
@@ -984,7 +958,10 @@ AB → BA</textarea>
 
                 const applicable = rules.filter(r => r.lhs === nt);
                 for (const rule of applicable) {
-                    const newForm = applyRule(form, rule);
+                    const newForm = applyRule(form, rule, rules);
+                    // Prune: token count must not exceed target length + small slack
+                    const tokCount = tokeniseSentential(newForm, nts).length;
+                    if (tokCount > targetLen + 3) continue;
                     if (!visited.has(newForm)) {
                         visited.add(newForm);
                         queue.push({
@@ -995,12 +972,14 @@ AB → BA</textarea>
                 }
             }
 
-            document.getElementById('deriv-log').textContent = `❌ Could not derive "${target}" within ${MAX_DEPTH} steps. Try a shorter target.`;
+            document.getElementById('deriv-log').textContent =
+                `❌ Could not derive "${rawTarget}" within ${MAX_DEPTH} steps. ` +
+                `Tip: use spaces between tokens (e.g. "a a b b" not "aabb") for multi-char grammars.`;
         }
 
 
         // ════════════════════════════════════════════════════════════════
-        // TOOL 2 — Chomsky Hierarchy Classifier
+        // TOOL 2 — Chomsky Hierarchy Classifier  (unchanged)
         // ════════════════════════════════════════════════════════════════
 
         const CHOMSKY_EXAMPLES = {
@@ -1016,31 +995,29 @@ AB → BA</textarea>
 
         function classifyRule(lhs, rhs) {
             const eps = rhs === '' || rhs === 'ε';
-
-            // Helpers
             const isNT = s => /^[A-Z]/.test(s);
             const isTerm = s => /^[a-z0-9]$/.test(s);
             const lhsTokens = tokeniseString(lhs);
             const rhsTokens = eps ? [] : tokeniseString(rhs);
 
-            // Type 3: A → aB or A → a (single NT on left, right side is terminal optionally followed by single NT)
             if (lhsTokens.length === 1 && isNT(lhsTokens[0])) {
                 if (eps) return {
                     type: 2,
                     name: 'Context-Free',
                     reason: 'Single NT on left; ε on right'
                 };
-                if (rhsTokens.length === 1 && isTerm(rhsTokens[0])) return {
-                    type: 3,
-                    name: 'Right Linear',
-                    reason: 'A → a'
-                };
-                if (rhsTokens.length === 2 && isTerm(rhsTokens[0]) && isNT(rhsTokens[1])) return {
-                    type: 3,
-                    name: 'Right Linear',
-                    reason: 'A → aB'
-                };
-                // Any single NT on left → context-free
+                if (rhsTokens.length === 1 && isTerm(rhsTokens[0]))
+                    return {
+                        type: 3,
+                        name: 'Right Linear',
+                        reason: 'A → a'
+                    };
+                if (rhsTokens.length === 2 && isTerm(rhsTokens[0]) && isNT(rhsTokens[1]))
+                    return {
+                        type: 3,
+                        name: 'Right Linear',
+                        reason: 'A → aB'
+                    };
                 return {
                     type: 2,
                     name: 'Context-Free',
@@ -1048,22 +1025,22 @@ AB → BA</textarea>
                 };
             }
 
-            // Type 1: αAγ → αβγ where β is non-empty (LHS length ≤ RHS length, single NT being rewritten in context)
             if (lhsTokens.length > 1) {
                 const ntCount = lhsTokens.filter(isNT).length;
                 const lhsLen = lhsTokens.length;
                 const rhsLen = rhsTokens.length;
-                if (ntCount === 1 && rhsLen >= lhsLen) return {
-                    type: 1,
-                    name: 'Context-Sensitive',
-                    reason: 'αAγ → αβγ (single NT rewritten in context)'
-                };
-                if (ntCount === 1 && rhsLen < lhsLen) return {
-                    type: 0,
-                    name: 'Unrestricted',
-                    reason: 'αAγ → αβγ but |RHS| < |LHS| (shrinking rule not allowed in CS)'
-                };
-                // multiple NTs on left
+                if (ntCount === 1 && rhsLen >= lhsLen)
+                    return {
+                        type: 1,
+                        name: 'Context-Sensitive',
+                        reason: 'αAγ → αβγ (single NT rewritten in context)'
+                    };
+                if (ntCount === 1 && rhsLen < lhsLen)
+                    return {
+                        type: 0,
+                        name: 'Unrestricted',
+                        reason: 'αAγ → αβγ but |RHS| < |LHS| (shrinking rule not allowed in CS)'
+                    };
                 return {
                     type: 0,
                     name: 'Unrestricted',
@@ -1079,7 +1056,6 @@ AB → BA</textarea>
         }
 
         function tokeniseString(s) {
-            // Split into multi-char NT tokens (capital-started words) or single chars
             const tokens = [];
             let i = 0;
             while (i < s.length) {
@@ -1089,11 +1065,7 @@ AB → BA</textarea>
                 }
                 if (/[A-Z]/.test(s[i])) {
                     let j = i + 1;
-                    while (j < s.length && /[a-zA-Z0-9]/.test(s[j]) && /[A-Z]/.test(s[i])) {
-                        // keep reading if still looks like same word
-                        if (/[a-z0-9]/.test(s[j])) j++;
-                        else break;
-                    }
+                    while (j < s.length && /[a-z0-9]/.test(s[j])) j++;
                     tokens.push(s.slice(i, j));
                     i = j;
                 } else {
@@ -1111,7 +1083,6 @@ AB → BA</textarea>
             const lines = document.getElementById('chomsky-input').value.trim().split('\n').filter(l => l.trim());
             const results = document.getElementById('chomsky-results');
             results.innerHTML = '';
-
             let overallType = 3;
 
             lines.forEach(line => {
@@ -1133,7 +1104,7 @@ AB → BA</textarea>
 
             if (lines.length > 1) {
                 const summary = document.createElement('div');
-                summary.style.cssText = 'margin-top:10px;padding:12px 16px;background:var(--code-bg);border-radius:10px;font-family:\'Syne\',sans-serif;font-weight:700;font-size:13px;color:white;';
+                summary.style.cssText = "margin-top:10px;padding:12px 16px;background:var(--code-bg);border-radius:10px;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:white;";
                 summary.innerHTML = `Overall grammar classification: <span class="ch-badge ${TYPE_COLOURS[overallType]}" style="margin-left:8px;">${TYPE_LABELS[overallType]}</span>
             <div style="font-size:11px;font-weight:400;color:#94A3B8;margin-top:6px;">A grammar's class is determined by its most permissive (least restricted) rule.</div>`;
                 results.appendChild(summary);
@@ -1144,18 +1115,13 @@ AB → BA</textarea>
 
 
         // ════════════════════════════════════════════════════════════════
-        // TOOL 3 — Parse Tree Builder (Grammar G5)
+        // TOOL 3 — Parse Tree Builder (Grammar G5)  (unchanged)
         // ════════════════════════════════════════════════════════════════
 
         function ptreeLoad(expr) {
             document.getElementById('ptree-input').value = expr;
             buildPTree();
         }
-
-        // ── Recursive-descent parser for G5 ──
-        // Expr → Expr + Term | Expr - Term | Term
-        // Term → Term * Factor | Term / Factor | Factor
-        // Factor → ( Expr ) | var | const
 
         function ptreeTokenise(s) {
             const toks = [];
@@ -1198,22 +1164,19 @@ AB → BA</textarea>
                 children: []
             };
             let term = parseTerm();
-            // Check for left-recursive: Expr → Expr + Term | Expr - Term
             while (ptPeek() === '+' || ptPeek() === '-') {
                 const op = ptConsume();
                 const right = parseTerm();
-                const inner = {
+                node = {
                     label: 'Expr',
-                    children: [node, {
+                    children: [node.children.length ? node : term, {
                         label: op,
                         children: []
                     }, right]
                 };
-                node = inner;
+                term = null;
             }
-            if (node.children.length === 0) {
-                node.children.push(term);
-            }
+            if (node.children.length === 0) node.children.push(term);
             return node;
         }
 
@@ -1226,18 +1189,16 @@ AB → BA</textarea>
             while (ptPeek() === '*' || ptPeek() === '/') {
                 const op = ptConsume();
                 const right = parseFactor();
-                const inner = {
+                node = {
                     label: 'Term',
-                    children: [node, {
+                    children: [node.children.length ? node : factor, {
                         label: op,
                         children: []
                     }, right]
                 };
-                node = inner;
+                factor = null;
             }
-            if (node.children.length === 0) {
-                node.children.push(factor);
-            }
+            if (node.children.length === 0) node.children.push(factor);
             return node;
         }
 
@@ -1250,7 +1211,7 @@ AB → BA</textarea>
             if (tok === '(') {
                 ptConsume();
                 const inner = parseExpr();
-                const rp = ptConsume(); // ')'
+                ptConsume(); // ')'
                 node.children.push({
                     label: '(',
                     children: []
@@ -1288,9 +1249,9 @@ AB → BA</textarea>
                 document.getElementById('ptree-svg').innerHTML = '';
                 return;
             }
-
             document.getElementById('ptree-out').style.display = 'block';
-            document.getElementById('ptree-log').textContent = `✅ Parsed successfully — ${countNodes(tree)} nodes, depth ${treeDepth(tree)}.`;
+            document.getElementById('ptree-log').textContent =
+                `✅ Parsed successfully — ${countNodes(tree)} nodes, depth ${treeDepth(tree)}.`;
             drawPTree(tree);
         }
 
@@ -1311,7 +1272,6 @@ AB → BA</textarea>
             svg.setAttribute('width', W);
             svg.setAttribute('height', H);
 
-            // Assign x positions via in-order traversal
             let leafIdx = 0;
             const leaves = [];
 
@@ -1338,7 +1298,6 @@ AB → BA</textarea>
             }
             assignX(root, 0);
 
-            const isTerminal = n => n.children.length === 0;
             const NT_COLOURS = {
                 'Expr': '#6366F1',
                 'Term': '#10B981',
@@ -1360,7 +1319,7 @@ AB → BA</textarea>
             }
 
             function drawNodes(n) {
-                const isT = isTerminal(n);
+                const isT = n.children.length === 0;
                 const colour = isT ? '#1E1B4B' : (NT_COLOURS[n.label] || '#6366F1');
                 const r = isT ? 14 : 20;
                 if (isT) {
@@ -1403,7 +1362,7 @@ AB → BA</textarea>
 
 
         // ════════════════════════════════════════════════════════════════
-        // TOOL 4 — Pushdown Machine Simulator
+        // TOOL 4 — Pushdown Machine Simulator  (unchanged)
         // ════════════════════════════════════════════════════════════════
 
         let pdmSteps = [],
@@ -1474,7 +1433,6 @@ AB → BA</textarea>
 
             while (true) {
                 const sym = i < input.length ? input[i] : 'N';
-
                 if (state === 'S1') {
                     if (sym === 'a') {
                         addStep('a', 'push(X), advance');
@@ -1525,7 +1483,7 @@ AB → BA</textarea>
                         });
                         break;
                     }
-                } else { // S2
+                } else {
                     if (sym === 'b') {
                         if (stack[0] !== 'X') {
                             addStep('b', 'Reject (no X to pop)');
@@ -1587,12 +1545,11 @@ AB → BA</textarea>
         function simulateParens(input) {
             const steps = [];
             let stack = [','];
-            let state = 'S1';
             let i = 0;
 
             const addStep = (inputSym, action) => {
                 steps.push({
-                    state,
+                    state: 'S1',
                     inputSym: inputSym === '' ? 'ε' : inputSym,
                     stack: [...stack],
                     action
@@ -1601,7 +1558,6 @@ AB → BA</textarea>
 
             while (true) {
                 const sym = i < input.length ? input[i] : 'N';
-
                 if (sym === '(') {
                     addStep('(', 'push(X), advance');
                     stack = ['X', ...stack];
@@ -1614,7 +1570,7 @@ AB → BA</textarea>
                     } else {
                         addStep(')', 'Reject (stack empty)');
                         steps.push({
-                            state,
+                            state: 'S1',
                             inputSym: '-',
                             stack: [...stack],
                             action: '❌ REJECT'
@@ -1625,7 +1581,7 @@ AB → BA</textarea>
                     if (stack[0] === ',') {
                         addStep('N', 'stack=, → Accept');
                         steps.push({
-                            state,
+                            state: 'S1',
                             inputSym: '-',
                             stack: [...stack],
                             action: '✅ ACCEPT'
@@ -1634,7 +1590,7 @@ AB → BA</textarea>
                     } else {
                         addStep('N', 'Reject (unclosed parens)');
                         steps.push({
-                            state,
+                            state: 'S1',
                             inputSym: '-',
                             stack: [...stack],
                             action: '❌ REJECT'
@@ -1644,17 +1600,16 @@ AB → BA</textarea>
                 } else {
                     addStep(sym, 'Reject (unexpected)');
                     steps.push({
-                        state,
+                        state: 'S1',
                         inputSym: '-',
                         stack: [...stack],
                         action: '❌ REJECT'
                     });
                     break;
                 }
-
                 if (steps.length > 200) {
                     steps.push({
-                        state,
+                        state: 'S1',
                         inputSym: '-',
                         stack: [...stack],
                         action: 'HALT'
@@ -1679,12 +1634,12 @@ AB → BA</textarea>
             const input = document.getElementById('pdm-input').value;
             pdmSteps = machine === 'anbn' ? simulateAnBn(input) : simulateParens(input);
             pdmStepCursor = pdmSteps.length;
+            document.getElementById('pdm-trace-body').innerHTML = '';
             renderPdmTrace(0, pdmSteps.length);
         }
 
         function pdmStep() {
             if (pdmSteps.length === 0) {
-                // Generate steps first
                 const machine = document.getElementById('pdm-machine').value;
                 const input = document.getElementById('pdm-input').value;
                 pdmSteps = machine === 'anbn' ? simulateAnBn(input) : simulateParens(input);
@@ -1719,7 +1674,6 @@ AB → BA</textarea>
                 tbody.appendChild(tr);
             }
 
-            // Show verdict
             const last = pdmSteps[pdmSteps.length - 1];
             if (to >= pdmSteps.length && last) {
                 const v = document.getElementById('pdm-verdict');

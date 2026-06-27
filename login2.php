@@ -17,7 +17,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $row = $result->fetch_assoc();
 
         if (password_verify($password, $row['password'])) {
-            $_SESSION['username'] = $username;
+            $_SESSION['user_id'] = $row['id'];
+            $_SESSION['username'] = $row['username'];
             header("Location: dashboard.php");
             exit();
         } else {
@@ -27,4 +28,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $error = "User not found!";
     }
 }
-?>

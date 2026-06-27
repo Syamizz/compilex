@@ -25,7 +25,7 @@
             </div>
             <div class="collapse navbar-collapse">
                 <div class="ms-auto">
-                    <a href="logout.php" class="button-28">LOGOUT</a>
+                    <a href="../logout.php" class="button-28">LOGOUT</a>
                 </div>
             </div>
         </div>

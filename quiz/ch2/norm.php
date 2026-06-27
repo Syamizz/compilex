@@ -660,6 +660,14 @@ function getImage(string $key): string
 
         <!-- ── Left Nav ── -->
         <nav class="q-nav" id="qNav">
+            <?php if (!$submitted): ?>
+                <div class="timer-wrap">
+                    <div class="timer-box" id="timerBox">
+                        <span class="timer-icon">⏱</span>
+                        <span id="timerDisplay">25:00</span>
+                    </div>
+                </div>
+            <?php endif; ?>
             <div class="q-nav-label">Question</div>
             <?php for ($i = 0; $i < $total; $i++):
                 $nc = 'q-nav-btn';
@@ -686,14 +694,7 @@ function getImage(string $key): string
 
         <!-- ── Questions ── -->
         <div class="quiz-wrap">
-            <?php if (!$submitted): ?>
-                <div class="timer-wrap">
-                    <div class="timer-box" id="timerBox">
-                        <span class="timer-icon">⏱</span>
-                        <span id="timerDisplay">25:00</span>
-                    </div>
-                </div>
-            <?php endif; ?>
+            
 
             <?php if ($submitted):
                 $wrong   = array_reduce(array_keys($results), fn($c, $i) => $c + (!$results[$i]['correct'] && $results[$i]['answered'] ? 1 : 0), 0);

@@ -1,70 +1,15 @@
 <?php
 session_start();
-include 'dbconn.php';
 
-if (!isset($_SESSION['username'])) {
-    header("Location: login.php");
-    exit();
+if (!isset($_SESSION['user_id'], $_SESSION['username'])) {
+    header('Location: login.php');
+    exit;
 }
 
-$username = $_SESSION['username'];
-
-$message = "";
-$message_type = "";
-
-// Get user data
-$sql = "SELECT * FROM users WHERE username = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("s", $username);
-$stmt->execute();
-$result = $stmt->get_result();
-$user = $result->fetch_assoc();
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $current_password = $_POST['current_password'];
-    $new_password = $_POST['new_password'];
-    $confirm_password = $_POST['confirm_password'];
-
-    if (empty($current_password) || empty($new_password) || empty($confirm_password)) {
-        $message = "Please fill in all fields.";
-        $message_type = "danger";
-    } elseif ($new_password !== $confirm_password) {
-        $message = "New password and confirm password do not match.";
-        $message_type = "danger";
-    } elseif (strlen($new_password) < 6) {
-        $message = "New password must be at least 6 characters.";
-        $message_type = "danger";
-    } else {
-        $stored_password = $user['password'];
-
-        // Works for hashed password. Also supports old plain text password if your system used plain text before.
-        $password_correct = password_verify($current_password, $stored_password) || $current_password === $stored_password;
-
-        if (!$password_correct) {
-            $message = "Current password is incorrect.";
-            $message_type = "danger";
-        } else {
-            $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
-
-            $update_sql = "UPDATE users SET password = ? WHERE username = ?";
-            $update_stmt = $conn->prepare($update_sql);
-            $update_stmt->bind_param("ss", $hashed_password, $username);
-
-            if ($update_stmt->execute()) {
-                $message = "Password changed successfully.";
-                $message_type = "success";
-            } else {
-                $message = "Something went wrong. Please try again.";
-                $message_type = "danger";
-            }
-        }
-    }
-}
+$error = $_POST['error'] ?? '';
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <title>CompileX - Change Password</title>
@@ -72,14 +17,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-
-    <link rel="stylesheet" href="body.css">
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         body {
             font-family: 'Syne', sans-serif;
-            background: var(--color-background-tertiary);
+            background: #ffffff;
             margin: 0;
         }
 
@@ -97,37 +40,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color: #A1A1AA;
         }
 
-        #navbar a.active,
-        #navbar .nav-link.active {
-            color: #FFFFFF;
-            border-bottom: 4px solid #6366F1;
-        }
-
         .button-28 {
             appearance: none;
             background-color: transparent;
             border: 2px solid #f7f3f3;
             border-radius: 15px;
-            box-sizing: border-box;
             color: #504141;
             cursor: pointer;
             display: inline-block;
             font-size: 10px;
             font-weight: 600;
-            line-height: normal;
-            margin: 0;
             min-height: 30px;
-            min-width: 0;
             outline: none;
             padding: 12px 20px;
             text-align: center;
             text-decoration: none;
             transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
-            user-select: none;
-            -webkit-user-select: none;
-            touch-action: manipulation;
-            width: auto;
-            will-change: transform;
         }
 
         .button-28:hover {
@@ -137,88 +65,156 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             transform: translateY(-2px);
         }
 
-        .button-4 {
-            appearance: none;
-            background-color: #FAFBFC;
-            border: 1px solid rgba(27, 31, 35, 0.15);
-            border-radius: 6px;
-            box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0, rgba(255, 255, 255, 0.25) 0 1px 0 inset;
-            box-sizing: border-box;
-            color: #24292E;
-            cursor: pointer;
-            display: inline-block;
-            font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-            font-size: 14px;
-            font-weight: 500;
-            line-height: 20px;
-            padding: 6px 16px;
-            position: relative;
-            transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
-            user-select: none;
-            -webkit-user-select: none;
-            touch-action: manipulation;
-            vertical-align: middle;
-            white-space: nowrap;
-            text-decoration: none;
-        }
-
-        .button-4:hover {
-            background-color: #F3F4F6;
-            text-decoration: none;
-        }
-
-        .password-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 70vh;
-        }
-
-        .password-card {
-            background: #ffffff;
-            padding: 35px 45px;
+        .login-box {
+            width: 400px;
+            margin: 60px auto;
+            padding: 2rem;
+            background: white;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            width: 430px;
+            box-shadow: 0 4px 24px rgba(99, 102, 241, 0.08), 0 1px 4px rgba(0,0,0,0.06);
         }
 
-        .password-card h2 {
+        .login-box h2 {
             text-align: center;
-            color: #6366F1;
-            margin-bottom: 25px;
-        }
-
-        .form-label {
+            font-size: 20px;
             font-weight: 600;
-            color: #374151;
+            color: #1F2937;
+            margin-bottom: 4px;
         }
 
-        .btn-save {
-            background-color: #6366F1;
-            color: white;
-            border: none;
+        .login-box p.sub {
+            text-align: center;
+            font-size: 13px;
+            color: #6B7280;
+            margin-bottom: 1.5rem;
+        }
+
+        .error-box {
+            background: #FEE2E2;
+            color: #991B1B;
+            border: 1px solid #FCA5A5;
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 13px;
+            margin-bottom: 1rem;
+        }
+
+        .success-box {
+            background: #D1FAE5;
+            color: #065F46;
+            border: 1px solid #6EE7B7;
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 13px;
+            margin-bottom: 1rem;
+        }
+
+        .rg-field {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .rg-field input {
             width: 100%;
-            padding: 10px;
-            border-radius: 6px;
-            font-weight: 600;
+            height: 48px;
+            padding: 18px 44px 6px 12px;
+            font-size: 14px;
+            font-family: 'Syne', sans-serif;
+            background: #F9FAFB;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            color: #111827;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
         }
 
-        .btn-save:hover {
-            background-color: #4F46E5;
+        .rg-field input:focus {
+            border-color: #818CF8;
+            background: #fff;
+            box-shadow: 0 0 0 3px #EEF2FF;
+        }
+
+        .rg-field input.invalid {
+            border-color: #EF4444;
+        }
+
+        .rg-label {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            color: #9CA3AF;
+            pointer-events: none;
+            transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: left top;
+        }
+
+        .rg-field input:focus ~ .rg-label,
+        .rg-field input.has-val ~ .rg-label {
+            top: 10px;
+            transform: translateY(0) scale(0.78);
+            color: #6366F1;
+        }
+
+        .eye-btn {
+            position: absolute;
+            right: 10px;
+            top: 24px;
+            transform: translateY(-50%);
+            width: 42px;
+            height: 24px;
+            padding: 0;
+            background: transparent;
+            border: none;
+            color: #6B7280;
+            cursor: pointer;
+            font-size: 11px;
+            line-height: 1;
+        }
+
+        .eye-btn:hover { color: #4F46E5; }
+
+        .rg-error {
+            display: block;
+            min-height: 14px;
+            margin-top: 4px;
+            font-size: 11px;
+            color: #EF4444;
+        }
+
+        .rg-submit {
+            width: 100%;
+            height: 44px;
+            margin-top: 0.5rem;
+            background: #6366F1;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Syne', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.12s;
+        }
+
+        .rg-submit:hover {
+            background: #4F46E5;
+            transform: translateY(-1px);
         }
 
         .back-link {
             display: block;
             text-align: center;
-            margin-top: 15px;
+            margin-top: 14px;
+            font-size: 13px;
             color: #6366F1;
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
         }
 
-        .back-link:hover {
-            text-decoration: underline;
-        }
+        .back-link:hover { text-decoration: underline; }
 
         footer {
             text-align: center;
@@ -230,84 +226,106 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     </style>
 </head>
-
 <body>
 
-    <!-- Navbar -->
-    <nav id="navbar" class="navbar navbar-expand-lg">
-        <div class="container-fluid">
-            <a id="title" class="navbar-brand" href="#">CompileX</a>
+<?php
+include "dashboard.php";
+?>
+<br><br><br><br>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+<div class="login-box">
+    <h2>Change Password</h2>
+    <p class="sub">Enter and confirm your new password.</p>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="home.php">Home</a>
-                    </li>
+    <?php if ($error !== ''): ?>
+        <div class="error-box"><?= htmlspecialchars($error) ?></div>
+    <?php endif; ?>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="quiz.php">Quiz</a>
-                    </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="leaderboard.php">Leaderboard</a>
-                    </li>
+    <form method="POST" action="change_password_process.php" id="cpForm">
 
-                    <li class="nav-item">
-                        <a class="nav-link active" href="profile.php">Profile</a>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="collapse navbar-collapse">
-                <div class="ms-auto">
-                    <a href="logout.php" class="button-28">LOGOUT</a>
-                </div>
-            </div>
+        <div class="rg-field">
+            <input type="password" name="new_password" id="f-new" required>
+            <label class="rg-label" for="f-new">New Password</label>
+            <button type="button" class="eye-btn" data-target="f-new">Show</button>
+            <span class="rg-error" id="new-error"></span>
         </div>
-    </nav>
 
-    <div class="password-container">
-        <div class="password-card">
-            <h2>Change Password</h2>
-
-            <?php if (!empty($message)) { ?>
-                <div class="alert alert-<?php echo $message_type; ?>" role="alert">
-                    <?php echo $message; ?>
-                </div>
-            <?php } ?>
-
-            <form action="change_password.php" method="POST">
-                <div class="mb-3">
-                    <label for="current_password" class="form-label">Current Password</label>
-                    <input type="password" class="form-control" id="current_password" name="current_password" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="new_password" class="form-label">New Password</label>
-                    <input type="password" class="form-control" id="new_password" name="new_password" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="confirm_password" class="form-label">Confirm New Password</label>
-                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
-                </div>
-
-                <button type="submit" class="btn-save">Update Password</button>
-
-                <a href="profile.php" class="back-link">Back to Profile</a>
-            </form>
+        <div class="rg-field">
+            <input type="password" name="confirm_password" id="f-confirm" required>
+            <label class="rg-label" for="f-confirm">Confirm New Password</label>
+            <button type="button" class="eye-btn" data-target="f-confirm">Show</button>
+            <span class="rg-error" id="confirm-error"></span>
         </div>
-    </div>
 
-    <footer>
-        © <?php echo date("Y"); ?> ezComp • Compiler Learning Platform
-    </footer>
+        <button type="submit" class="rg-submit">Update Password</button>
+    </form>
 
+    <a href="profile.php" class="back-link">Back to Profile</a>
+</div>
+
+<footer>
+    &copy; <?= date("Y") ?> CompileX - Compiler Learning Platform
+</footer>
+
+<script>
+    const fNew     = document.getElementById('f-new');
+    const fConfirm = document.getElementById('f-confirm');
+    const newErr   = document.getElementById('new-error');
+    const conErr   = document.getElementById('confirm-error');
+
+    // Floating label
+    [fNew, fConfirm].forEach(input => {
+        input.addEventListener('input', () => {
+            input.classList.toggle('has-val', input.value.length > 0);
+        });
+    });
+
+    // Show/hide password
+    document.querySelectorAll('.eye-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const input = document.getElementById(btn.dataset.target);
+            const show  = input.type === 'password';
+            input.type  = show ? 'text' : 'password';
+            btn.textContent = show ? 'Hide' : 'Show';
+        });
+    });
+
+    // Live validation
+    function validate() {
+        let ok = true;
+
+        newErr.textContent = '';
+        conErr.textContent = '';
+        fNew.classList.remove('invalid');
+        fConfirm.classList.remove('invalid');
+
+        if (fNew.value.length > 0 && fNew.value.length < 8) {
+            newErr.textContent = 'Password must be at least 8 characters.';
+            fNew.classList.add('invalid');
+            ok = false;
+        }
+
+        if (fConfirm.value.length > 0 && fNew.value !== fConfirm.value) {
+            conErr.textContent = 'Passwords do not match.';
+            fConfirm.classList.add('invalid');
+            ok = false;
+        }
+
+        return ok;
+    }
+
+    fNew.addEventListener('input', validate);
+    fConfirm.addEventListener('input', validate);
+
+    document.getElementById('cpForm').addEventListener('submit', e => {
+        if (!validate()) { e.preventDefault(); return; }
+
+        if (fNew.value === '' || fConfirm.value === '') {
+            e.preventDefault();
+            newErr.textContent = 'All fields are required.';
+        }
+    });
+</script>
 </body>
-
 </html>

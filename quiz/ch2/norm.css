@@ -667,3 +667,39 @@ body {
         font-size: 14px;
     }
 }
+
+.q-nav {
+    box-sizing: border-box;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+/* The timer must occupy its own full row in the navbar grid. */
+.q-nav > .timer-wrap {
+    position: static;
+    grid-column: 1 / -1;
+    width: 100%;
+    margin: 0 0 14px;
+}
+
+.q-nav > .timer-wrap .timer-box {
+    box-sizing: border-box;
+    width: 100%;
+    justify-content: center;
+    padding: 10px 12px;
+}
+
+.q-nav-btn {
+    justify-self: center;
+}
+
+.nav-submit-wrap,
+.nav-count,
+.q-nav-label {
+    min-width: 0;
+}
+
+@media (max-width: 768px) {
+    .q-nav {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+}

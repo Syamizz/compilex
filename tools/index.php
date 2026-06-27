@@ -182,7 +182,7 @@ if (!isset($_SESSION['user_id'])) {
             </div>
             <div class="collapse navbar-collapse">
                 <div class="ms-auto">
-                    <a href="logout.php" class="button-28">LOGOUT</a>
+                    <a href="../logout.php" class="button-28">LOGOUT</a>
                 </div>
             </div>
         </div>
@@ -196,7 +196,7 @@ if (!isset($_SESSION['user_id'])) {
     </div>
 
     
-    <div class="main-grid" style="display:grid; grid-template-columns:1.25fr 1.35fr; gap:32px; align-items:start;">
+    <div class="main-grid" style="display:grid; grid-template-columns:1.25fr 1.25fr 1.25fr; gap:32px; align-items:start;">
         <div>
             <?php
             include "tools.php";
@@ -205,6 +205,11 @@ if (!isset($_SESSION['user_id'])) {
         <div>
             <?php
             include "tools2.php";
+            ?>
+        </div>
+        <div>
+            <?php
+            include "tools3.php";
             ?>
         </div>
 

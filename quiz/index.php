@@ -7,45 +7,95 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-$user_id = $_SESSION['user_id'];
+$user_id = (int)$_SESSION['user_id'];
 
-// Default progress for all chapters
-$progress = [
-    1 => 0,
-    2 => 0,
-    3 => 0,
-    4 => 0,
+/*
+Quiz IDs:
+
+Chapter 1: Q001 Easy, Q002 Normal, Q003 Hard
+Chapter 2: Q004 Easy, Q005 Normal, Q006 Hard
+Chapter 3: Q007 Easy, Q008 Normal, Q009 Hard
+Chapter 4: Q010 Easy, Q011 Normal, Q012 Hard
+*/
+
+$quizIds = [
+    1 => [
+        'easy'   => 'Q001',
+        'normal' => 'Q002',
+        'hard'   => 'Q003',
+    ],
+    2 => [
+        'easy'   => 'Q004',
+        'normal' => 'Q005',
+        'hard'   => 'Q006',
+    ],
+    3 => [
+        'easy'   => 'Q007',
+        'normal' => 'Q008',
+        'hard'   => 'Q009',
+    ],
+    4 => [
+        'easy'   => 'Q010',
+        'normal' => 'Q011',
+        'hard'   => 'Q012',
+    ],
 ];
 
-// Load progress from new users_progress table.
-// users_progress stores the user's prog_id and percentage,
-// progress stores which chapter that prog_id belongs to.
+/* Find quizzes already completed by this user */
+$completedQuizzes = [];
+
 $stmt = $conn->prepare("
-    SELECT p.chapter, up.percentage
-    FROM users_progress up
-    INNER JOIN progress p ON up.prog_id = p.prog_id
-    WHERE up.user_id = ?
+    SELECT DISTINCT quiz_id
+    FROM leaderboard
+    WHERE user_id = ?
 ");
+
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
+
 $result = $stmt->get_result();
 
 while ($row = $result->fetch_assoc()) {
-    $chapter = (int)$row['chapter'];
-    $percentage = (float)$row['percentage'];
-
-    if (array_key_exists($chapter, $progress)) {
-        $progress[$chapter] = $percentage;
-    }
+    $completedQuizzes[$row['quiz_id']] = true;
 }
 
 $stmt->close();
-// A chapter's quiz is unlocked once the previous chapter's learning is 100%
-// Chapter 1 quiz is always accessible
-function isUnlocked(int $ch, array $progress): bool
-{
-    if ($ch === 1) return true;
-    return ($progress[$ch - 1] ?? 0) >= 100;
+
+function quizCompleted(
+    string $quizId,
+    array $completedQuizzes
+): bool {
+    return isset($completedQuizzes[$quizId]);
+}
+
+function difficultyUnlocked(
+    int $chapter,
+    string $difficulty,
+    array $quizIds,
+    array $completedQuizzes
+): bool {
+    /* Every Easy quiz is always unlocked */
+    if ($difficulty === 'easy') {
+        return true;
+    }
+
+    /* Normal unlocks after completing Easy */
+    if ($difficulty === 'normal') {
+        return quizCompleted(
+            $quizIds[$chapter]['easy'],
+            $completedQuizzes
+        );
+    }
+
+    /* Hard unlocks after completing Normal */
+    if ($difficulty === 'hard') {
+        return quizCompleted(
+            $quizIds[$chapter]['normal'],
+            $completedQuizzes
+        );
+    }
+
+    return false;
 }
 ?>
 <!DOCTYPE html>
@@ -424,6 +474,37 @@ function isUnlocked(int $ch, array $progress): bool
         .locked .mini-bar-fill {
             background: #D1D5DB !important;
         }
+
+        .diff-btn.locked-difficulty {
+            background: #E5E7EB !important;
+            color: #9CA3AF !important;
+            cursor: not-allowed;
+            pointer-events: none;
+            box-shadow: none;
+        }
+
+        .diff-btn.completed-difficulty {
+            box-shadow: inset 0 0 0 2px #22C55E;
+        }
+
+        .difficulty-note {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            min-height: 42px;
+            padding: 10px 22px;
+            border-top: 1px solid #E5E7EB;
+            background: #F8FAFC;
+            color: #64748B;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .difficulty-note.all-completed {
+            border-color: #BBF7D0;
+            background: #F0FDF4;
+            color: #047857;
+        }
     </style>
 </head>
 
@@ -433,7 +514,7 @@ function isUnlocked(int $ch, array $progress): bool
 
     <div class="page-header">
         <h1>Choose Your <span>Quiz</span></h1>
-        <p>Complete each chapter's learning material to unlock the next quiz.</p>
+        <p>Complete Easy to unlock Normal, then complete Normal to unlock Hard.</p>
     </div>
 
     <?php
@@ -475,68 +556,150 @@ function isUnlocked(int $ch, array $progress): bool
     ?>
 
     <div class="quiz-grid">
-        <?php foreach ($chapters as $ch => $info):
-            $unlocked = isUnlocked($ch, $progress);
-            $pct = $progress[$ch] ?? 0;
-            $pct = max(0, min(100, $pct));
-            $displayPct = round($pct);
-            $cardClass = $unlocked ? '' : ' locked';
-            $prevPct = $ch > 1 ? round($progress[$ch - 1] ?? 0) : 100;
+    <?php foreach ($chapters as $ch => $info): ?>
+        <?php
+        $easyCompleted = quizCompleted(
+            $quizIds[$ch]['easy'],
+            $completedQuizzes
+        );
+
+        $normalCompleted = quizCompleted(
+            $quizIds[$ch]['normal'],
+            $completedQuizzes
+        );
+
+        $hardCompleted = quizCompleted(
+            $quizIds[$ch]['hard'],
+            $completedQuizzes
+        );
+
+        if ($hardCompleted) {
+            $quizProgress = 100;
+        } elseif ($normalCompleted) {
+            $quizProgress = 67;
+        } elseif ($easyCompleted) {
+            $quizProgress = 33;
+        } else {
+            $quizProgress = 0;
+        }
         ?>
-            <div class="chapter-card<?= $cardClass ?>">
-                <div class="card-bar <?= $info['bar'] ?>"></div>
 
-                <div class="card-body-inner">
-                    <span class="chapter-badge">
-                        <?= $unlocked ? '✓' : '🔒' ?> Chapter <?= $ch ?>
-                    </span>
+        <div class="chapter-card">
+            <div class="card-bar <?= htmlspecialchars($info['bar']) ?>"></div>
 
-                    <div class="card-title-text"><?= htmlspecialchars($info['title']) ?></div>
-                    <div class="card-desc"><?= htmlspecialchars($info['desc']) ?></div>
+            <div class="card-body-inner">
+                <span class="chapter-badge">
+                    Chapter <?= $ch ?>
+                </span>
 
-                    <div class="mini-bar-wrap">
-                        <div class="mini-bar-label">
-                            <span>Learning progress</span>
-                            <span><?= $displayPct ?>%</span>
-                        </div>
-                        <div class="mini-bar">
-                            <div class="mini-bar-fill"
-                                style="width: <?= $pct ?>%; background: <?= $bar_colors[$ch] ?>;"></div>
-                        </div>
+                <div class="card-title-text">
+                    <?= htmlspecialchars($info['title']) ?>
+                </div>
+
+                <div class="card-desc">
+                    <?= htmlspecialchars($info['desc']) ?>
+                </div>
+
+                <div class="mini-bar-wrap">
+                    <div class="mini-bar-label">
+                        <span>Quiz progress</span>
+                        <span><?= $quizProgress ?>%</span>
                     </div>
 
-                    <div class="diff-group">
-                        <?php foreach ($difficulties as $level => $d):
-                            $href = "ch{$ch}/{$d['file']}";
-                        ?>
-                            <div class="tooltip-wrap">
-                                <?php if (!$unlocked): ?>
-                                    <span class="tip">Complete Chapter <?= $ch - 1 ?> first</span>
-                                <?php endif; ?>
-
-                                <a href="<?= $unlocked ? htmlspecialchars($href) : '#' ?>"
-                                    class="diff-btn btn-<?= htmlspecialchars($level) ?>"
-                                    <?= !$unlocked ? 'tabindex="-1" aria-disabled="true"' : '' ?>>
-                                    <?= htmlspecialchars($d['label']) ?>
-                                </a>
-                            </div>
-                        <?php endforeach; ?>
+                    <div class="mini-bar">
+                        <div
+                            class="mini-bar-fill"
+                            style="
+                                width: <?= $quizProgress ?>%;
+                                background: <?= $bar_colors[$ch] ?>;
+                            ">
+                        </div>
                     </div>
                 </div>
 
-                <?php if ($unlocked): ?>
-                    <div class="unlock-note">
-                        <span>✅</span> Unlocked - pick a difficulty to begin
-                    </div>
-                <?php else: ?>
-                    <div class="lock-banner">
-                        <span class="lock-icon">🔒</span>
-                        Finish Chapter <?= $ch - 1 ?> learning (<?= $prevPct ?>/100%) to unlock
-                    </div>
-                <?php endif; ?>
+                <div class="diff-group">
+                    <?php foreach ($difficulties as $level => $difficulty): ?>
+                        <?php
+                        $unlocked = difficultyUnlocked(
+                            $ch,
+                            $level,
+                            $quizIds,
+                            $completedQuizzes
+                        );
+
+                        $completed = quizCompleted(
+                            $quizIds[$ch][$level],
+                            $completedQuizzes
+                        );
+
+                        $href = "ch{$ch}/{$difficulty['file']}";
+
+                        $buttonClass =
+                            'diff-btn btn-' . $level;
+
+                        if (!$unlocked) {
+                            $buttonClass .= ' locked-difficulty';
+                        }
+
+                        if ($completed) {
+                            $buttonClass .= ' completed-difficulty';
+                        }
+
+                        if ($level === 'normal') {
+                            $lockedMessage =
+                                'Complete Easy first';
+                        } elseif ($level === 'hard') {
+                            $lockedMessage =
+                                'Complete Normal first';
+                        } else {
+                            $lockedMessage = '';
+                        }
+                        ?>
+
+                        <div class="tooltip-wrap">
+                            <?php if (!$unlocked): ?>
+                                <span class="tip">
+                                    <?= htmlspecialchars($lockedMessage) ?>
+                                </span>
+                            <?php endif; ?>
+
+                            <a
+                                href="<?= $unlocked
+                                    ? htmlspecialchars($href)
+                                    : '#' ?>"
+                                class="<?= htmlspecialchars($buttonClass) ?>"
+                                <?= !$unlocked
+                                    ? 'tabindex="-1" aria-disabled="true"'
+                                    : '' ?>>
+
+                                <?= $completed ? '✓ ' : '' ?>
+                                <?= htmlspecialchars($difficulty['label']) ?>
+                            </a>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
             </div>
-        <?php endforeach; ?>
-    </div>
+
+            <?php if ($hardCompleted): ?>
+                <div class="difficulty-note all-completed">
+                    ✓ All difficulties completed
+                </div>
+            <?php elseif ($normalCompleted): ?>
+                <div class="difficulty-note">
+                    Hard quiz unlocked
+                </div>
+            <?php elseif ($easyCompleted): ?>
+                <div class="difficulty-note">
+                    Normal quiz unlocked
+                </div>
+            <?php else: ?>
+                <div class="difficulty-note">
+                    Start with the Easy quiz
+                </div>
+            <?php endif; ?>
+        </div>
+    <?php endforeach; ?>
+</div>
 
 </body>
 

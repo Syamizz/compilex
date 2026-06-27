@@ -1,9 +1,12 @@
 RewriteEngine On
 RewriteBase /compilex/
 
-RewriteCond %{THE_REQUEST} \s/compilex/(.+?)\.php[\s?] [NC]
-RewriteRule ^ %1 [R=301,L]
+# Remove .php only from normal GET requests
+RewriteCond %{REQUEST_METHOD} =GET
+RewriteCond %{THE_REQUEST} \s/+compilex/(.+?)\.php[\s?] [NC]
+RewriteRule ^(.+)\.php$ $1 [R=302,L]
 
+# Internally load the PHP file
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.php -f
-RewriteRule ^(.+)$ $1.php [L]
+RewriteRule ^(.+?)/?$ $1.php [L]

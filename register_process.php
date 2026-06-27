@@ -57,7 +57,7 @@ if ($stmt->execute()) {
     $stmt->close();
     $conn->close();
 
-    header("Location: index");
+    header("Location: index?register=success");
     exit();
 }
 
